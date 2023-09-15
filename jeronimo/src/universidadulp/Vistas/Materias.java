@@ -8,10 +8,15 @@ import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.MateriaData;
 import universidadulp.Entidades.Materia;
 
-public class Materias extends javax.swing.JInternalFrame {
+public final class Materias extends javax.swing.JInternalFrame {
 
     String[] col = {"ID", "Nombre"};
-    DefaultTableModel modelo = new DefaultTableModel(null, col);
+    DefaultTableModel modelo = new DefaultTableModel(null, col) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
     MateriaData materiaDB = new MateriaData();
     private Connection con;
 
@@ -39,6 +44,7 @@ public class Materias extends javax.swing.JInternalFrame {
         jbModificarMateria = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtTablaMateria = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
         setPreferredSize(new java.awt.Dimension(483, 499));
@@ -153,6 +159,14 @@ public class Materias extends javax.swing.JInternalFrame {
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(290, 30, 180, 310);
 
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(430, 350, 30, 30);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -170,6 +184,9 @@ public class Materias extends javax.swing.JInternalFrame {
                     boolean estado = jcbEstadoMateria.isEnabled();
                     Materia mat = new Materia(nombre, anio, estado);
                     materiaDB.nuevoMateria(mat);
+                    DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+                    mod.setRowCount(0);
+                    mostrarTabla();
                 }
             }
         } catch (NumberFormatException ex) {
@@ -179,45 +196,75 @@ public class Materias extends javax.swing.JInternalFrame {
 
     private void jbEliminarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarMateriaActionPerformed
         // TODO add your handling code here:
-        if (jtIdMateria.getText() == null || jtNombreMateria.getText() == null || jtAnioMateria.getText() == null) {
-            JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
-        } else {
-            int id = Integer.parseInt(jtIdMateria.getText());
+        try {
+            if (jtIdMateria.getText() == null || jtNombreMateria.getText() == null || jtAnioMateria.getText() == null) {
+                JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
+            } else {
+                int id = Integer.parseInt(jtIdMateria.getText());
 
-            materiaDB.eliminarAlumno(id);
+                materiaDB.eliminarAlumno(id);
 
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado.");
         }
+
     }//GEN-LAST:event_jbEliminarMateriaActionPerformed
 
     private void jbModificarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarMateriaActionPerformed
         // TODO add your handling code here:
-        if (jtNombreMateria.getText() == null || jtAnioMateria.getText() == null) {
-            JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
-        } else {
-            String nombre = jtNombreMateria.getText();
-            int anio = Integer.parseInt(jtAnioMateria.getText());
-            boolean estado = jcbEstadoMateria.isSelected();
-            Materia mat = new Materia(nombre, anio, estado);
-            materiaDB.modificarMateria(mat);
+        String sql = "select idMateria from materia";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int i = jtTablaMateria.getSelectedRow();
+                        
+                String id = jtTablaMateria.getModel().getValueAt(i, 0).toString();
+                String nombre = jtNombreMateria.getText();
+                int anio = Integer.parseInt(jtAnioMateria.getText());
+                boolean estado = jcbEstadoMateria.isSelected();
+                Materia mat = new Materia(Integer.valueOf(id), nombre, anio, estado);
+                DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+                mod.setRowCount(0);
+                mostrarTabla();
+                materiaDB.modificarMateria(mat);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado.");
+        }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
+        }catch(ArrayIndexOutOfBoundsException ex){
+            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
         }
+
     }//GEN-LAST:event_jbModificarMateriaActionPerformed
 
     private void jtTablaMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaMateriaMouseClicked
         // TODO add your handling code here:
-        int id = jtTablaMateria.getSelectedRow()+1;
+        int i = jtTablaMateria.getSelectedRow();
+        String val = jtTablaMateria.getModel().getValueAt(i, 0).toString();
+        int id = Integer.valueOf(val);
         String nombre = materiaDB.buscarMateria(id).getNombre();
         int anio = materiaDB.buscarMateria(id).getAnioMateria();
         Boolean estado = materiaDB.buscarMateria(id).isActivo();
         jtIdMateria.setText(String.valueOf(id));
         jtNombreMateria.setText(nombre);
         jtAnioMateria.setText(String.valueOf(anio));
-        if(estado=true){
-            jcbEstadoMateria.isSelected();
-        }
+        jcbEstadoMateria.setSelected(true);
     }//GEN-LAST:event_jtTablaMateriaMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+        mod.setRowCount(0);
+        mostrarTabla();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -237,11 +284,10 @@ public class Materias extends javax.swing.JInternalFrame {
     public void mostrarTabla() {
 
         jtTablaMateria.setModel(modelo);
-        jtTablaMateria.setAutoCreateRowSorter(true);
         TableColumnModel columna = jtTablaMateria.getColumnModel();
         columna.getColumn(0).setMaxWidth(25);
 
-        String sql = "SELECT idMateria, nombre FROM materia WHERE 1 order by idMateria ASC";
+        String sql = "SELECT idMateria, nombre FROM materia WHERE estado = 1 order by idMateria ASC";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
