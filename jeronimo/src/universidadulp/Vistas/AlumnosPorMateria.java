@@ -1,20 +1,19 @@
-
 package universidadulp.Vistas;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import universidadulp.AccesoADatos.Conexion;
 
-
 public class AlumnosPorMateria extends javax.swing.JInternalFrame {
-    
+
     private Connection con;
 
-
-    public AlumnosPorMateria(){
+    public AlumnosPorMateria() {
         initComponents();
         con = Conexion.getConnection();
         mostrarComboBox();
@@ -78,9 +77,9 @@ public class AlumnosPorMateria extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jcbListaMaterias, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
+                        .addGap(17, 17, 17)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,9 +90,9 @@ public class AlumnosPorMateria extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jcbListaMaterias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                .addGap(76, 76, 76))
+                .addGap(50, 50, 50)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         pack();
@@ -101,7 +100,7 @@ public class AlumnosPorMateria extends javax.swing.JInternalFrame {
 
     private void jcbListaMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaMateriasActionPerformed
         // TODO add your handling code here:
-        
+        mostrarTabla();
     }//GEN-LAST:event_jcbListaMateriasActionPerformed
 
 
@@ -113,28 +112,61 @@ public class AlumnosPorMateria extends javax.swing.JInternalFrame {
     private javax.swing.JTable jtTablaAlumnoMaterias;
     // End of variables declaration//GEN-END:variables
 
-    public void mostrarTabla(){
-        String [] col={"ID", "DNI", "Apellido", "Nombre"};
-        DefaultTableModel modelo=new DefaultTableModel(null, col);
+    public void mostrarTabla() {
+        String[] col = {"ID", "DNI", "Apellido", "Nombre"};
+        DefaultTableModel modelo = new DefaultTableModel(null, col) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
         jtTablaAlumnoMaterias.setModel(modelo);
+        jtTablaAlumnoMaterias.setAutoCreateRowSorter(true);
+        TableColumnModel columna = jtTablaAlumnoMaterias.getColumnModel();
+        columna.getColumn(0).setMaxWidth(30);
+
+        String sql = "SELECT alumno.idAlumno, alumno.dni, alumno.apellido, alumno.nombre\n"
+                + "FROM `alumno`\n"
+                + "INNER JOIN inscripcion\n"
+                + "ON alumno.idAlumno = inscripcion.idAlumno\n"
+                + "INNER JOIN materia\n"
+                + "ON materia.idMateria = inscripcion.idMateria\n"
+                + "WHERE materia.nombre=?";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, jcbListaMaterias.getSelectedItem().toString());
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("alumno.idAlumno"));
+                String dni = String.valueOf(rs.getInt("alumno.dni"));
+                String apellido = rs.getString("alumno.apellido");
+                String nombre = rs.getString("alumno.nombre");
+                String[] dataM = {id, dni, apellido, nombre};
+                modelo.addRow(dataM);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error..");
+        }
+
     }
-    
-    public void mostrarComboBox(){
-        String sql="select nombre from materia";
-        
-        try{
-            PreparedStatement ps=con.prepareStatement(sql);
-            
-            ResultSet rs=ps.executeQuery();
-            
-            while(rs.next()){
-                String nombre= rs.getString("nombre");
+
+    public void mostrarComboBox() {
+        String sql = "select nombre from materia WHERE 1 order by idMateria ASC";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String nombre = rs.getString("nombre");
                 jcbListaMaterias.addItem(nombre);
             }
-        }catch(SQLException ex){
-            
+        } catch (SQLException ex) {
         }
     }
-    
-    
+
 }

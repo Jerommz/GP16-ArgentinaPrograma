@@ -1,4 +1,4 @@
-            package universidadulp.Vistas;
+package universidadulp.Vistas;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -235,7 +235,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
             String fechaNac = ((JTextField) jdFechaNacAlumno.getDateEditor().getUiComponent()).getText();
             boolean estado = jcbEstadoAlumno.isSelected();
             String sql = "select idAlumno from alumno where dni=?";
-            
+
             try {
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setInt(1, dni);

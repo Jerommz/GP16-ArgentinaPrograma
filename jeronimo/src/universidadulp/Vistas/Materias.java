@@ -2,8 +2,10 @@ package universidadulp.Vistas;
 
 import java.sql.*;
 import javax.swing.JOptionPane;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.MateriaData;
 import universidadulp.Entidades.Materia;
@@ -36,7 +38,6 @@ public class Materias extends javax.swing.JInternalFrame {
         jbNuevoMateria = new javax.swing.JButton();
         jbEliminarMateria = new javax.swing.JButton();
         jbModificarMateria = new javax.swing.JButton();
-        jbBuscarMateria = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtTablaMateria = new javax.swing.JTable();
 
@@ -127,17 +128,6 @@ public class Materias extends javax.swing.JInternalFrame {
         getContentPane().add(jbModificarMateria);
         jbModificarMateria.setBounds(290, 390, 77, 31);
 
-        jbBuscarMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jbBuscarMateria.setForeground(java.awt.Color.black);
-        jbBuscarMateria.setText("Buscar");
-        jbBuscarMateria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbBuscarMateriaActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jbBuscarMateria);
-        jbBuscarMateria.setBounds(190, 70, 65, 31);
-
         jtTablaMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtTablaMateria.setForeground(java.awt.Color.black);
         jtTablaMateria.setModel(new javax.swing.table.DefaultTableModel(
@@ -197,23 +187,18 @@ public class Materias extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jbModificarMateriaActionPerformed
 
-    private void jbBuscarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarMateriaActionPerformed
-        // TODO add your handling code here:
-//        try {
-//            if (jtIdMateria.getText() == null) {
-//                JOptionPane.showMessageDialog(null, "Para buscar, introduzca la ID de una materia.");
-//            } else {
-//                int id = Integer.parseInt(jtIdMateria.getText());
-//                String sql = ""
-//            }
-//        } catch (SQLException ex) 
-//            JOptionPane.showMessageDialog(null, "Error al ingresar a la base de datos.");
-//        }
-    }//GEN-LAST:event_jbBuscarMateriaActionPerformed
-
     private void jtTablaMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaMateriaMouseClicked
         // TODO add your handling code here:
-        int seleccion=jtTablaMateria.rowAtPoint(evt.getPoint());
+        DefaultTableModel model = (DefaultTableModel) jtTablaMateria.getModel();
+        int i = jtTablaMateria.getSelectedRow();
+        try{
+            jtIdMateria.setText(model.getValueAt(i, 0).toString());
+            jtNombreMateria.setText(model.getValueAt(i, 1).toString());
+            jtAnioMateria.setText(model.getValueAt(i, 2).toString());
+            jcbEstadoMateria.setSelected((Boolean) model.getValueAt(i, 3));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }//GEN-LAST:event_jtTablaMateriaMouseClicked
 
 
@@ -224,7 +209,6 @@ public class Materias extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton jbBuscarMateria;
     private javax.swing.JButton jbEliminarMateria;
     private javax.swing.JButton jbModificarMateria;
     private javax.swing.JButton jbNuevoMateria;
@@ -239,15 +223,19 @@ public class Materias extends javax.swing.JInternalFrame {
         String [] col = {"ID", "Nombre"};
         DefaultTableModel modelo=new DefaultTableModel(null, col);
         jtTablaMateria.setModel(modelo);
+        jtTablaMateria.setAutoCreateRowSorter(true);
         TableColumnModel columna= jtTablaMateria.getColumnModel();
         columna.getColumn(0).setMaxWidth(25);
         
-        String sql="select idMateria, nombre from materia";
+        String sql="SELECT idMateria, nombre FROM materia WHERE 1 order by idMateria ASC";
         try{
             PreparedStatement ps=con.prepareStatement(sql);
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
-                modelo.addRow(new Object [] {rs.getInt("idMateria"), rs.getString("nombre")});
+                String id=String.valueOf(rs.getInt("idMateria"));
+                String nombre=rs.getString("nombre");
+                String tbdata[] = {id, nombre};
+                modelo.addRow(tbdata);
             }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Error..");
