@@ -2,19 +2,18 @@ package universidadulp.Vistas;
 
 import java.sql.*;
 import javax.swing.JOptionPane;
-import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableRowSorter;
 import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.MateriaData;
 import universidadulp.Entidades.Materia;
 
 public class Materias extends javax.swing.JInternalFrame {
 
+    String[] col = {"ID", "Nombre"};
+    DefaultTableModel modelo = new DefaultTableModel(null, col);
     MateriaData materiaDB = new MateriaData();
     private Connection con;
-    
 
     public Materias() {
         initComponents();
@@ -180,24 +179,40 @@ public class Materias extends javax.swing.JInternalFrame {
 
     private void jbEliminarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarMateriaActionPerformed
         // TODO add your handling code here:
+        if (jtIdMateria.getText() == null || jtNombreMateria.getText() == null || jtAnioMateria.getText() == null) {
+            JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
+        } else {
+            int id = Integer.parseInt(jtIdMateria.getText());
+
+            materiaDB.eliminarAlumno(id);
+
+        }
     }//GEN-LAST:event_jbEliminarMateriaActionPerformed
 
     private void jbModificarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarMateriaActionPerformed
         // TODO add your handling code here:
-
+        if (jtNombreMateria.getText() == null || jtAnioMateria.getText() == null) {
+            JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
+        } else {
+            String nombre = jtNombreMateria.getText();
+            int anio = Integer.parseInt(jtAnioMateria.getText());
+            boolean estado = jcbEstadoMateria.isSelected();
+            Materia mat = new Materia(nombre, anio, estado);
+            materiaDB.modificarMateria(mat);
+        }
     }//GEN-LAST:event_jbModificarMateriaActionPerformed
 
     private void jtTablaMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaMateriaMouseClicked
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jtTablaMateria.getModel();
-        int i = jtTablaMateria.getSelectedRow();
-        try{
-            jtIdMateria.setText(model.getValueAt(i, 0).toString());
-            jtNombreMateria.setText(model.getValueAt(i, 1).toString());
-            jtAnioMateria.setText(model.getValueAt(i, 2).toString());
-            jcbEstadoMateria.setSelected((Boolean) model.getValueAt(i, 3));
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
+        int id = jtTablaMateria.getSelectedRow()+1;
+        String nombre = materiaDB.buscarMateria(id).getNombre();
+        int anio = materiaDB.buscarMateria(id).getAnioMateria();
+        Boolean estado = materiaDB.buscarMateria(id).isActivo();
+        jtIdMateria.setText(String.valueOf(id));
+        jtNombreMateria.setText(nombre);
+        jtAnioMateria.setText(String.valueOf(anio));
+        if(estado=true){
+            jcbEstadoMateria.isSelected();
         }
     }//GEN-LAST:event_jtTablaMateriaMouseClicked
 
@@ -219,29 +234,26 @@ public class Materias extends javax.swing.JInternalFrame {
     private javax.swing.JTable jtTablaMateria;
     // End of variables declaration//GEN-END:variables
 
-    public void mostrarTabla(){
-        String [] col = {"ID", "Nombre"};
-        DefaultTableModel modelo=new DefaultTableModel(null, col);
+    public void mostrarTabla() {
+
         jtTablaMateria.setModel(modelo);
         jtTablaMateria.setAutoCreateRowSorter(true);
-        TableColumnModel columna= jtTablaMateria.getColumnModel();
+        TableColumnModel columna = jtTablaMateria.getColumnModel();
         columna.getColumn(0).setMaxWidth(25);
-        
-        String sql="SELECT idMateria, nombre FROM materia WHERE 1 order by idMateria ASC";
-        try{
-            PreparedStatement ps=con.prepareStatement(sql);
-            ResultSet rs=ps.executeQuery();
-            while(rs.next()){
-                String id=String.valueOf(rs.getInt("idMateria"));
-                String nombre=rs.getString("nombre");
+
+        String sql = "SELECT idMateria, nombre FROM materia WHERE 1 order by idMateria ASC";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("idMateria"));
+                String nombre = rs.getString("nombre");
                 String tbdata[] = {id, nombre};
                 modelo.addRow(tbdata);
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error..");
         }
     }
-    
-  
 
 }

@@ -61,14 +61,40 @@ public class MateriaData {
         }
         return materia;
     }
-//    
-//    public void modificarMateria(Materia materia){
-//        
-//    }
-//    
-//    public void eliminarMateria(int id){
-//        
-//    }
+
+    public void modificarMateria(Materia materia) {
+        String sql = "update materia set nombre = ?, año = ?, estado = ? where idMateria = ?";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, materia.getNombre());
+            ps.setInt(2, materia.getAnioMateria());
+            ps.setBoolean(3, materia.isActivo());
+            ps.setInt(4, materia.getIdMateria());
+            int exito = ps.executeUpdate();
+            if (exito == 1) {
+                JOptionPane.showMessageDialog(null, "Materia modificada.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Materia no modificada.");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
+        }
+    }
+
+    public void eliminarAlumno(int id) {
+        String sql = "update materia set estado = 0 where idMateria = ?";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            int exito = ps.executeUpdate();
+            if (exito == 1) {
+                JOptionPane.showMessageDialog(null, "Materia eliminada.");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno.");
+        }
+    }
 //    
 
     public List<Materia> listarMateria() {

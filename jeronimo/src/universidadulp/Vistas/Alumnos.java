@@ -118,7 +118,6 @@ public class Alumnos extends javax.swing.JInternalFrame {
             }
         });
 
-        jtID.setEditable(false);
         jtID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtID.setForeground(java.awt.Color.black);
 
@@ -207,20 +206,32 @@ public class Alumnos extends javax.swing.JInternalFrame {
 
     private void jbNuevoAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoAlumnoActionPerformed
         // TODO add your handling code here:
+        int dniDB = Integer.parseInt(jtDniAlumno.getText());
+        String sql = "select * from alumno where dni = ?";
         try {
-            if (jtDniAlumno.getText() == null || jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos.");
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, dniDB);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(null, "Ya hay un alumno registrado con ese DNI.");
             } else {
-                int dni = Integer.parseInt(jtDniAlumno.getText());
-                String apellido = jtApellidoAlumno.getText();
-                String nombre = jtNombreAlumno.getText();
-                String fechaNac = ((JTextField) jdFechaNacAlumno.getDateEditor().getUiComponent()).getText();
-                boolean estado = jcbEstadoAlumno.isEnabled();
-                Alumno alu = new Alumno(dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
-                alumnoDB.nuevoAlumno(alu);
+                if (jtDniAlumno.getText() == null || jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
+                    JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos.");
+                } else {
+                    int dni = Integer.parseInt(jtDniAlumno.getText());
+                    String apellido = jtApellidoAlumno.getText();
+                    String nombre = jtNombreAlumno.getText();
+                    String fechaNac = ((JTextField) jdFechaNacAlumno.getDateEditor().getUiComponent()).getText();
+                    boolean estado = jcbEstadoAlumno.isEnabled();
+                    Alumno alu = new Alumno(dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
+                    alumnoDB.nuevoAlumno(alu);
+                }
             }
+
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "No puede haber campos vacios.");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error nuevo.");
         }
     }//GEN-LAST:event_jbNuevoAlumnoActionPerformed
 
