@@ -263,5 +263,5 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
 //
 //    }
 
-
+        }
 }

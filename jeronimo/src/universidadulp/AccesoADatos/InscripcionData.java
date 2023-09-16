@@ -10,14 +10,14 @@ import universidadulp.Entidades.Materia;
 
 public class InscripcionData {
 
-    Connection con;
+    private Connection con;
 
-    MateriaData materiaDB;
-    AlumnoData alumnoDB;
+    MateriaData materiaDB = new MateriaData();
+    AlumnoData alumnoDB = new AlumnoData();
 
-    public void InscripcionData() {
+    public InscripcionData() {
 
-        con = Conexion.getConnection();
+        this.con = Conexion.getConnection();
 
     }
 
@@ -41,7 +41,7 @@ public class InscripcionData {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Inscripcion inscripcion = new Inscripcion();
-                inscripcion.setIdInscripcion(rs.getInt("idInscripcion"));
+                inscripcion.setIdInscripcion(rs.getInt("idInscripto"));
                 Alumno alumno = alumnoDB.buscarAlumno(rs.getInt("idAlumno"));
                 Materia materia = materiaDB.buscarMateria(rs.getInt("idMateria"));
                 inscripcion.setAlumno(alumno);
@@ -54,11 +54,30 @@ public class InscripcionData {
         }
         return inscripciones;
     }
-//    
-//    public List<Inscripcion> obtenerInscripcionesPorAlumno(int id){
-//        
-//    }
-//    
+    
+    public List<Inscripcion> obtenerInscripcionesPorAlumno(int id){
+        List<Inscripcion> inscripciones = new ArrayList<>();
+        String sql = "select idInscripto, idMateria, nota from inscripcion where idAlumno = ?";
+        try {
+            PreparedStatement ps=con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Inscripcion inscripcion = new Inscripcion();
+                inscripcion.setIdInscripcion(rs.getInt("idInscripto"));
+                Alumno alumno = alumnoDB.buscarAlumno(id);
+                Materia materia = materiaDB.buscarMateria(rs.getInt("idMateria"));
+                inscripcion.setAlumno(alumno);
+                inscripcion.setMateria(materia);
+                inscripcion.setNota(rs.getDouble("nota"));
+                inscripciones.add(inscripcion);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error.");
+        }
+        return inscripciones;
+    }
+    
 //    public List<Materia> obtenerMateriasCursadas(int id){
 //        
 //    }
