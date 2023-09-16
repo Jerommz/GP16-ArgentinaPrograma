@@ -33,6 +33,8 @@ public class MateriaData {
                 materia.setIdMateria(rs.getInt(1));
                 JOptionPane.showMessageDialog(null, "Materia agregada.");
             }
+            ps.close();
+            rs.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia.");
         }
@@ -56,6 +58,8 @@ public class MateriaData {
             } else {
                 JOptionPane.showMessageDialog(null, "Materia no encontrada.");
             }
+            ps.close();
+            rs.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla materia.");
         }
@@ -75,6 +79,7 @@ public class MateriaData {
             } else {
                 JOptionPane.showMessageDialog(null, "Materia no modificada.");
             }
+            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
         }
@@ -90,6 +95,7 @@ public class MateriaData {
             if (exito == 1) {
                 JOptionPane.showMessageDialog(null, "Materia eliminada.");
             }
+            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno.");
         }

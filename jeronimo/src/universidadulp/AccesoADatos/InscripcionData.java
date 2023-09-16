@@ -72,16 +72,32 @@ public class InscripcionData {
                 inscripcion.setNota(rs.getDouble("nota"));
                 inscripciones.add(inscripcion);
             }
+            ps.close();
+            rs.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error.");
         }
         return inscripciones;
     }
     
-//    public List<Materia> obtenerMateriasCursadas(int id){
-//        
-//    }
-//    
+    public List<Materia> obtenerMateriasCursadas(int id){
+        List<Materia> materiasCursadas = new ArrayList<>();
+        String sql="select idMateria from inscripcion";
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs=ps.executeQuery();
+            
+            if(rs.next()){
+                if(rs.getInt("idMateria")==id){
+                    
+                }
+            }
+            
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error al obtener materias cursadas.");
+        }
+    }
+    
 //    public List<Materia> obtenerMateriasNoCursadas(int id){
 //        
 //    }
