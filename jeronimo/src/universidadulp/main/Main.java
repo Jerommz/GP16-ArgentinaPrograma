@@ -18,8 +18,8 @@ public class Main {
         List<Inscripcion> inscripciones = inscripcionDAO.obtenerInscripciones();
 
         for (Inscripcion inscripcion : inscripciones) {
-            System.out.println("Alumno: " + inscripcion.getAlumno() +
-                    ", Materia: " + inscripcion.getMateria() +
+            System.out.println("Alumno: " + inscripcion.getAlumno().getNombre() +
+                    ", Materia: " + inscripcion.getMateria().getNombre() +
                     ", Nota: " + inscripcion.getNota());
         }
         

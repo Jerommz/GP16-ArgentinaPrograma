@@ -46,7 +46,7 @@ public class InscripcionData {
                 Inscripcion inscrip=new Inscripcion();
                 inscrip.setAlumno(alumnoDB.buscarAlumno(idAlumno));
                 inscrip.setMateria(materiaDB.buscarMateria(idMateria));
-                inscrip.setNota(rs.getInt(nota));
+                inscrip.setNota(nota);
                 insc.add(inscrip);  
             }
             ps.close();
