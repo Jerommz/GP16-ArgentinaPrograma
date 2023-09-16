@@ -42,10 +42,12 @@ public class InscripcionData {
             while (rs.next()) {
                 int idAlumno=rs.getInt("idAlumno");
                 int idMateria=rs.getInt("idMateria");
+                Alumno al = alumnoDB.buscarAlumno(idAlumno);
+                Materia mat = materiaDB.buscarMateria(idMateria);
                 int nota=rs.getInt("nota");
                 Inscripcion inscrip=new Inscripcion();
-                inscrip.setAlumno(alumnoDB.buscarAlumno(idAlumno));
-                inscrip.setMateria(materiaDB.buscarMateria(idMateria));
+                inscrip.setAlumno(al);
+                inscrip.setMateria(mat);
                 inscrip.setNota(nota);
                 insc.add(inscrip);  
             }
