@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import universidadulp.AccesoADatos.Conexion;
 
 public final class Inscripciones extends javax.swing.JInternalFrame {
@@ -224,6 +227,41 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
         }
     }
+    
+        public void mostrarTabla() {
+        String[] col = {"ID", "DNI", "Apellido", "Nombre"};
+        DefaultTableModel modelo = new DefaultTableModel(null, col) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+//        jtTablaAlumnoMaterias.setModel(modelo);
+//        jtTablaAlumnoMaterias.setAutoCreateRowSorter(true);
+//        TableColumnModel columna = jtTablaAlumnoMaterias.getColumnModel();
+//        columna.getColumn(0).setMaxWidth(30);
+//
+//        String sql = "select inscripcion.idAlumno, inscripcion.idMateria";
+//
+//        try {
+//            PreparedStatement ps = con.prepareStatement(sql);
+//            ps.setString(1, jcbListaMaterias.getSelectedItem().toString());
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                String id = String.valueOf(rs.getInt("alumno.idAlumno"));
+//                String dni = String.valueOf(rs.getInt("alumno.dni"));
+//                String apellido = rs.getString("alumno.apellido");
+//                String nombre = rs.getString("alumno.nombre");
+//                String[] dataM = {id, dni, apellido, nombre};
+//                modelo.addRow(dataM);
+//            }
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Error..");
+//        }
+//
+//    }
 
 
 }

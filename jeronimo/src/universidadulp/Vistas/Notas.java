@@ -26,8 +26,9 @@ import universidadulp.Entidades.Materia;
  * @author jero
  */
 public class Notas extends javax.swing.JInternalFrame {
-    AlumnoData alu =new AlumnoData();
-    
+
+    AlumnoData alu = new AlumnoData();
+
     /**
      * Creates new form Notas
      */
@@ -35,26 +36,27 @@ public class Notas extends javax.swing.JInternalFrame {
         initComponents();
         llenarCombo();
         tabla();
-        
-    }
-  private void llenarCombo(){
-     
-     
-      Alumno alumno = new Alumno(WIDTH, WIDTH, title, title, LocalDate.MIN, isIcon);
-      Materia materia =new Materia();
-      Inscripcion insc =new Inscripcion(alumno, materia, WIDTH);
-      AlumnoData alu =new AlumnoData();
-      ArrayList <Alumno> listaAlumnos =(ArrayList <Alumno>) alu.listarAlumnos();
-      jComboAlumno.removeAllItems();
-      for(int i=0; i< listaAlumnos.size();i++){
-      jComboAlumno.addItem(listaAlumnos.get(i).getIdAlumno()+"");
-      jComboAlumno.addItem(listaAlumnos.get(i).getApellido());
-      jComboAlumno.addItem(listaAlumnos.get(i).getNombre());
-      jComboAlumno.addItem("nota"+insc.getNota());
-      jComboAlumno.addItem("--------------------------------");
-     } 
 
-}
+    }
+
+    private void llenarCombo() {
+
+        Alumno alumno = new Alumno(WIDTH, WIDTH, title, title, LocalDate.MIN, isIcon);
+        Materia materia = new Materia();
+        Inscripcion insc = new Inscripcion(alumno, materia, WIDTH);
+        AlumnoData alu = new AlumnoData();
+        ArrayList<Alumno> listaAlumnos = (ArrayList<Alumno>) alu.listarAlumnos();
+        jComboAlumno.removeAllItems();
+        for (int i = 0; i < listaAlumnos.size(); i++) {
+            jComboAlumno.addItem(listaAlumnos.get(i).getIdAlumno() + "");
+            jComboAlumno.addItem(listaAlumnos.get(i).getApellido());
+            jComboAlumno.addItem(listaAlumnos.get(i).getNombre());
+            jComboAlumno.addItem("nota" + insc.getNota());
+            jComboAlumno.addItem("--------------------------------");
+        }
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -222,56 +224,54 @@ public class Notas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboAlumnoActionPerformed
-       llenarCombo(); 
-       
+        llenarCombo();
+
     }//GEN-LAST:event_jComboAlumnoActionPerformed
 
     private void jbguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbguardarActionPerformed
-        DefaultTableModel modelo =new DefaultTableModel();
-       PreparedStatement ps =null;
-     try{
-         Connection con =Conexion.getConnection();
-         //obtener id alumno y la nota
-         double nota = Double.parseDouble(jtNota.getText());
-        int idAlumno = Integer.parseInt(jtCodigo.getText());
-        //obtener el id de la materia a partir del campo de texto
-         int idMateria =Integer.parseInt(jtMateria.getText());
-         //consultar el sql para obtener nombre de materia
-         String sql ="SELECT nombre FROM materia where idMateria =?";
-         PreparedStatement psmateria =con.prepareStatement(sql);
-         psmateria.setInt(1, idMateria);
-         ResultSet rsMateria =psmateria.executeQuery();
-         String nombreMateria ="";
-         if(rsMateria.next()){
-         nombreMateria =rsMateria.getString("nombre");
-         }else{
-         JOptionPane.showMessageDialog(null, "ID de materia invalido");
-         return;
-         }
-         //inserccion de datos a la tabla 
-         String sql2 ="INSERT INTO inscripcion (idAlumno, idMteria, nota) VALUES (?, ?, ?)";
-         PreparedStatement psinscripcion =con.prepareStatement(sql2);
-         
+        DefaultTableModel modelo = new DefaultTableModel();
+        PreparedStatement ps = null;
+        try {
+            Connection con = Conexion.getConnection();
+            //obtener id alumno y la nota
+            double nota = Double.parseDouble(jtNota.getText());
+            int idAlumno = Integer.parseInt(jtCodigo.getText());
+            //obtener el id de la materia a partir del campo de texto
+            int idMateria = Integer.parseInt(jtMateria.getText());
+            //consultar el sql para obtener nombre de materia
+            String sql = "SELECT nombre FROM materia where idMateria =?";
+            PreparedStatement psmateria = con.prepareStatement(sql);
+            psmateria.setInt(1, idMateria);
+            ResultSet rsMateria = psmateria.executeQuery();
+            String nombreMateria = "";
+            if (rsMateria.next()) {
+                nombreMateria = rsMateria.getString("nombre");
+            } else {
+                JOptionPane.showMessageDialog(null, "ID de materia invalido");
+                return;
+            }
+            //inserccion de datos a la tabla 
+            String sql2 = "INSERT INTO inscripcion (idAlumno, idMteria, nota) VALUES (?, ?, ?)";
+            PreparedStatement psinscripcion = con.prepareStatement(sql2);
 
-         ps.setInt(1, idAlumno);
-         ps.setString(2, nombreMateria);
-         ps.setDouble(3, nota);
-         psinscripcion.executeUpdate();
-         JOptionPane.showMessageDialog(null, "Producto guardado");
-         Object[]fila =new Object[3];
-         fila[0]=jtCodigo.getText();
-         fila[1]=jtMateria.getText();
-         fila[2]=jtNota.getText();
-         modelo.addRow(fila);
-         
-     
-     
-     }catch(Exception ex){
-     JOptionPane.showMessageDialog(null, "Error al guardar ");}
+            ps.setInt(1, idAlumno);
+            ps.setString(2, nombreMateria);
+            ps.setDouble(3, nota);
+            psinscripcion.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Producto guardado");
+            Object[] fila = new Object[3];
+            fila[0] = jtCodigo.getText();
+            fila[1] = jtMateria.getText();
+            fila[2] = jtNota.getText();
+            modelo.addRow(fila);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al guardar ");
+        }
     }//GEN-LAST:event_jbguardarActionPerformed
 
     private void jbsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbsalirActionPerformed
-    dispose();
+        dispose();
     }//GEN-LAST:event_jbsalirActionPerformed
 
     private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCodigoActionPerformed
@@ -281,39 +281,38 @@ public class Notas extends javax.swing.JInternalFrame {
     private void jTablaNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablaNotasMouseClicked
 
     }//GEN-LAST:event_jTablaNotasMouseClicked
-private void    tabla(){
-    
- try{
-  DefaultTableModel modelo =new DefaultTableModel();
-  jTablaNotas.setModel(modelo);
-  PreparedStatement ps =null;
-  ResultSet rs=null;
-  Connection con =Conexion.getConnection();
-  
-  String sql ="SELECT inscripcion.idalumno, materia.nombre AS nombre_materia, inscripcion.nota\n" +
-"FROM inscripcion\n" +
-"INNER JOIN materia ON inscripcion.idmateria = materia.idmateria;";
-  ps =con.prepareStatement(sql);
-  rs =ps.executeQuery();
-  ResultSetMetaData rsMd =rs.getMetaData();
-  int cantidadColumnas =rsMd.getColumnCount();
-  modelo.addColumn("CODIGO");
-  modelo.addColumn("NOMBRE_MATERIA");
-  modelo.addColumn("NOTA");
-  while(rs.next()){
-Object []filas =new Object[cantidadColumnas];
-for(int i =0;i<cantidadColumnas;i++){
-filas[i]=rs.getObject(i+1);
-}
-modelo.addRow(filas);
-  
-  }
-          
-          
- }catch(SQLException e){
- JOptionPane.showMessageDialog(null,"Error al cargar tabla de datos");
- }
-}
+    private void tabla() {
+
+        try {
+            DefaultTableModel modelo = new DefaultTableModel();
+            jTablaNotas.setModel(modelo);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Connection con = Conexion.getConnection();
+
+            String sql = "SELECT inscripcion.idalumno, materia.nombre AS nombre_materia, inscripcion.nota\n"
+                    + "FROM inscripcion\n"
+                    + "INNER JOIN materia ON inscripcion.idmateria = materia.idmateria;";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ResultSetMetaData rsMd = rs.getMetaData();
+            int cantidadColumnas = rsMd.getColumnCount();
+            modelo.addColumn("CODIGO");
+            modelo.addColumn("NOMBRE_MATERIA");
+            modelo.addColumn("NOTA");
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(filas);
+
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar tabla de datos");
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> jComboAlumno;

@@ -61,8 +61,8 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jdFechaNacAlumno" min="-2" pref="173" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="jdFechaNacAlumno" min="-2" pref="181" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -75,7 +75,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -106,7 +106,7 @@
                   <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                   <Component id="jcbEstadoAlumno" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                   <Component id="jdFechaNacAlumno" min="-2" max="-2" attributes="0"/>
@@ -219,11 +219,6 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="com.toedter.calendar.JDateChooser" name="jdFechaNacAlumno">
-      <Properties>
-        <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JCheckBox" name="jcbEstadoAlumno">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -299,6 +294,8 @@
           <Color blue="0" green="0" id="black" palette="1" red="0" type="palette"/>
         </Property>
       </Properties>
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="jdFechaNacAlumno">
     </Component>
   </SubComponents>
 </Form>

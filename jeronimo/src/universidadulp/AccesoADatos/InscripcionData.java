@@ -32,30 +32,27 @@ public class InscripcionData {
 //            JOptionPane.showMessageDialog(null, "Error al guardar la inscripcion.");
 //        }
 //    }
-
+    
     public List<Inscripcion> obtenerInscripciones() {
-        List<Inscripcion> insc = new ArrayList();
-        String sql = "select idAlumno, idMateria, nota from inscripcion";
-        try{
+        List<Inscripcion> inscripciones = new ArrayList<>();
+        String sql = "select * from inscripcion";
+        try {
             PreparedStatement ps=con.prepareStatement(sql);
-            ResultSet rs=ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int idAlumno=rs.getInt("idAlumno");
-                int idMateria=rs.getInt("idMateria");
-                Alumno al = alumnoDB.buscarAlumno(idAlumno);
-                Materia mat = materiaDB.buscarMateria(idMateria);
-                int nota=rs.getInt("nota");
-                Inscripcion inscrip=new Inscripcion();
-                inscrip.setAlumno(al);
-                inscrip.setMateria(mat);
-                inscrip.setNota(nota);
-                insc.add(inscrip);  
+                Inscripcion inscripcion = new Inscripcion();
+                inscripcion.setIdInscripcion(rs.getInt("idInscripcion"));
+                Alumno alumno = alumnoDB.buscarAlumno(rs.getInt("idAlumno"));
+                Materia materia = materiaDB.buscarMateria(rs.getInt("idMateria"));
+                inscripcion.setAlumno(alumno);
+                inscripcion.setMateria(materia);
+                inscripcion.setNota(rs.getDouble("nota"));
+                inscripciones.add(inscripcion);
             }
-            ps.close();
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null, "ERROR AL ACCEDER ALA BASE DE DATOS.");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error.");
         }
-        return insc;
+        return inscripciones;
     }
 //    
 //    public List<Inscripcion> obtenerInscripcionesPorAlumno(int id){

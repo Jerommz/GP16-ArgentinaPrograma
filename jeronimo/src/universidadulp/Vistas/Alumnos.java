@@ -31,13 +31,13 @@ public class Alumnos extends javax.swing.JInternalFrame {
         jtDniAlumno = new javax.swing.JTextField();
         jtNombreAlumno = new javax.swing.JTextField();
         jtApellidoAlumno = new javax.swing.JTextField();
-        jdFechaNacAlumno = new com.toedter.calendar.JDateChooser();
         jcbEstadoAlumno = new javax.swing.JCheckBox();
         jbNuevoAlumno = new javax.swing.JButton();
         jgModificarAlumno = new javax.swing.JButton();
         jbEliminarAlumno = new javax.swing.JButton();
         jbBuscarAlumno = new javax.swing.JButton();
         jtID = new javax.swing.JTextField();
+        jdFechaNacAlumno = new com.toedter.calendar.JDateChooser();
 
         setClosable(true);
         setIconifiable(true);
@@ -76,8 +76,6 @@ public class Alumnos extends javax.swing.JInternalFrame {
 
         jtApellidoAlumno.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtApellidoAlumno.setForeground(java.awt.Color.black);
-
-        jdFechaNacAlumno.setDateFormatString("yyyy-MM-dd");
 
         jcbEstadoAlumno.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jcbEstadoAlumno.setForeground(java.awt.Color.black);
@@ -155,8 +153,8 @@ public class Alumnos extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel9)
-                                .addGap(18, 18, 18)
-                                .addComponent(jdFechaNacAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jdFechaNacAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel10)
                             .addComponent(jLabel8)
                             .addComponent(jLabel7)
@@ -164,7 +162,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel5)
                                 .addGap(40, 40, 40)
                                 .addComponent(jtID, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(31, 31, 31))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,7 +187,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel10)
                     .addComponent(jcbEstadoAlumno))
-                .addGap(36, 36, 36)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel9)
                     .addComponent(jdFechaNacAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
