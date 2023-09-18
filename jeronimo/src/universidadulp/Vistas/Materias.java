@@ -44,7 +44,7 @@ public final class Materias extends javax.swing.JInternalFrame {
         jbModificarMateria = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtTablaMateria = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        jbBotonActualizar = new javax.swing.JButton();
 
         setClosable(true);
         setPreferredSize(new java.awt.Dimension(483, 499));
@@ -159,13 +159,13 @@ public final class Materias extends javax.swing.JInternalFrame {
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(290, 30, 180, 310);
 
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jbBotonActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jbBotonActualizarActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(430, 350, 30, 30);
+        getContentPane().add(jbBotonActualizar);
+        jbBotonActualizar.setBounds(430, 350, 30, 30);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -219,7 +219,7 @@ public final class Materias extends javax.swing.JInternalFrame {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int i = jtTablaMateria.getSelectedRow();
-                        
+
                 String id = jtTablaMateria.getModel().getValueAt(i, 0).toString();
                 String nombre = jtNombreMateria.getText();
                 int anio = Integer.parseInt(jtAnioMateria.getText());
@@ -229,13 +229,16 @@ public final class Materias extends javax.swing.JInternalFrame {
                 mod.setRowCount(0);
                 mostrarTabla();
                 materiaDB.modificarMateria(mat);
+                jtIdMateria.setText("");
+                jtNombreMateria.setText("");
+                jtAnioMateria.setText("");
+                jcbEstadoMateria.enable(false);
             }
-
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error inesperado.");
-        }catch(NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
-        }catch(ArrayIndexOutOfBoundsException ex){
+        } catch (ArrayIndexOutOfBoundsException ex) {
             JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
         }
 
@@ -253,24 +256,25 @@ public final class Materias extends javax.swing.JInternalFrame {
         jtNombreMateria.setText(nombre);
         jtAnioMateria.setText(String.valueOf(anio));
         jcbEstadoMateria.setSelected(true);
+        
     }//GEN-LAST:event_jtTablaMateriaMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jbBotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonActualizarActionPerformed
         // TODO add your handling code here:
         DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
         mod.setRowCount(0);
         mostrarTabla();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jbBotonActualizarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbBotonActualizar;
     private javax.swing.JButton jbEliminarMateria;
     private javax.swing.JButton jbModificarMateria;
     private javax.swing.JButton jbNuevoMateria;

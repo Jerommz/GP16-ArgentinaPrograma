@@ -105,9 +105,9 @@ public class InscripcionData {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Materia materia = new Materia();
-                materia.setIdMateria(rs.getInt("idMateria"));
-                materia.setNombre(rs.getNString("nombre"));
-                materia.setAnioMateria(rs.getInt("año"));
+                materia.setIdMateria(rs.getInt("materia.idMateria"));
+                materia.setNombre(rs.getNString("materia.nombre"));
+                materia.setAnioMateria(rs.getInt("materia.año"));
                 materiasCursadas.add(materia);
             }
             ps.close();
@@ -118,54 +118,80 @@ public class InscripcionData {
         return materiasCursadas;
     }
 
-//    public List<Materia> obtenerMateriasNoCursadas(int id){
-//        
-//    }
-//    
-    public void borrarInscripcionMateriaAlumno(int idAlumno, int idMateria){
+    public List<Materia> obtenerMateriasNoCursadas(int id) {
+        List<Materia> materiasCursadas = new ArrayList<>();
+        String sql = "select materia.idMateria, materia.nombre, materia.año"
+                + "from materia"
+                + "inner join inscripcion on inscripcion.idMateria = materia.idMateria"
+                + "inner join alumno on alumno.idAlumno = inscripcion.idAlumno"
+                + "where inscripcion.idAlumno = ?";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            int exito = ps.executeUpdate();
+            ResultSet rs = ps.executeQuery();
+            if (exito == 0) {
+                while (rs.next()) {
+                    Materia materia = new Materia();
+                    materia.setIdMateria(rs.getInt("materia.idMateria"));
+                    materia.setNombre(rs.getNString("materia.nombre"));
+                    materia.setAnioMateria(rs.getInt("materia.año"));
+                    materiasCursadas.add(materia);
+                }
+            }
+
+            ps.close();
+            rs.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al obtener materias cursadas.");
+        }
+        return materiasCursadas;
+    }
+
+    public void borrarInscripcionMateriaAlumno(int idAlumno, int idMateria) {
         String sql = "delete from inscripcion where idAlumno = ? and idMateria = ?";
-        try{
+        try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idAlumno);
             ps.setInt(2, idMateria);
-            
+
             int exito = ps.executeUpdate();
-            if(exito == 1){
+            if (exito == 1) {
                 JOptionPane.showMessageDialog(null, "Inscripcion eliminada con exito.");
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "La inscripcion no pudo ser eliminada.");
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al ingresar a la base de datos.");
         }
     }
-    
-    public void actualizarNota(int idAlumno, int idMateria, double nota){
+
+    public void actualizarNota(int idAlumno, int idMateria, double nota) {
         String sql = "update inscripcion set nota = ? where idAlumno = ? and idMateria = ?";
-        try{
+        try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setDouble(1, nota);
             ps.setInt(2, idAlumno);
             ps.setInt(3, idMateria);
-            
+
             int exito = ps.executeUpdate();
-            if(exito == 1){
+            if (exito == 1) {
                 JOptionPane.showMessageDialog(null, "Nota actualizada.");
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "La nota no pudo ser actualizada.");
             }
-            
-        }catch(SQLException ex){
+
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
         }
     }
-    
-    public List<Alumno> obtenerAlumnosPorMateria(int idMateria){
-        List<Alumno> alumnoPorMateria = new ArrayList<>();
-        String sql = "select alumno.idAlumno, alumno.nombre, alumno.apellido, alumno.dni, inscripcion.idMateria"
-                + "from alumno"
-                + "inner join inscripcion on inscripcion.idAlumno = alumno.idAlumno"
-                + "inner join materia on materia.idMateria = inscripcion.idMateria"
-                + "where inscripcion.idMateria = ?";
-    }
+
+//    public List<Alumno> obtenerAlumnosPorMateria(int idMateria){
+//        List<Alumno> alumnoPorMateria = new ArrayList<>();
+//        String sql = "select alumno.idAlumno, alumno.nombre, alumno.apellido, alumno.dni, inscripcion.idMateria"
+//                + "from alumno"
+//                + "inner join inscripcion on inscripcion.idAlumno = alumno.idAlumno"
+//                + "inner join materia on materia.idMateria = inscripcion.idMateria"
+//                + "where inscripcion.idMateria = ?";
+//    }
 }

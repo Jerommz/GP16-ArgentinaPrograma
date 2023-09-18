@@ -9,18 +9,18 @@ public class Main {
 
     public static void main(String[] args) {
         
-        testObtenerInscripciones();
+//        testObtenerInscripciones();
         
     }
     
-    public static void testObtenerInscripciones() {
-        InscripcionData id=new InscripcionData();
-        
-        for(Inscripcion inscripcion:id.obtenerInscripcionesPorAlumno(2)){
-            System.out.println("ID: "+inscripcion.getIdInscripcion());
-            System.out.println("Apellido: "+inscripcion.getAlumno().getApellido());
-            System.out.println("Materia: "+inscripcion.getMateria().getNombre());
-        }
-    }
+//    public static void testObtenerInscripciones() {
+//        InscripcionData id=new InscripcionData();
+//        
+//        for(Inscripcion inscripcion:id.obtenerInscripcionesPorAlumno(2)){
+//            System.out.println("ID: "+inscripcion.getIdInscripcion());
+//            System.out.println("Apellido: "+inscripcion.getAlumno().getApellido());
+//            System.out.println("Materia: "+inscripcion.getMateria().getNombre());
+//        }
+//    }
     
 }

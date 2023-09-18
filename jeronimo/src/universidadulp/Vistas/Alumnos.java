@@ -119,6 +119,8 @@ public class Alumnos extends javax.swing.JInternalFrame {
         jtID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtID.setForeground(java.awt.Color.black);
 
+        jdFechaNacAlumno.setDateFormatString("yyyy-MM-dd");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(

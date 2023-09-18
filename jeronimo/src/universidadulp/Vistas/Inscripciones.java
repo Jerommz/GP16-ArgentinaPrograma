@@ -1,22 +1,25 @@
-
 package universidadulp.Vistas;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import universidadulp.AccesoADatos.AlumnoData;
 import universidadulp.AccesoADatos.Conexion;
 
 public final class Inscripciones extends javax.swing.JInternalFrame {
-    
+
     private Connection con;
+    private AlumnoData alumnoDB = new AlumnoData();
 
     public Inscripciones() {
         initComponents();
         con = Conexion.getConnection();
+        jcMateriasInscriptas.setSelected(true);
         mostrarComboBox();
     }
 
@@ -61,9 +64,19 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
 
         jcMateriasNoInscriptas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jcMateriasNoInscriptas.setForeground(java.awt.Color.black);
+        jcMateriasNoInscriptas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcMateriasNoInscriptasActionPerformed(evt);
+            }
+        });
 
         jcMateriasInscriptas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jcMateriasInscriptas.setForeground(java.awt.Color.black);
+        jcMateriasInscriptas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcMateriasInscriptasActionPerformed(evt);
+            }
+        });
 
         jtTablaInscripcion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtTablaInscripcion.setForeground(java.awt.Color.black);
@@ -187,12 +200,28 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
 
     private void jbInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbInscribirActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jbInscribirActionPerformed
 
     private void jcbListaAlumnosInscripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaAlumnosInscripcionActionPerformed
         // TODO add your handling code here:
+        String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
+        int id = buscarAlumno(nombre);
+        mostrarTabla(id);
     }//GEN-LAST:event_jcbListaAlumnosInscripcionActionPerformed
+
+    private void jcMateriasNoInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasNoInscriptasActionPerformed
+        // TODO add your handling code here:
+        jcMateriasInscriptas.setSelected(false);
+        
+
+    }//GEN-LAST:event_jcMateriasNoInscriptasActionPerformed
+
+    private void jcMateriasInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasInscriptasActionPerformed
+        // TODO add your handling code here:
+        jcMateriasNoInscriptas.setSelected(false);
+
+    }//GEN-LAST:event_jcMateriasInscriptasActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -211,6 +240,7 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     public void mostrarComboBox() {
+
         String sql = "select nombre, apellido from alumno order by idAlumno ASC";
 
         try {
@@ -220,48 +250,63 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
 
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
-                String apellido = rs.getString("apellido");
-                String dato = nombre + " " + apellido;
+//                String apellido = rs.getString("apellido");
+                String dato = nombre;
                 jcbListaAlumnosInscripcion.addItem(dato);
             }
         } catch (SQLException ex) {
         }
     }
-    
-        public void mostrarTabla() {
-        String[] col = {"ID", "DNI", "Apellido", "Nombre"};
+
+    public void mostrarTabla(int id) {
+        String[] col = {"ID", "Nombre", "Año"};
         DefaultTableModel modelo = new DefaultTableModel(null, col) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+        jtTablaInscripcion.setModel(modelo);
+        TableColumnModel columna = jtTablaInscripcion.getColumnModel();
+        columna.getColumn(0).setMaxWidth(30);
+        String sql = "select materia.idMateria, materia.nombre, materia.año\n"
+                + "from materia\n"
+                + "inner join inscripcion on inscripcion.idMateria = materia.idMateria\n"
+                + "inner join alumno on alumno.idAlumno = inscripcion.idAlumno\n"
+                + "where alumno.idAlumno = ?";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
 
-//        jtTablaAlumnoMaterias.setModel(modelo);
-//        jtTablaAlumnoMaterias.setAutoCreateRowSorter(true);
-//        TableColumnModel columna = jtTablaAlumnoMaterias.getColumnModel();
-//        columna.getColumn(0).setMaxWidth(30);
-//
-//        String sql = "select inscripcion.idAlumno, inscripcion.idMateria";
-//
-//        try {
-//            PreparedStatement ps = con.prepareStatement(sql);
-//            ps.setString(1, jcbListaMaterias.getSelectedItem().toString());
-//            ResultSet rs = ps.executeQuery();
-//
-//            while (rs.next()) {
-//                String id = String.valueOf(rs.getInt("alumno.idAlumno"));
-//                String dni = String.valueOf(rs.getInt("alumno.dni"));
-//                String apellido = rs.getString("alumno.apellido");
-//                String nombre = rs.getString("alumno.nombre");
-//                String[] dataM = {id, dni, apellido, nombre};
-//                modelo.addRow(dataM);
-//            }
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(null, "Error..");
-//        }
-//
-//    }
-
+            while (rs.next()) {
+                String idMateria = String.valueOf(rs.getInt("materia.idMateria"));
+                String nombre = rs.getString("materia.nombre");
+                String anio = String.valueOf(rs.getInt("materia.año"));
+                String[] dataM = {idMateria, nombre, anio};
+                modelo.addRow(dataM);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error..");
         }
+    }
+
+    public int buscarAlumno(String nombre) {
+        String sql = "select idAlumno from alumno where nombre = ?";
+        int id = 0;
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nombre);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                id = rs.getInt("idAlumno");
+
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error..");
+        }
+        return id;
+    }
+
 }
