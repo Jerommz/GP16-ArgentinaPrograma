@@ -33,7 +33,7 @@ public class Alumno {
         this.activo = activo;
     }
 
-    public int getIdAlumno() {
+    public int getIdAlumno(int aInt) {
         return idAlumno;
     }
 

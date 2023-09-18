@@ -28,14 +28,14 @@ public class AlumnoData {
             ps.setString(3, alumno.getNombre());
             ps.setDate(4, Date.valueOf(alumno.getFechaNac()));
             ps.setBoolean(5, alumno.isActivo());
-
-            ps.executeUpdate();
+            int exito = ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
-
             if (rs.next()) {
                 alumno.setIdAlumno(rs.getInt(1));
                 JOptionPane.showMessageDialog(null, "Alumno agregado.");
+            }else{
+                JOptionPane.showMessageDialog(null, "Alumno no agregado.");
             }
             ps.close();
             rs.close();

@@ -8,8 +8,12 @@ package universidadulp.Vistas;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.MateriaData;
 import universidadulp.Entidades.Materia;
@@ -54,6 +58,8 @@ public class Materias extends javax.swing.JInternalFrame {
         jbModificar = new javax.swing.JButton();
         jbsalir = new javax.swing.JButton();
         jbbuscar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtTablaMateria = new javax.swing.JTable();
 
         setClosable(true);
         setIconifiable(true);
@@ -137,6 +143,28 @@ public class Materias extends javax.swing.JInternalFrame {
             }
         });
 
+        jtTablaMateria.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ));
+        jtTablaMateria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtTablaMateriaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtTablaMateria);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -153,52 +181,62 @@ public class Materias extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(109, 109, 109)
-                                .addComponent(jLabel1))
-                            .addComponent(jtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jbbuscar)
-                                .addGap(63, 63, 63)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jtcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(32, 32, 32)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jrbestado)
-                                    .addComponent(jtanio, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jbeliminar)
                                         .addGap(43, 43, 43)
                                         .addComponent(jbModificar)
                                         .addGap(32, 32, 32)
-                                        .addComponent(jbsalir))))))
+                                        .addComponent(jbsalir))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(77, 77, 77)
+                                                .addComponent(jLabel1))
+                                            .addComponent(jrbestado)
+                                            .addComponent(jtanio, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(46, 46, 46)
                         .addComponent(jbnuevo)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jtcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbbuscar))
-                .addGap(58, 58, 58)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jtanio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jrbestado))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jtcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jbbuscar))
+                        .addGap(58, 58, 58)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jtnombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(60, 60, 60)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jtanio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(60, 60, 60)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(jrbestado))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbnuevo)
                     .addComponent(jbeliminar)
@@ -254,30 +292,32 @@ public class Materias extends javax.swing.JInternalFrame {
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
                
-           if (jtnombre.getText()  == null) {
-               JOptionPane.showMessageDialog(null, "Para buscar, introduzca la ID de una materia.");
-           } else {
-               int id = Integer.parseInt(jtcodigo.getText());
-               String nombre =jtnombre.getText();
-               int anio =Integer.parseInt(jtanio.getText());
-               boolean estado = jrbestado.isSelected();
-               String sql = "select nombre ,anio ,estado  from Materia where idMateria=?";
+           String sql = "select idMateria from materia";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int i = jtTablaMateria.getSelectedRow();
+                        
+                String id = jtTablaMateria.getModel().getValueAt(i, 0).toString();
+                String nombre = jtnombre.getText();
+                int anio = Integer.parseInt(jtanio.getText());
+                boolean estado = jrbestado.isSelected();
+                Materia mat = new Materia(Integer.valueOf(id), nombre, anio, estado);
+                DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+                mod.setRowCount(0);
+                tabla();
+                materiaDB.modificarMateria(mat);
+            }
 
-            try {
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setInt(1, id);
-                ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-               id = rs.getInt("idMateria");
-               Materia materia = new Materia();
-               materiaDB.modificarMateria(materia);
-                
-                    
-                }
-            }  catch (SQLException ex) {
-                   JOptionPane.showMessageDialog(null, "Error al ingresar a la base de datos.");
-               }
-           }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado.");
+        }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
+        }catch(ArrayIndexOutOfBoundsException ex){
+            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
+        }
+
 
     }//GEN-LAST:event_jbModificarActionPerformed
 
@@ -289,6 +329,54 @@ public class Materias extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jbbuscarActionPerformed
 
+    private void jtTablaMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaMateriaMouseClicked
+             // TODO add your handling code here:
+        int i = jtTablaMateria.getSelectedRow();
+        String val = jtTablaMateria.getModel().getValueAt(i, 0).toString();
+        int id = Integer.valueOf(val);
+        String nombre = materiaDB.buscaMateria(id).getNombre();
+        int anio = materiaDB.buscaMateria(id).getAnioMateria();
+        Boolean estado = materiaDB.buscaMateria(id).isActivo();
+        jtcodigo.setText(String.valueOf(id));
+        jtnombre.setText(nombre);
+        jtanio.setText(String.valueOf(anio));
+        jrbestado.setSelected(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtTablaMateriaMouseClicked
+     private void    tabla(){
+    
+ try{
+  DefaultTableModel modelo =new DefaultTableModel();
+  jtTablaMateria.setModel(modelo);
+  PreparedStatement ps =null;
+  ResultSet rs=null;
+  Connection con =Conexion.getConnection();
+  
+  String sql ="SELECT idMateria,nombre FROM materia WHERE estado=1";
+  ps =con.prepareStatement(sql);
+  rs =ps.executeQuery();
+  ResultSetMetaData rsMd =rs.getMetaData();
+  int cantidadColumnas =rsMd.getColumnCount();
+  modelo.addColumn("CODIGO");
+  modelo.addColumn("NOMBRE_MATERIA");
+  
+  while(rs.next()){
+Object []filas =new Object[cantidadColumnas];
+for(int i =0;i<cantidadColumnas;i++){
+filas[i]=rs.getObject(i+1);
+}
+modelo.addRow(filas);
+  
+  }
+          
+          
+ }catch(SQLException e){
+ JOptionPane.showMessageDialog(null,"Error al cargar tabla de datos");
+ }
+}
+
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -296,12 +384,14 @@ public class Materias extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbModificar;
     private javax.swing.JButton jbbuscar;
     private javax.swing.JButton jbeliminar;
     private javax.swing.JButton jbnuevo;
     private javax.swing.JButton jbsalir;
     private javax.swing.JCheckBox jrbestado;
+    private javax.swing.JTable jtTablaMateria;
     private javax.swing.JTextField jtanio;
     private javax.swing.JTextField jtcodigo;
     private javax.swing.JTextField jtnombre;

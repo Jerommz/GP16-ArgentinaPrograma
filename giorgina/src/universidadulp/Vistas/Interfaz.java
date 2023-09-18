@@ -112,6 +112,11 @@ public class Interfaz extends javax.swing.JFrame {
         jMenuBar1.add(jMenu4);
 
         jMenu5.setText("Salir");
+        jMenu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu5ActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
@@ -154,9 +159,10 @@ public class Interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
         escritorio.removeAll();
         escritorio.repaint();
-        Materias gi=new Materias();
+        Inscripciones gi=new Inscripciones();
         frameCentrado(gi);
         escritorio.moveToFront(gi);
+        gi.show();
     }//GEN-LAST:event_mManejoInscripcionesActionPerformed
 
     private void mManejoNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mManejoNotasActionPerformed
@@ -166,6 +172,7 @@ public class Interfaz extends javax.swing.JFrame {
         Notas gn=new Notas();
         frameCentrado(gn);
         escritorio.moveToFront(gn);
+        gn.show();
     }//GEN-LAST:event_mManejoNotasActionPerformed
 
     private void mAlumnosMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAlumnosMateriaActionPerformed
@@ -175,7 +182,13 @@ public class Interfaz extends javax.swing.JFrame {
         AlumnosPorMateria gam=new AlumnosPorMateria();
         frameCentrado(gam);
         escritorio.moveToFront(gam);
+        gam.setVisible(true);
+        
     }//GEN-LAST:event_mAlumnosMateriaActionPerformed
+
+    private void jMenu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu5ActionPerformed
+   dispose();      
+    }//GEN-LAST:event_jMenu5ActionPerformed
 
     /**
      * @param args the command line arguments

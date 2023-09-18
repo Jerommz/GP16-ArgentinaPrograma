@@ -7,6 +7,9 @@ package universidadulp.Vistas;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import universidadulp.AccesoADatos.AlumnoData;
@@ -24,7 +27,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
      */
     AlumnoData alumnoDB = new AlumnoData();
     private Connection con;
-
+    
     public Alumnos() {
         initComponents();
         con = Conexion.getConnection();
@@ -51,10 +54,10 @@ public class Alumnos extends javax.swing.JInternalFrame {
         jtApellido = new javax.swing.JTextField();
         jcbEstado = new javax.swing.JCheckBox();
         jbNuevo = new javax.swing.JButton();
-        jgGuardar = new javax.swing.JButton();
+        jbModificar = new javax.swing.JButton();
         jbEliminar = new javax.swing.JButton();
         jbBuscar = new javax.swing.JButton();
-        jtID = new javax.swing.JTextField();
+        jtcodigo = new javax.swing.JTextField();
         jdcFechaDeNacimiento = new com.toedter.calendar.JDateChooser();
 
         setClosable(true);
@@ -107,12 +110,12 @@ public class Alumnos extends javax.swing.JInternalFrame {
             }
         });
 
-        jgGuardar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jgGuardar.setForeground(java.awt.Color.black);
-        jgGuardar.setText("MODIFICAR");
-        jgGuardar.addActionListener(new java.awt.event.ActionListener() {
+        jbModificar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jbModificar.setForeground(java.awt.Color.black);
+        jbModificar.setText("MODIFICAR");
+        jbModificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jgGuardarActionPerformed(evt);
+                jbModificarActionPerformed(evt);
             }
         });
 
@@ -134,9 +137,9 @@ public class Alumnos extends javax.swing.JInternalFrame {
             }
         });
 
-        jtID.setEditable(false);
-        jtID.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jtID.setForeground(java.awt.Color.black);
+        jtcodigo.setEditable(false);
+        jtcodigo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jtcodigo.setForeground(java.awt.Color.black);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -167,7 +170,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jbEliminar)
                         .addGap(18, 18, 18)
-                        .addComponent(jgGuardar))
+                        .addComponent(jbModificar))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(42, 42, 42)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,7 +181,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(40, 40, 40)
-                                .addComponent(jtID, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jtcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -191,7 +194,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
                     .addComponent(jtDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(jbBuscar)
-                    .addComponent(jtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtcodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -212,7 +215,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jbNuevo)
                             .addComponent(jbEliminar)
-                            .addComponent(jgGuardar))
+                            .addComponent(jbModificar))
                         .addGap(42, 42, 42))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jdcFechaDeNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,35 +227,50 @@ public class Alumnos extends javax.swing.JInternalFrame {
 
     private void jbNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoActionPerformed
         // Permite al usuario completar los campos si estan completos deja accionar al guardado como usuario nuevo
+        int dniDB = Integer.parseInt(jtDni.getText());
+        String sql = "select * from alumno where dni = ?";
         try {
-            if (jtDni.getText() == null || jtApellido.getText() == null || jtNombre.getText() == null || jdcFechaDeNacimiento.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos.");
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, dniDB);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(null, "Ya hay un alumno registrado con ese DNI.");
             } else {
-                int dni = Integer.parseInt(jtDni.getText());
-                String apellido = jtApellido.getText();
-                String nombre = jtNombre.getText();
-                String fechaNac = ((JTextField) jdcFechaDeNacimiento.getDateEditor().getUiComponent()).getText();
-                boolean estado = jcbEstado.isEnabled();
-                Alumno alu = new Alumno(dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
-                alumnoDB.guardarAlumno(alu);
+                if (jtDni.getText() == null || jtApellido.getText() == null || jtNombre.getText() == null || jdcFechaDeNacimiento.getDate() == null) {
+                    JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos.");
+                } else {
+                    int dni = Integer.parseInt(jtDni.getText());
+                    String apellido = jtApellido.getText();
+                    String nombre = jtNombre.getText();
+                    LocalDate fechaNac = jdcFechaDeNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    boolean estado = jcbEstado.isEnabled();
+                    Alumno alu = new Alumno(dni, apellido, nombre, fechaNac, estado);
+                    alumnoDB.guardarAlumno(alu);
+                }
+                
             }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "No puede haber campos vacios.");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "error al cargar los datos del alumno");
         }
+        jtDni.setText("");
+        jtApellido.setText("");
+        jtNombre.setText("");
+        jtcodigo.setText("");
     }//GEN-LAST:event_jbNuevoActionPerformed
 
-    private void jgGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jgGuardarActionPerformed
-      // TODO add your handling code here:
+    private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
         if (jtApellido.getText() == null || jtNombre.getText() == null || jdcFechaDeNacimiento.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
-        } else {        
+        } else {
             int dni = Integer.parseInt(jtDni.getText());
             String apellido = jtApellido.getText();
             String nombre = jtNombre.getText();
             String fechaNac = ((JTextField) jdcFechaDeNacimiento.getDateEditor().getUiComponent()).getText();
             boolean estado = jcbEstado.isSelected();
             String sql = "select idAlumno from alumno where dni=?";
-
+            
             try {
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setInt(1, dni);
@@ -262,35 +280,54 @@ public class Alumnos extends javax.swing.JInternalFrame {
                     Alumno alu = new Alumno(id, dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
                     alumnoDB.modificarAlumno(alu);
                 }
-
+                
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "error");
+            } catch (Exception e) {
+                JOptionPane.showInternalMessageDialog(null, "error al modificar");
             }
-          // TEste guardado es despues de una modificacion al alumno y seguido lo lleva a base de datos 
-     
-    }//GEN-LAST:event_jgGuardarActionPerformed
-    }
+            
+        }
+        jtDni.setText("");
+        jtApellido.setText("");
+        jtNombre.setText("");
+        jtcodigo.setText("");
+        // TEste guardado es despues de una modificacion al alumno y seguido lo lleva a base de datos 
+        
+    }//GEN-LAST:event_jbModificarActionPerformed
+    
     private void jbEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarActionPerformed
         //Eliminacion del alumno  tanto en netbeans y en base de datos 
-        if (jtApellido.getText() == null  || jtNombre.getText()== (null) || jdcFechaDeNacimiento.getDate()==null) {
+        if (jtApellido.getText() == null || jtNombre.getText() == (null) || jdcFechaDeNacimiento.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
         } else {
             try {
                 
                 int dni = Integer.parseInt(jtDni.getText());
                 String sql = "select idAlumno from alumno where dni=?";
-
+                
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setInt(1, dni);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     int id = rs.getInt("idAlumno");
                     alumnoDB.eliminarAlumno(id);
+                    JOptionPane.showMessageDialog(null, "alumno eliminado");
                 }
+                
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
+                JOptionPane.showMessageDialog(null, "Error de sql .");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "error al querer eliminar");
+                
             }
         }
+        jtDni.setText("");
+        jtApellido.setText("");
+        jtNombre.setText("");
+        jtcodigo.setText("");
+        
+
     }//GEN-LAST:event_jbEliminarActionPerformed
 
     private void jbBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarActionPerformed
@@ -307,7 +344,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
                         int id = rs.getInt("idAlumno");
-                        jtID.setText(String.valueOf((char) alumnoDB.buscarAlumno(id).getIdAlumno()));
+                        jtcodigo.setText(String.valueOf((char) alumnoDB.buscarAlumno(id).getIdAlumno(rs.getInt("idAlumno"))));
                         jtDni.setText(String.valueOf(alumnoDB.buscarAlumno(id).getDni()));
                         jtApellido.setText(alumnoDB.buscarAlumno(id).getApellido());
                         jtNombre.setText(alumnoDB.buscarAlumno(id).getNombre());
@@ -324,6 +361,8 @@ public class Alumnos extends javax.swing.JInternalFrame {
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Ingrese un DNI.");
         }
+       
+
     }//GEN-LAST:event_jbBuscarActionPerformed
 
 
@@ -336,14 +375,14 @@ public class Alumnos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JButton jbBuscar;
     private javax.swing.JButton jbEliminar;
+    private javax.swing.JButton jbModificar;
     private javax.swing.JButton jbNuevo;
     private javax.swing.JCheckBox jcbEstado;
     private com.toedter.calendar.JDateChooser jdcFechaDeNacimiento;
-    private javax.swing.JButton jgGuardar;
     private javax.swing.JTextField jtApellido;
     private javax.swing.JTextField jtDni;
-    private javax.swing.JTextField jtID;
     private javax.swing.JTextField jtNombre;
+    private javax.swing.JTextField jtcodigo;
     // End of variables declaration//GEN-END:variables
 
 //    private void rellenarCampos() {

@@ -103,7 +103,7 @@ public Materia buscaMateria(int idMateria){
      return materia;       
             
     }
-  /*  public   List <Materia> listarMateria(){
+    public   List <Materia> listarMateria(){
     String sql ="SELECT  idMateria,  nombre,  anio,  estado FROM materia  WHERE estado = 1";
     ArrayList <Materia >materias =new ArrayList<>();
         try {
@@ -125,8 +125,8 @@ public Materia buscaMateria(int idMateria){
         }
     
             
-     return materias      
+     return materias ;     
 
-}*/
+}
 
 }

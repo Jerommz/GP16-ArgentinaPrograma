@@ -33,7 +33,7 @@ public class Inscripcion {
         this.idInscripcion = idInscripcion;
     }
 
-    public Alumno getAlumno() {
+    public Alumno getAlumno(String idinscripcion) {
         return alumno;
     }
 

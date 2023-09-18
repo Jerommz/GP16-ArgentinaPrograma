@@ -5,17 +5,37 @@
  */
 package universidadulp.Vistas;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import universidadulp.AccesoADatos.AlumnoData;
+import universidadulp.AccesoADatos.Conexion;
+import universidadulp.AccesoADatos.InscripcionData;
+import universidadulp.Entidades.Alumno;
+import universidadulp.Entidades.Inscripcion;
+
 /**
  *
  * @author jero
  */
 public class Inscripciones extends javax.swing.JInternalFrame {
-
+    Connection con =Conexion.getConnection();
     /**
      * Creates new form Inscripciones
      */
     public Inscripciones() {
         initComponents();
+        mostrarComboBox();
+        mostrarTabla();
+        
     }
 
     /**
@@ -32,14 +52,14 @@ public class Inscripciones extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        jcmatNoinscriptas = new javax.swing.JCheckBox();
+        jcmatinscriptas = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jTablaInscripcion = new javax.swing.JTable();
+        jcbListaAlumnosInscripcion = new javax.swing.JComboBox<>();
+        jbanular = new javax.swing.JButton();
+        jtsalir = new javax.swing.JButton();
+        jbinscribir = new javax.swing.JButton();
 
         setClosable(true);
 
@@ -63,15 +83,15 @@ public class Inscripciones extends javax.swing.JInternalFrame {
         jLabel8.setForeground(java.awt.Color.black);
         jLabel8.setText("Materias no inscriptas");
 
-        jCheckBox1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jCheckBox1.setForeground(java.awt.Color.black);
+        jcmatNoinscriptas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jcmatNoinscriptas.setForeground(java.awt.Color.black);
 
-        jCheckBox2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jCheckBox2.setForeground(java.awt.Color.black);
+        jcmatinscriptas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jcmatinscriptas.setForeground(java.awt.Color.black);
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTable1.setForeground(java.awt.Color.black);
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTablaInscripcion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTablaInscripcion.setForeground(java.awt.Color.black);
+        jTablaInscripcion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -82,43 +102,26 @@ public class Inscripciones extends javax.swing.JInternalFrame {
                 "ID", "Nombre", "Año"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTablaInscripcion);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton1.setForeground(java.awt.Color.black);
-        jButton1.setText("Anular inscripcion");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jcbListaAlumnosInscripcion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jcbListaAlumnosInscripcion.setForeground(java.awt.Color.black);
+        jcbListaAlumnosInscripcion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jcbListaAlumnosInscripcionActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton2.setForeground(java.awt.Color.black);
-        jButton2.setText("Salir");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jbanular.setText("Anular inscripcion");
+
+        jtsalir.setText("Salir");
+        jtsalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jtsalirActionPerformed(evt);
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton3.setForeground(java.awt.Color.black);
-        jButton3.setText("Inscribir");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jComboBox1.setForeground(java.awt.Color.black);
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
+        jbinscribir.setText("inscribir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,14 +141,14 @@ public class Inscripciones extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jcbListaAlumnosInscripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox2)
+                                .addComponent(jcmatinscriptas)
                                 .addGap(2, 2, 2)
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jCheckBox1)
+                                .addComponent(jcmatNoinscriptas)
                                 .addGap(5, 5, 5)
                                 .addComponent(jLabel8)))))
                 .addGap(58, 58, 58))
@@ -153,13 +156,15 @@ public class Inscripciones extends javax.swing.JInternalFrame {
                 .addContainerGap(43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addGap(76, 76, 76)
-                        .addComponent(jButton1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jbinscribir)
+                        .addGap(71, 71, 71)
+                        .addComponent(jbanular)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39))
+                        .addComponent(jtsalir)
+                        .addGap(49, 49, 49))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -169,63 +174,103 @@ public class Inscripciones extends javax.swing.JInternalFrame {
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbListaAlumnosInscripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addComponent(jLabel6)
                 .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBox2)
+                    .addComponent(jcmatinscriptas)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(4, 4, 4)
                                 .addComponent(jLabel8))
-                            .addComponent(jCheckBox1)
+                            .addComponent(jcmatNoinscriptas)
                             .addComponent(jLabel7))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jbanular)
+                    .addComponent(jtsalir)
+                    .addComponent(jbinscribir))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jcbListaAlumnosInscripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaAlumnosInscripcionActionPerformed
+       mostrarComboBox();
+    }//GEN-LAST:event_jcbListaAlumnosInscripcionActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
+    private void jtsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtsalirActionPerformed
+    dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jtsalirActionPerformed
+      public void mostrarComboBox() {
+        try {
+            String sql="SELECT idAlumno , apellido, nombre FROM alumno";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+            int idAl =rs.getInt("idAlumno");
+            String apellido =rs.getString("apellido");
+            String nombre =rs.getString("nombre");
+            String datos = idAl +" "+apellido+" "+nombre;
+            jcbListaAlumnosInscripcion.addItem(datos);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "error en el sql ");
+        }
+    }
+    
+        public void mostrarTabla() {
+         try{
+  DefaultTableModel modelo =new DefaultTableModel();
+  jTablaInscripcion.setModel(modelo);
+  PreparedStatement ps =null;
+  ResultSet rs=null;
+  Connection con =Conexion.getConnection();
+  
+  String sql ="SELECT a.idalumno, a.apellido, m.anio AS anio_que_cursa\n" +
+"FROM alumno a\n" +
+"CROSS JOIN (SELECT DISTINCT anio FROM materia) m;";
+  ps =con.prepareStatement(sql);
+  rs =ps.executeQuery();
+  ResultSetMetaData rsMd =rs.getMetaData();
+  int cantidadColumnas =rsMd.getColumnCount();
+  modelo.addColumn("IdAlumno");
+  modelo.addColumn("NOMBRE_Alumno");
+  modelo.addColumn("NOTA");
+  while(rs.next()){
+Object []filas =new Object[cantidadColumnas];
+for(int i =0;i<cantidadColumnas;i++){
+filas[i]=rs.getObject(i+1);
+}
+modelo.addRow(filas);
+  
+  }
+          
+          
+ }catch(SQLException e){
+ JOptionPane.showMessageDialog(null,"Error al cargar tabla de datos");
+ }
+        }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTablaInscripcion;
+    private javax.swing.JButton jbanular;
+    private javax.swing.JButton jbinscribir;
+    private javax.swing.JComboBox<String> jcbListaAlumnosInscripcion;
+    private javax.swing.JCheckBox jcmatNoinscriptas;
+    private javax.swing.JCheckBox jcmatinscriptas;
+    private javax.swing.JButton jtsalir;
     // End of variables declaration//GEN-END:variables
 }
