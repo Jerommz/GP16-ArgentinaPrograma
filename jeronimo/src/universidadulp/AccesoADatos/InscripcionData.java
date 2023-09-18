@@ -93,7 +93,7 @@ public class InscripcionData {
     }
 
     public List<Materia> obtenerMateriasCursadas(int id) {
-        List<Materia> materiasCursadas = new ArrayList<>();
+        ArrayList<Materia> materiasCursadas = new ArrayList<>();
         String sql = "select materia.idMateria, materia.nombre, materia.año"
                 + "from materia"
                 + "inner join inscripcion on inscripcion.idMateria = materia.idMateria"
@@ -119,7 +119,7 @@ public class InscripcionData {
     }
 
     public List<Materia> obtenerMateriasNoCursadas(int id) {
-        List<Materia> materiasCursadas = new ArrayList<>();
+        ArrayList<Materia> materiasCursadas = new ArrayList<>();
         String sql = "select materia.idMateria, materia.nombre, materia.año"
                 + "from materia"
                 + "inner join inscripcion on inscripcion.idMateria = materia.idMateria"

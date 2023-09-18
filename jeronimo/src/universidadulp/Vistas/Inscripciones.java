@@ -5,16 +5,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import universidadulp.AccesoADatos.AlumnoData;
 import universidadulp.AccesoADatos.Conexion;
+import universidadulp.AccesoADatos.InscripcionData;
+import universidadulp.Entidades.Materia;
 
 public final class Inscripciones extends javax.swing.JInternalFrame {
 
     private Connection con;
     private AlumnoData alumnoDB = new AlumnoData();
+    private InscripcionData inscripcionDB = new InscripcionData();
 
     public Inscripciones() {
         initComponents();
@@ -213,7 +218,7 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
     private void jcMateriasNoInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasNoInscriptasActionPerformed
         // TODO add your handling code here:
         jcMateriasInscriptas.setSelected(false);
-        
+
 
     }//GEN-LAST:event_jcMateriasNoInscriptasActionPerformed
 
@@ -269,26 +274,37 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
         jtTablaInscripcion.setModel(modelo);
         TableColumnModel columna = jtTablaInscripcion.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
-        String sql = "select materia.idMateria, materia.nombre, materia.año\n"
-                + "from materia\n"
-                + "inner join inscripcion on inscripcion.idMateria = materia.idMateria\n"
-                + "inner join alumno on alumno.idAlumno = inscripcion.idAlumno\n"
-                + "where alumno.idAlumno = ?";
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                String idMateria = String.valueOf(rs.getInt("materia.idMateria"));
-                String nombre = rs.getString("materia.nombre");
-                String anio = String.valueOf(rs.getInt("materia.año"));
-                String[] dataM = {idMateria, nombre, anio};
-                modelo.addRow(dataM);
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error..");
+        for (Materia materias : (ArrayList<Materia>) inscripcionDB.obtenerMateriasCursadas(id)) {
+            
+            String idMateria = String.valueOf(materias.getIdMateria());
+            String nombre = materias.getNombre();
+            String anio = String.valueOf(materias.getAnioMateria());
+            String[] dataM = {idMateria, nombre, anio};
+            modelo.addRow(dataM);
+            
         }
+
+//        String sql = "select materia.idMateria, materia.nombre, materia.año\n"
+//                + "from materia\n"
+//                + "inner join inscripcion on inscripcion.idMateria = materia.idMateria\n"
+//                + "inner join alumno on alumno.idAlumno = inscripcion.idAlumno\n"
+//                + "where alumno.idAlumno = ?";
+//        try {
+//            PreparedStatement ps = con.prepareStatement(sql);
+//            ps.setInt(1, id);
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                String idMateria = String.valueOf(rs.getInt("materia.idMateria"));
+//                String nombre = rs.getString("materia.nombre");
+//                String anio = String.valueOf(rs.getInt("materia.año"));
+//                String[] dataM = {idMateria, nombre, anio};
+//                modelo.addRow(dataM);
+//            }
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, "Error..");
+//        }
     }
 
     public int buscarAlumno(String nombre) {
