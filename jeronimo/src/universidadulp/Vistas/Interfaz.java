@@ -12,7 +12,6 @@ public class Interfaz extends javax.swing.JFrame {
 
     public Interfaz() {
         initComponents();
-        
     }
 
     @SuppressWarnings("unchecked")

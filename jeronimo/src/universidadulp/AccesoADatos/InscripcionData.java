@@ -93,21 +93,19 @@ public class InscripcionData {
     }
 
     public List<Materia> obtenerMateriasCursadas(int id) {
-        ArrayList<Materia> materiasCursadas = new ArrayList<>();
-        String sql = "select materia.idMateria, materia.nombre, materia.año"
-                + "from materia"
-                + "inner join inscripcion on inscripcion.idMateria = materia.idMateria"
-                + "inner join alumno on alumno.idAlumno = inscripcion.idAlumno"
-                + "where inscripcion.idAlumno = ?";
+        List<Materia> materiasCursadas = new ArrayList<>();
+        String sql = "SELECT inscripcion.idMateria, nombre, año"
+                + "FROM inscripcion, materia"
+                + "WHERE inscripcion.idMateria = materia.idMateria AND inscripcion.idAlumno = ?";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Materia materia = new Materia();
-                materia.setIdMateria(rs.getInt("materia.idMateria"));
-                materia.setNombre(rs.getNString("materia.nombre"));
-                materia.setAnioMateria(rs.getInt("materia.año"));
+                materia.setIdMateria(rs.getInt("inscripcion.idMateria"));
+                materia.setNombre(rs.getNString("nombre"));
+                materia.setAnioMateria(rs.getInt("año"));
                 materiasCursadas.add(materia);
             }
             ps.close();
@@ -119,31 +117,29 @@ public class InscripcionData {
     }
 
     public List<Materia> obtenerMateriasNoCursadas(int id) {
-        ArrayList<Materia> materiasCursadas = new ArrayList<>();
-        String sql = "select materia.idMateria, materia.nombre, materia.año"
-                + "from materia"
-                + "inner join inscripcion on inscripcion.idMateria = materia.idMateria"
-                + "inner join alumno on alumno.idAlumno = inscripcion.idAlumno"
-                + "where inscripcion.idAlumno = ?";
+        List<Materia> materiasCursadas = new ArrayList<>();
+        String sql = "SELECT idMateria, nombre, año"
+                + "FROM materia"
+                + "WHERE estado = 1 AND idMateria"
+                + "NOT IN(SELECT idMateria FROM inscripcion WHERE inscripcion.idAlumno = ?)";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             int exito = ps.executeUpdate();
             ResultSet rs = ps.executeQuery();
-            if (exito == 0) {
+            if (exito == 1) {
                 while (rs.next()) {
                     Materia materia = new Materia();
-                    materia.setIdMateria(rs.getInt("materia.idMateria"));
-                    materia.setNombre(rs.getNString("materia.nombre"));
-                    materia.setAnioMateria(rs.getInt("materia.año"));
+                    materia.setIdMateria(rs.getInt("idMateria"));
+                    materia.setNombre(rs.getNString("nombre"));
+                    materia.setAnioMateria(rs.getInt("año"));
                     materiasCursadas.add(materia);
                 }
             }
-
             ps.close();
             rs.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al obtener materias cursadas.");
+            JOptionPane.showMessageDialog(null, "Error al obtener materias no cursadas.");
         }
         return materiasCursadas;
     }
