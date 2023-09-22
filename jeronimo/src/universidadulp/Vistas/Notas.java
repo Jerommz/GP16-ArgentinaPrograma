@@ -8,19 +8,12 @@ package universidadulp.Vistas;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import universidadulp.AccesoADatos.AlumnoData;
+import javax.swing.table.TableColumnModel;
 import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.InscripcionData;
-import universidadulp.AccesoADatos.MateriaData;
-import universidadulp.Entidades.Alumno;
-import universidadulp.Entidades.Inscripcion;
-import universidadulp.Entidades.Materia;
 
 /**
  *
@@ -28,38 +21,22 @@ import universidadulp.Entidades.Materia;
  */
 public class Notas extends javax.swing.JInternalFrame {
 
-    AlumnoData alumnoDB = new AlumnoData();
-    MateriaData materiaDB = new MateriaData();
     private Connection con;
+    boolean editable = false;
+    InscripcionData inscripcionDB = new InscripcionData();
+    
+    String[] col = {"ID", "Nombre", "Nota"};
+    DefaultTableModel modelo = new DefaultTableModel(null, col) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return editable;
+        }
+    };
 
-    /**
-     * Creates new form Notas
-     */
     public Notas() {
         initComponents();
         con = Conexion.getConnection();
-        llenarCombo();
-        tabla();
-
-    }
-
-    private void llenarCombo() {
-        String sql = "select idAlumno, nombre, apellido from alumno order by idAlumno ASC";
-
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                String idAlumno = String.valueOf(rs.getInt("idAlumno"));
-                String nombre = rs.getString("nombre");
-                String apellido = rs.getString("apellido");
-                String dato = idAlumno + " " + nombre + " " + apellido;
-                jcbNotas.addItem(dato);
-            }
-        } catch (SQLException ex) {
-        }
+        mostrarComboBox();
     }
 
     /**
@@ -71,14 +48,13 @@ public class Notas extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jcbNotas = new javax.swing.JComboBox<>();
-        jbGuardar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jtTablaNotas = new javax.swing.JTable();
-
-        setClosable(true);
+        jcbListaNotas = new javax.swing.JComboBox<>();
+        jbBotonGuardarNotas = new javax.swing.JButton();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
         jLabel1.setForeground(java.awt.Color.black);
@@ -88,179 +64,198 @@ public class Notas extends javax.swing.JInternalFrame {
         jLabel5.setForeground(java.awt.Color.black);
         jLabel5.setText("Seleccione un alumno:");
 
-        jcbNotas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jcbNotas.setForeground(java.awt.Color.black);
-        jcbNotas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jcbNotas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbNotasActionPerformed(evt);
-            }
-        });
-
-        jbGuardar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jbGuardar.setForeground(java.awt.Color.black);
-        jbGuardar.setText("Guardar");
-        jbGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbGuardarActionPerformed(evt);
-            }
-        });
-
         jtTablaNotas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtTablaNotas.setForeground(java.awt.Color.black);
         jtTablaNotas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Codigo", "Nombre", "Nota"
+
             }
         ));
-        jScrollPane1.setViewportView(jtTablaNotas);
+        jtTablaNotas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtTablaNotasMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtTablaNotas);
+
+        jcbListaNotas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jcbListaNotas.setForeground(java.awt.Color.black);
+        jcbListaNotas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbListaNotasActionPerformed(evt);
+            }
+        });
+
+        jbBotonGuardarNotas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jbBotonGuardarNotas.setForeground(java.awt.Color.black);
+        jbBotonGuardarNotas.setText("Guardar");
+        jbBotonGuardarNotas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBotonGuardarNotasActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(jcbListaNotas, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(163, 163, 163))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jbBotonGuardarNotas)
+                        .addGap(195, 195, 195))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jcbListaNotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jbBotonGuardarNotas)
+                .addGap(43, 43, 43))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(165, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(162, 162, 162))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(jcbNotas, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(198, 198, 198)
-                        .addComponent(jbGuardar)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel1)
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jcbNotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jbGuardar)
-                .addGap(38, 38, 38))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboAlumnoActionPerformed
-        llenarCombo();
-
-    }//GEN-LAST:event_jComboAlumnoActionPerformed
-
-    private void jbguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbguardarActionPerformed
-        DefaultTableModel modelo = new DefaultTableModel();
-        PreparedStatement ps = null;
-        try {
-            Connection con = Conexion.getConnection();
-            //obtener id alumno y la nota
-            double nota = Double.parseDouble(jtNota.getText());
-            int idAlumno = Integer.parseInt(jtCodigo.getText());
-            //obtener el id de la materia a partir del campo de texto
-            int idMateria = Integer.parseInt(jtMateria.getText());
-            //consultar el sql para obtener nombre de materia
-            String sql = "SELECT nombre FROM materia where idMateria =?";
-            PreparedStatement psmateria = con.prepareStatement(sql);
-            psmateria.setInt(1, idMateria);
-            ResultSet rsMateria = psmateria.executeQuery();
-            String nombreMateria = "";
-            if (rsMateria.next()) {
-                nombreMateria = rsMateria.getString("nombre");
-            } else {
-                JOptionPane.showMessageDialog(null, "ID de materia invalido");
-                return;
-            }
-            //inserccion de datos a la tabla 
-            String sql2 = "INSERT INTO inscripcion (idAlumno, idMteria, nota) VALUES (?, ?, ?)";
-            PreparedStatement psinscripcion = con.prepareStatement(sql2);
-
-            ps.setInt(1, idAlumno);
-            ps.setString(2, nombreMateria);
-            ps.setDouble(3, nota);
-            psinscripcion.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Producto guardado");
-            Object[] fila = new Object[3];
-            fila[0] = jtCodigo.getText();
-            fila[1] = jtMateria.getText();
-            fila[2] = jtNota.getText();
-            modelo.addRow(fila);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error al guardar ");
-        }
-    }//GEN-LAST:event_jbguardarActionPerformed
-
-    private void jbsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbsalirActionPerformed
-        dispose();
-    }//GEN-LAST:event_jbsalirActionPerformed
-
-    private void jtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtCodigoActionPerformed
+    private void jcbListaNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaNotasActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jtCodigoActionPerformed
+        String dataCB = jcbListaNotas.getSelectedItem().toString();
+        mostrarTabla(dataCB);
+    }//GEN-LAST:event_jcbListaNotasActionPerformed
 
-    private void jTablaNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablaNotasMouseClicked
-
-    }//GEN-LAST:event_jTablaNotasMouseClicked
-    private void tabla() {
-
-        try {
-            DefaultTableModel modelo = new DefaultTableModel();
-            jtTablaNotas.setModel(modelo);
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            Connection con = Conexion.getConnection();
-
-            String sql = "SELECT inscripcion.idalumno, materia.nombre AS nombre_materia, inscripcion.nota\n"
-                    + "FROM inscripcion\n"
-                    + "INNER JOIN materia ON inscripcion.idmateria = materia.idmateria;";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            ResultSetMetaData rsMd = rs.getMetaData();
-            int cantidadColumnas = rsMd.getColumnCount();
-            modelo.addColumn("CODIGO");
-            modelo.addColumn("NOMBRE_MATERIA");
-            modelo.addColumn("NOTA");
-            while (rs.next()) {
-                Object[] filas = new Object[cantidadColumnas];
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    filas[i] = rs.getObject(i + 1);
-                }
-                modelo.addRow(filas);
-
-            }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error al cargar tabla de datos");
+    private void jtTablaNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaNotasMouseClicked
+        // TODO add your handling code here:
+        if (jtTablaNotas.getSelectedColumn() == 2) {
+            editable = true;
+        } else {
+            editable = false;
         }
-    }
+    }//GEN-LAST:event_jtTablaNotasMouseClicked
+
+    private void jbBotonGuardarNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonGuardarNotasActionPerformed
+        // TODO add your handling code here:
+        String sql = "select idMateria from materia where nombre = ?";
+        int i = jtTablaNotas.getSelectedRow();
+        String idAl = jtTablaNotas.getModel().getValueAt(i, 0).toString();
+        String nombreMat = jtTablaNotas.getModel().getValueAt(i, 1).toString();
+        String notaAl = jtTablaNotas.getModel().getValueAt(i, 2).toString();
+        try {
+            
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nombreMat);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                int idMat = rs.getInt("idMateria");
+                inscripcionDB.actualizarNota(Integer.valueOf(idAl), idMat, Integer.valueOf(notaAl));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
+        }
+    }//GEN-LAST:event_jbBotonGuardarNotasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton jbGuardar;
-    private javax.swing.JComboBox<String> jcbNotas;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton jbBotonGuardarNotas;
+    private javax.swing.JComboBox<String> jcbListaNotas;
     private javax.swing.JTable jtTablaNotas;
     // End of variables declaration//GEN-END:variables
 
+    public int mostrarComboBox() {
+        String sql = "select idAlumno, nombre, apellido from alumno order by idAlumno ASC";
+        int id = 0;
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                id = rs.getInt("idAlumno");
+                String idAlumno = String.valueOf(rs.getInt("idAlumno"));
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String dato[] = {idAlumno + " " + nombre + " " + apellido};
+                for (String datos : dato) {
+                    jcbListaNotas.addItem(datos);
+                }
+
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
+        }
+        return id;
+    }
+
+    public void mostrarTabla(String dataCB) {
+        String[] valores = dataCB.split(" ");
+        int id = Integer.valueOf(valores[0]);
+        jtTablaNotas.setModel (modelo);
+
+        TableColumnModel columna = jtTablaNotas.getColumnModel();
+        columna.getColumn(0).setMaxWidth(30);
+        columna.getColumn(2).setMaxWidth(60);
+
+        String sql = "select materia.idMateria, materia.nombre, inscripcion.nota\n"
+                + "from `materia`\n"
+                + "inner join inscripcion on inscripcion.idMateria = materia.idMateria\n"
+                + "inner join alumno on alumno.idAlumno = inscripcion.idAlumno\n"
+                + "where inscripcion.idAlumno = ?";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String idMateria = String.valueOf(rs.getInt("materia.idMateria"));
+                String nombre = rs.getString("materia.nombre");
+                String nota = rs.getString("inscripcion.nota");
+                String dataM[] = {idMateria, nombre, nota};
+                modelo.addRow(dataM);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
+        }
+    }
 }

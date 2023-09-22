@@ -155,7 +155,7 @@ public class AlumnosPorMateria extends javax.swing.JInternalFrame {
                 String dni = String.valueOf(rs.getInt("alumno.dni"));
                 String apellido = rs.getString("alumno.apellido");
                 String nombre = rs.getString("alumno.nombre");
-                String[] dataM = {id, dni, apellido, nombre};
+                String dataM[] = {id, dni, apellido, nombre};
                 modelo.addRow(dataM);
             }
         } catch (SQLException ex) {

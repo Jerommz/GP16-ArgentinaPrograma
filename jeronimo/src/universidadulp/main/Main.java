@@ -2,25 +2,16 @@ package universidadulp.main;
 
 import universidadulp.AccesoADatos.InscripcionData;
 import universidadulp.Entidades.Inscripcion;
+import universidadulp.Vistas.Notas;
 
 
 
 public class Main {
 
     public static void main(String[] args) {
+     
+        Notas nota=new Notas();
         
-//        testObtenerInscripciones();
-        
+        nota.mostrarComboBox();
     }
-    
-//    public static void testObtenerInscripciones() {
-//        InscripcionData id=new InscripcionData();
-//        
-//        for(Inscripcion inscripcion:id.obtenerInscripcionesPorAlumno(2)){
-//            System.out.println("ID: "+inscripcion.getIdInscripcion());
-//            System.out.println("Apellido: "+inscripcion.getAlumno().getApellido());
-//            System.out.println("Materia: "+inscripcion.getMateria().getNombre());
-//        }
-//    }
-    
 }

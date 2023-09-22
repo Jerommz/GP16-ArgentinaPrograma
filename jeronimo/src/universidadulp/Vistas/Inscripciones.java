@@ -3,9 +3,7 @@ package universidadulp.Vistas;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -256,7 +254,7 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
-                String[] dato = {nombre + " " + apellido};
+                String dato[] = {nombre + " " + apellido};
                 for(String datos : dato){
                     jcbListaAlumnosInscripcion.addItem(datos);
                 }
