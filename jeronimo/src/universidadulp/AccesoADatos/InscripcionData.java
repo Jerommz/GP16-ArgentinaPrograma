@@ -104,14 +104,14 @@ public class InscripcionData {
             while (rs.next()) {
                 Materia materia = new Materia();
                 materia.setIdMateria(rs.getInt("inscripcion.idMateria"));
-                materia.setNombre(rs.getNString("nombre"));
+                materia.setNombre(rs.getString("nombre"));
                 materia.setAnioMateria(rs.getInt("año"));
                 materiasCursadas.add(materia);
             }
             ps.close();
             rs.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al obtener materias cursadas.");
+            JOptionPane.showMessageDialog(null, "Error al obtener materias cursadas." + ex.getMessage());
         }
         return materiasCursadas;
     }
@@ -125,8 +125,11 @@ public class InscripcionData {
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
+            System.out.println("a");
             int exito = ps.executeUpdate();
+            System.out.println("b");
             ResultSet rs = ps.executeQuery();
+            System.out.println("c");
             if (exito == 1) {
                 while (rs.next()) {
                     Materia materia = new Materia();

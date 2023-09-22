@@ -24,7 +24,6 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
     public Inscripciones() {
         initComponents();
         con = Conexion.getConnection();
-        jcMateriasInscriptas.setSelected(true);
         mostrarComboBox();
     }
 
@@ -218,8 +217,7 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         jcMateriasInscriptas.setSelected(false);
         String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
-        buscarAlumno(nombre);
-//        inscripcionDB.obtenerMateriasCursadas(id)
+        mostrarTabla(inscripcionDB.obtenerMateriasNoCursadas(buscarAlumno(nombre)));
     }//GEN-LAST:event_jcMateriasNoInscriptasActionPerformed
 
     private void jcMateriasInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasInscriptasActionPerformed
