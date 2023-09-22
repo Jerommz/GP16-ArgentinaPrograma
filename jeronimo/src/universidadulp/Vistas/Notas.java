@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import universidadulp.AccesoADatos.AlumnoData;
 import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.InscripcionData;
+import universidadulp.AccesoADatos.MateriaData;
 import universidadulp.Entidades.Alumno;
 import universidadulp.Entidades.Inscripcion;
 import universidadulp.Entidades.Materia;
@@ -27,34 +28,38 @@ import universidadulp.Entidades.Materia;
  */
 public class Notas extends javax.swing.JInternalFrame {
 
-    AlumnoData alu = new AlumnoData();
+    AlumnoData alumnoDB = new AlumnoData();
+    MateriaData materiaDB = new MateriaData();
+    private Connection con;
 
     /**
      * Creates new form Notas
      */
     public Notas() {
         initComponents();
+        con = Conexion.getConnection();
         llenarCombo();
         tabla();
 
     }
 
     private void llenarCombo() {
+        String sql = "select idAlumno, nombre, apellido from alumno order by idAlumno ASC";
 
-        Alumno alumno = new Alumno(WIDTH, WIDTH, title, title, LocalDate.MIN, isIcon);
-        Materia materia = new Materia();
-        Inscripcion insc = new Inscripcion(alumno, materia, WIDTH);
-        AlumnoData alu = new AlumnoData();
-        ArrayList<Alumno> listaAlumnos = (ArrayList<Alumno>) alu.listarAlumnos();
-        jComboAlumno.removeAllItems();
-        for (int i = 0; i < listaAlumnos.size(); i++) {
-            jComboAlumno.addItem(listaAlumnos.get(i).getIdAlumno() + "");
-            jComboAlumno.addItem(listaAlumnos.get(i).getApellido());
-            jComboAlumno.addItem(listaAlumnos.get(i).getNombre());
-            jComboAlumno.addItem("nota" + insc.getNota());
-            jComboAlumno.addItem("--------------------------------");
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String idAlumno = String.valueOf(rs.getInt("idAlumno"));
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String dato = idAlumno + " " + nombre + " " + apellido;
+                jcbNotas.addItem(dato);
+            }
+        } catch (SQLException ex) {
         }
-
     }
 
     /**
@@ -68,17 +73,10 @@ public class Notas extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jComboAlumno = new javax.swing.JComboBox<>();
-        jbguardar = new javax.swing.JButton();
-        jbsalir = new javax.swing.JButton();
+        jcbNotas = new javax.swing.JComboBox<>();
+        jbGuardar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTablaNotas = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        jtCodigo = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jtMateria = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jtNota = new javax.swing.JTextField();
+        jtTablaNotas = new javax.swing.JTable();
 
         setClosable(true);
 
@@ -90,38 +88,28 @@ public class Notas extends javax.swing.JInternalFrame {
         jLabel5.setForeground(java.awt.Color.black);
         jLabel5.setText("Seleccione un alumno:");
 
-        jComboAlumno.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jComboAlumno.setForeground(java.awt.Color.black);
-        jComboAlumno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboAlumno.addActionListener(new java.awt.event.ActionListener() {
+        jcbNotas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jcbNotas.setForeground(java.awt.Color.black);
+        jcbNotas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbNotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboAlumnoActionPerformed(evt);
+                jcbNotasActionPerformed(evt);
             }
         });
 
-        jbguardar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jbguardar.setForeground(java.awt.Color.black);
-        jbguardar.setText("Guardar");
-        jbguardar.addActionListener(new java.awt.event.ActionListener() {
+        jbGuardar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jbGuardar.setForeground(java.awt.Color.black);
+        jbGuardar.setText("Guardar");
+        jbGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbguardarActionPerformed(evt);
+                jbGuardarActionPerformed(evt);
             }
         });
 
-        jbsalir.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jbsalir.setForeground(java.awt.Color.black);
-        jbsalir.setText("Salir");
-        jbsalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbsalirActionPerformed(evt);
-            }
-        });
-
-        jTablaNotas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jTablaNotas.setForeground(java.awt.Color.black);
-        jTablaNotas.setModel(new javax.swing.table.DefaultTableModel(
+        jtTablaNotas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jtTablaNotas.setForeground(java.awt.Color.black);
+        jtTablaNotas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
                 {null, null, null},
                 {null, null, null},
                 {null, null, null},
@@ -131,92 +119,44 @@ public class Notas extends javax.swing.JInternalFrame {
                 "Codigo", "Nombre", "Nota"
             }
         ));
-        jTablaNotas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTablaNotasMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jTablaNotas);
-
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Codigo");
-
-        jtCodigo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtCodigoActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Materia");
-
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Nota");
+        jScrollPane1.setViewportView(jtTablaNotas);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(165, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(162, 162, 162))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jcbNotas, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(48, 48, 48)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jtCodigo)
-                            .addComponent(jtMateria)
-                            .addComponent(jtNota))))
-                .addContainerGap(29, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(162, 162, 162))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jbguardar)
-                        .addGap(49, 49, 49)
-                        .addComponent(jbsalir)
-                        .addGap(158, 158, 158))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jComboAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15))))
+                        .addGap(198, 198, 198)
+                        .addComponent(jbGuardar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jLabel1)
-                .addGap(20, 20, 20)
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboAlumno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbNotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jtMateria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jtNota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbguardar)
-                    .addComponent(jbsalir))
+                .addComponent(jbGuardar)
                 .addGap(38, 38, 38))
         );
 
@@ -285,7 +225,7 @@ public class Notas extends javax.swing.JInternalFrame {
 
         try {
             DefaultTableModel modelo = new DefaultTableModel();
-            jTablaNotas.setModel(modelo);
+            jtTablaNotas.setModel(modelo);
             PreparedStatement ps = null;
             ResultSet rs = null;
             Connection con = Conexion.getConnection();
@@ -315,19 +255,12 @@ public class Notas extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboAlumno;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTablaNotas;
-    private javax.swing.JButton jbguardar;
-    private javax.swing.JButton jbsalir;
-    private javax.swing.JTextField jtCodigo;
-    private javax.swing.JTextField jtMateria;
-    private javax.swing.JTextField jtNota;
+    private javax.swing.JButton jbGuardar;
+    private javax.swing.JComboBox<String> jcbNotas;
+    private javax.swing.JTable jtTablaNotas;
     // End of variables declaration//GEN-END:variables
 
 }

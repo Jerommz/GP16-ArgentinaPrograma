@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.net.URI;
 import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.html.HTML;
 import universidadulp.AccesoADatos.MateriaData;
 
 public class Interfaz extends javax.swing.JFrame {
@@ -57,10 +58,10 @@ public class Interfaz extends javax.swing.JFrame {
             }
         };
         linkdinGiorgina = new javax.swing.JLabel();
-        linkdinHernan = new javax.swing.JLabel();
-        linkdinJero = new javax.swing.JLabel();
         gitGiorgina = new javax.swing.JLabel();
+        linkdinHernan = new javax.swing.JLabel();
         gitHernan = new javax.swing.JLabel();
+        linkdinJero = new javax.swing.JLabel();
         gitJero = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -115,7 +116,7 @@ public class Interfaz extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
+            .addGap(0, 103, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -129,11 +130,13 @@ public class Interfaz extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        linkdinGiorgina.setBackground(java.awt.Color.white);
+        linkdinGiorgina.setBackground(new Color(255, 0, 0, 0));
         linkdinGiorgina.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         linkdinGiorgina.setForeground(java.awt.Color.white);
         linkdinGiorgina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         linkdinGiorgina.setText("Linkedin/Giorgina");
+        linkdinGiorgina.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        linkdinGiorgina.setOpaque(true);
         linkdinGiorgina.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 linkdinGiorginaMouseClicked(evt);
@@ -146,45 +149,50 @@ public class Interfaz extends javax.swing.JFrame {
             }
         });
 
-        linkdinHernan.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        linkdinHernan.setForeground(java.awt.Color.white);
-        linkdinHernan.setText("Linkedin/Hernan");
-        linkdinHernan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                linkdinHernanMouseClicked(evt);
-            }
-        });
-
-        linkdinJero.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        linkdinJero.setForeground(java.awt.Color.white);
-        linkdinJero.setText("Linkedin/Jeronimo");
-        linkdinJero.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                linkdinJeroMouseClicked(evt);
-            }
-        });
-
         gitGiorgina.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         gitGiorgina.setForeground(java.awt.Color.white);
         gitGiorgina.setText("GitHub/York-Andy");
+        gitGiorgina.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gitGiorgina.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 gitGiorginaMouseClicked(evt);
             }
         });
 
+        linkdinHernan.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        linkdinHernan.setForeground(java.awt.Color.white);
+        linkdinHernan.setText("Linkedin/Hernan");
+        linkdinHernan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        linkdinHernan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                linkdinHernanMouseClicked(evt);
+            }
+        });
+
         gitHernan.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         gitHernan.setForeground(java.awt.Color.white);
         gitHernan.setText("GitHub/HernanL22");
+        gitHernan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gitHernan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 gitHernanMouseClicked(evt);
             }
         });
 
+        linkdinJero.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        linkdinJero.setForeground(java.awt.Color.white);
+        linkdinJero.setText("Linkedin/Jeronimo");
+        linkdinJero.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        linkdinJero.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                linkdinJeroMouseClicked(evt);
+            }
+        });
+
         gitJero.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         gitJero.setForeground(java.awt.Color.white);
         gitJero.setText("GitHub/Jerommz");
+        gitJero.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         gitJero.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 gitJeroMouseClicked(evt);
@@ -205,26 +213,28 @@ public class Interfaz extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(gitGiorgina)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(linkdinGiorgina))
-                                .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(linkdinJero))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel5)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(linkdinHernan))
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(gitHernan)
-                            .addComponent(gitJero))
-                        .addContainerGap(93, Short.MAX_VALUE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(linkdinGiorgina))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(linkdinHernan)
+                                    .addComponent(gitGiorgina)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(gitHernan)
+                                        .addComponent(linkdinJero))
+                                    .addComponent(gitJero))))
+                        .addContainerGap(93, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(103, 103, 103)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -246,28 +256,34 @@ public class Interfaz extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gitGiorgina)
-                .addGap(33, 33, 33)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(linkdinHernan))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gitHernan)
-                .addGap(31, 31, 31)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(linkdinJero))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(gitGiorgina)
+                        .addGap(73, 73, 73))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(linkdinHernan))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(linkdinJero))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(gitHernan)
+                        .addGap(72, 72, 72)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(gitJero)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGap(0, 19, Short.MAX_VALUE))
         );
 
         escritorio.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -286,7 +302,7 @@ public class Interfaz extends javax.swing.JFrame {
             .addGroup(escritorioLayout.createSequentialGroup()
                 .addGap(64, 64, 64)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(200, Short.MAX_VALUE))
+                .addContainerGap(202, Short.MAX_VALUE))
         );
 
         jMenu1.setText("Alumno");
@@ -382,8 +398,6 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void mFormularioMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mFormularioMateriaActionPerformed
         // TODO add your handling code here:
-        escritorio.removeAll();
-        escritorio.repaint();
         Materias gm=new Materias();
         frameCentrado(gm);
         escritorio.moveToFront(gm);
@@ -391,8 +405,6 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void mManejoInscripcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mManejoInscripcionesActionPerformed
         // TODO add your handling code here:
-        escritorio.removeAll();
-        escritorio.repaint();
         Inscripciones gi=new Inscripciones();
         frameCentrado(gi);
         escritorio.moveToFront(gi);
@@ -400,8 +412,6 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void mManejoNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mManejoNotasActionPerformed
         // TODO add your handling code here:
-        escritorio.removeAll();
-        escritorio.repaint();
         Notas gn=new Notas();
         frameCentrado(gn);
         escritorio.moveToFront(gn);
@@ -409,8 +419,6 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void mAlumnosMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAlumnosMateriaActionPerformed
         // TODO add your handling code here:
-        escritorio.removeAll();
-        escritorio.repaint();
         AlumnosPorMateria gam=new AlumnosPorMateria();
         frameCentrado(gam);
         escritorio.moveToFront(gam);
@@ -506,12 +514,10 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void linkdinGiorginaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinGiorginaMouseEntered
         // TODO add your handling code here:
-        linkdinGiorgina.setForeground(Color.red);
     }//GEN-LAST:event_linkdinGiorginaMouseEntered
 
     private void linkdinGiorginaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinGiorginaMouseExited
         // TODO add your handling code here:
-        linkdinGiorgina.setForeground(Color.white);
     }//GEN-LAST:event_linkdinGiorginaMouseExited
 
     /**
