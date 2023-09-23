@@ -28,15 +28,17 @@ public class AlumnoData {
             ps.setString(3, alumno.getNombre());
             ps.setDate(4, Date.valueOf(alumno.getFechaNac()));
             ps.setBoolean(5, alumno.isActivo());
-
-            ps.executeUpdate();
+            int exito = ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
-
             if (rs.next()) {
                 alumno.setIdAlumno(rs.getInt(1));
                 JOptionPane.showMessageDialog(null, "Alumno agregado.");
+            }else{
+                JOptionPane.showMessageDialog(null, "Alumno no agregado.");
             }
+            ps.close();
+            rs.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno.");
         }
@@ -61,33 +63,59 @@ public class AlumnoData {
             } else {
                 JOptionPane.showMessageDialog(null, "Alumno no encontrado.");
             }
+            ps.close();
+            rs.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno");
         }
         return alumno;
     }
-//    
-//    public Alumno buscarAlumnoPorDni(int dni){
-//        
-//    }
+
+    public Alumno buscarAlumnoPorDni(int dni) {
+        String sql = "select idAlumno, apellido, nombre, fechaNacimiento from alumno where dni = ? and estado = 1";
+        Alumno alumno = null;
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, dni);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                alumno = new Alumno();
+                alumno.setIdAlumno(rs.getInt("idAlumno"));
+                alumno.setDni(dni);
+                alumno.setApellido(rs.getString("apellido"));
+                alumno.setNombre(rs.getString("nombre"));
+                alumno.setFechaNac(rs.getDate("fechaNacimiento").toLocalDate());
+                alumno.setActivo(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Alumno no encontrado.");
+            }
+            ps.close();
+            rs.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno");
+        }
+        return alumno;
+
+    }
 
     public void modificarAlumno(Alumno alumno) {
-        String sql="update alumno set dni = ?, apellido = ?, nombre = ?, fechaNacimiento = ? where idAlumno = ?";
-        try{
-            PreparedStatement ps=con.prepareStatement(sql);
+        String sql = "update alumno set dni = ?, apellido = ?, nombre = ?, fechaNacimiento = ? where idAlumno = ?";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, alumno.getDni());
             ps.setString(2, alumno.getApellido());
             ps.setString(3, alumno.getNombre());
             ps.setDate(4, Date.valueOf(alumno.getFechaNac()));
             ps.setInt(5, alumno.getIdAlumno());
             int exito = ps.executeUpdate();
-            
-            if(exito==1){
+
+            if (exito == 1) {
                 JOptionPane.showMessageDialog(null, "Alumno modificado");
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Alumno no modificado.");
             }
-        }catch(SQLException ex){
+            ps.close();
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error.");
         }
     }
@@ -102,6 +130,7 @@ public class AlumnoData {
             if (exito == 1) {
                 JOptionPane.showMessageDialog(null, "Alumno eliminado.");
             }
+            ps.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la tabla alumno.");
         }
@@ -124,7 +153,6 @@ public class AlumnoData {
                 alumnos.add(alumno);
             }
             ps.close();
-
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR al buscar alumnos ");
         }

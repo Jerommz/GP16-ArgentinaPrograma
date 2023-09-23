@@ -13,7 +13,7 @@ public class Conexion {
     
     private static Connection connection;
     
-    private Conexion(){
+    public Conexion(){
         
     }
     

@@ -8,11 +8,17 @@ import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.MateriaData;
 import universidadulp.Entidades.Materia;
 
-public class Materias extends javax.swing.JInternalFrame {
+public final class Materias extends javax.swing.JInternalFrame {
 
+    String[] col = {"ID", "Nombre"};
+    DefaultTableModel modelo = new DefaultTableModel(null, col) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
     MateriaData materiaDB = new MateriaData();
     private Connection con;
-    
 
     public Materias() {
         initComponents();
@@ -24,7 +30,7 @@ public class Materias extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -33,10 +39,11 @@ public class Materias extends javax.swing.JInternalFrame {
         jtNombreMateria = new javax.swing.JTextField();
         jtAnioMateria = new javax.swing.JTextField();
         jcbEstadoMateria = new javax.swing.JCheckBox();
-        jbNuevoMateria = new javax.swing.JButton();
         jbEliminarMateria = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jbModificarMateria = new javax.swing.JButton();
-        jbBuscarMateria = new javax.swing.JButton();
+        jbBotonActualizar = new javax.swing.JButton();
+        jbNuevoMateria = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtTablaMateria = new javax.swing.JTable();
 
@@ -44,66 +51,51 @@ public class Materias extends javax.swing.JInternalFrame {
         setPreferredSize(new java.awt.Dimension(483, 499));
         getContentPane().setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
-        jLabel1.setForeground(java.awt.Color.black);
-        jLabel1.setText("Materia");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(182, 6, 73, 27);
+        jPanel1.setLayout(null);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel5.setForeground(java.awt.Color.black);
         jLabel5.setText("Codigo");
-        getContentPane().add(jLabel5);
+        jPanel1.add(jLabel5);
         jLabel5.setBounds(51, 78, 43, 19);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel6.setForeground(java.awt.Color.black);
         jLabel6.setText("Nombre");
-        getContentPane().add(jLabel6);
+        jPanel1.add(jLabel6);
         jLabel6.setBounds(51, 158, 52, 19);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel7.setForeground(java.awt.Color.black);
         jLabel7.setText("Estado");
-        getContentPane().add(jLabel7);
+        jPanel1.add(jLabel7);
         jLabel7.setBounds(51, 323, 44, 19);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel8.setForeground(java.awt.Color.black);
         jLabel8.setText("Año");
-        getContentPane().add(jLabel8);
+        jPanel1.add(jLabel8);
         jLabel8.setBounds(51, 241, 25, 19);
 
         jtIdMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtIdMateria.setForeground(java.awt.Color.black);
-        getContentPane().add(jtIdMateria);
+        jPanel1.add(jtIdMateria);
         jtIdMateria.setBounds(109, 70, 63, 23);
 
         jtNombreMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtNombreMateria.setForeground(java.awt.Color.black);
-        getContentPane().add(jtNombreMateria);
+        jPanel1.add(jtNombreMateria);
         jtNombreMateria.setBounds(109, 157, 150, 23);
 
         jtAnioMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtAnioMateria.setForeground(java.awt.Color.black);
-        getContentPane().add(jtAnioMateria);
+        jPanel1.add(jtAnioMateria);
         jtAnioMateria.setBounds(109, 240, 63, 23);
 
         jcbEstadoMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jcbEstadoMateria.setForeground(java.awt.Color.black);
-        getContentPane().add(jcbEstadoMateria);
+        jPanel1.add(jcbEstadoMateria);
         jcbEstadoMateria.setBounds(109, 323, 24, 24);
-
-        jbNuevoMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jbNuevoMateria.setForeground(java.awt.Color.black);
-        jbNuevoMateria.setText("Nuevo");
-        jbNuevoMateria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbNuevoMateriaActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jbNuevoMateria);
-        jbNuevoMateria.setBounds(120, 390, 65, 31);
 
         jbEliminarMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jbEliminarMateria.setForeground(java.awt.Color.black);
@@ -113,8 +105,14 @@ public class Materias extends javax.swing.JInternalFrame {
                 jbEliminarMateriaActionPerformed(evt);
             }
         });
-        getContentPane().add(jbEliminarMateria);
-        jbEliminarMateria.setBounds(200, 390, 70, 31);
+        jPanel1.add(jbEliminarMateria);
+        jbEliminarMateria.setBounds(200, 410, 70, 31);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
+        jLabel1.setForeground(java.awt.Color.black);
+        jLabel1.setText("Materia");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(200, 20, 73, 27);
 
         jbModificarMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jbModificarMateria.setForeground(java.awt.Color.black);
@@ -124,19 +122,27 @@ public class Materias extends javax.swing.JInternalFrame {
                 jbModificarMateriaActionPerformed(evt);
             }
         });
-        getContentPane().add(jbModificarMateria);
-        jbModificarMateria.setBounds(290, 390, 77, 31);
+        jPanel1.add(jbModificarMateria);
+        jbModificarMateria.setBounds(290, 410, 77, 31);
 
-        jbBuscarMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jbBuscarMateria.setForeground(java.awt.Color.black);
-        jbBuscarMateria.setText("Buscar");
-        jbBuscarMateria.addActionListener(new java.awt.event.ActionListener() {
+        jbBotonActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbBuscarMateriaActionPerformed(evt);
+                jbBotonActualizarActionPerformed(evt);
             }
         });
-        getContentPane().add(jbBuscarMateria);
-        jbBuscarMateria.setBounds(190, 70, 65, 31);
+        jPanel1.add(jbBotonActualizar);
+        jbBotonActualizar.setBounds(430, 370, 30, 30);
+
+        jbNuevoMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jbNuevoMateria.setForeground(java.awt.Color.black);
+        jbNuevoMateria.setText("Nuevo");
+        jbNuevoMateria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbNuevoMateriaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbNuevoMateria);
+        jbNuevoMateria.setBounds(120, 410, 65, 31);
 
         jtTablaMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtTablaMateria.setForeground(java.awt.Color.black);
@@ -161,8 +167,11 @@ public class Materias extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtTablaMateria);
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(290, 30, 180, 310);
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(270, 70, 200, 290);
+
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(0, 0, 480, 480);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -181,6 +190,9 @@ public class Materias extends javax.swing.JInternalFrame {
                     boolean estado = jcbEstadoMateria.isEnabled();
                     Materia mat = new Materia(nombre, anio, estado);
                     materiaDB.nuevoMateria(mat);
+                    DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+                    mod.setRowCount(0);
+                    mostrarTabla();
                 }
             }
         } catch (NumberFormatException ex) {
@@ -190,30 +202,71 @@ public class Materias extends javax.swing.JInternalFrame {
 
     private void jbEliminarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarMateriaActionPerformed
         // TODO add your handling code here:
+        try {
+            if (jtIdMateria.getText() == null || jtNombreMateria.getText() == null || jtAnioMateria.getText() == null) {
+                JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
+            } else {
+                int id = Integer.parseInt(jtIdMateria.getText());
+
+                materiaDB.eliminarAlumno(id);
+
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado.");
+        }
     }//GEN-LAST:event_jbEliminarMateriaActionPerformed
 
     private void jbModificarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarMateriaActionPerformed
         // TODO add your handling code here:
+         String sql = "select idMateria from materia";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int i = jtTablaMateria.getSelectedRow();
 
+                String id = jtTablaMateria.getModel().getValueAt(i, 0).toString();
+                String nombre = jtNombreMateria.getText();
+                int anio = Integer.parseInt(jtAnioMateria.getText());
+                boolean estado = jcbEstadoMateria.isSelected();
+                Materia mat = new Materia(Integer.valueOf(id), nombre, anio, estado);
+                DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+                mod.setRowCount(0);
+                mostrarTabla();
+                materiaDB.modificarMateria(mat);
+                jtIdMateria.setText("");
+                jtNombreMateria.setText("");
+                jtAnioMateria.setText("");
+                jcbEstadoMateria.enable(false);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error inesperado.");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
+        }
     }//GEN-LAST:event_jbModificarMateriaActionPerformed
 
-    private void jbBuscarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarMateriaActionPerformed
+    private void jbBotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonActualizarActionPerformed
         // TODO add your handling code here:
-//        try {
-//            if (jtIdMateria.getText() == null) {
-//                JOptionPane.showMessageDialog(null, "Para buscar, introduzca la ID de una materia.");
-//            } else {
-//                int id = Integer.parseInt(jtIdMateria.getText());
-//                String sql = ""
-//            }
-//        } catch (SQLException ex) 
-//            JOptionPane.showMessageDialog(null, "Error al ingresar a la base de datos.");
-//        }
-    }//GEN-LAST:event_jbBuscarMateriaActionPerformed
+        DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+        mod.setRowCount(0);
+        mostrarTabla();
+    }//GEN-LAST:event_jbBotonActualizarActionPerformed
 
     private void jtTablaMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaMateriaMouseClicked
         // TODO add your handling code here:
-        int seleccion=jtTablaMateria.rowAtPoint(evt.getPoint());
+        int i = jtTablaMateria.getSelectedRow();
+        String val = jtTablaMateria.getModel().getValueAt(i, 0).toString();
+        int id = Integer.valueOf(val);
+        String nombre = materiaDB.buscarMateria(id).getNombre();
+        int anio = materiaDB.buscarMateria(id).getAnioMateria();
+        Boolean estado = materiaDB.buscarMateria(id).isActivo();
+        jtIdMateria.setText(String.valueOf(id));
+        jtNombreMateria.setText(nombre);
+        jtAnioMateria.setText(String.valueOf(anio));
+        jcbEstadoMateria.setSelected(true);
     }//GEN-LAST:event_jtTablaMateriaMouseClicked
 
 
@@ -223,8 +276,9 @@ public class Materias extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton jbBuscarMateria;
+    private javax.swing.JButton jbBotonActualizar;
     private javax.swing.JButton jbEliminarMateria;
     private javax.swing.JButton jbModificarMateria;
     private javax.swing.JButton jbNuevoMateria;
@@ -235,25 +289,25 @@ public class Materias extends javax.swing.JInternalFrame {
     private javax.swing.JTable jtTablaMateria;
     // End of variables declaration//GEN-END:variables
 
-    public void mostrarTabla(){
-        String [] col = {"ID", "Nombre"};
-        DefaultTableModel modelo=new DefaultTableModel(null, col);
+    public void mostrarTabla() {
+
         jtTablaMateria.setModel(modelo);
-        TableColumnModel columna= jtTablaMateria.getColumnModel();
+        TableColumnModel columna = jtTablaMateria.getColumnModel();
         columna.getColumn(0).setMaxWidth(25);
-        
-        String sql="select idMateria, nombre from materia";
-        try{
-            PreparedStatement ps=con.prepareStatement(sql);
-            ResultSet rs=ps.executeQuery();
-            while(rs.next()){
-                modelo.addRow(new Object [] {rs.getInt("idMateria"), rs.getString("nombre")});
+
+        String sql = "SELECT idMateria, nombre FROM materia WHERE estado = 1 order by idMateria ASC";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String id = String.valueOf(rs.getInt("idMateria"));
+                String nombre = rs.getString("nombre");
+                String tbdata[] = {id, nombre};
+                modelo.addRow(tbdata);
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error..");
         }
     }
-    
-  
 
 }
