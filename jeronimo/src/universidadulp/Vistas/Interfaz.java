@@ -2,13 +2,8 @@ package universidadulp.Vistas;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.font.TextAttribute;
-import java.net.URI;
-import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -38,35 +33,20 @@ public class Interfaz extends javax.swing.JFrame {
             }
 
         };
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        gitJero = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        ImageIcon icon2 = new ImageIcon(getClass().getResource("/images/logo1term.png"));
-        Image image2 = icon2.getImage();
-        jPanel2 = new javax.swing.JPanel(){
-            public void paintComponent(Graphics g){
-                g.drawImage(image2,0,0,getWidth(),getHeight(),this);
-            }
-        };
-        ImageIcon icon3 = new ImageIcon(getClass().getResource("/images/logo2term.png"));
-        Image image3 = icon3.getImage();
-        jPanel3 = new javax.swing.JPanel(){
-            public void paintComponent(Graphics g){
-                g.drawImage(image3,0,0,getWidth(),getHeight(),this);
-            }
-        };
         linkdinGiorgina = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         gitGiorgina = new javax.swing.JLabel();
         linkdinHernan = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         gitHernan = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         linkdinJero = new javax.swing.JLabel();
-        gitJero = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mFormularioAlumno = new javax.swing.JMenuItem();
@@ -82,168 +62,99 @@ public class Interfaz extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(0,0,0,64));
-        jPanel1.setLayout(null);
-
-        jLabel1.setForeground(java.awt.Color.white);
-        jLabel1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, java.awt.Color.white));
-        jPanel1.add(jLabel1);
-        jLabel1.setBounds(77, 41, 145, 1);
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(java.awt.Color.white);
         jLabel2.setText("Alumnos");
-        jPanel1.add(jLabel2);
-        jLabel2.setBounds(77, 27, 95, 15);
+        escritorio.add(jLabel2);
+        jLabel2.setBounds(110, 90, 95, 15);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 25)); // NOI18N
-        jLabel3.setForeground(java.awt.Color.white);
-        jLabel3.setText("Jeronimo Manabella");
-        jPanel1.add(jLabel3);
-        jLabel3.setBounds(77, 250, 254, 31);
+        jLabel1.setForeground(java.awt.Color.white);
+        jLabel1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, java.awt.Color.white));
+        escritorio.add(jLabel1);
+        jLabel1.setBounds(110, 110, 145, 1);
+
+        gitJero.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        gitJero.setForeground(java.awt.Color.white);
+        gitJero.setText("GitHub/Jerommz");
+        gitJero.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                gitJeroMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                gitJeroMouseExited(evt);
+            }
+        });
+        escritorio.add(gitJero);
+        gitJero.setBounds(500, 370, 80, 14);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 25)); // NOI18N
         jLabel4.setForeground(java.awt.Color.white);
         jLabel4.setText("Giorgina Corvalan");
-        jPanel1.add(jLabel4);
-        jLabel4.setBounds(77, 71, 226, 31);
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 25)); // NOI18N
-        jLabel5.setForeground(java.awt.Color.white);
-        jLabel5.setText("Hernan Lopez");
-        jPanel1.add(jLabel5);
-        jLabel5.setBounds(77, 158, 172, 31);
-
-        jLabel6.setForeground(java.awt.Color.white);
-        jLabel6.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, java.awt.Color.white));
-        jPanel1.add(jLabel6);
-        jLabel6.setBounds(77, 108, 471, 1);
-
-        jLabel7.setForeground(java.awt.Color.white);
-        jLabel7.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, java.awt.Color.white));
-        jPanel1.add(jLabel7);
-        jLabel7.setBounds(77, 195, 471, 1);
-
-        jLabel8.setForeground(java.awt.Color.white);
-        jLabel8.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, java.awt.Color.white));
-        jPanel1.add(jLabel8);
-        jLabel8.setBounds(77, 287, 471, 1);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 203, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 103, Short.MAX_VALUE)
-        );
-
-        jPanel1.add(jPanel2);
-        jPanel2.setBounds(300, 320, 203, 103);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 191, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        jPanel1.add(jPanel3);
-        jPanel3.setBounds(103, 309, 191, 100);
+        escritorio.add(jLabel4);
+        jLabel4.setBounds(110, 140, 226, 31);
 
         linkdinGiorgina.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         linkdinGiorgina.setForeground(java.awt.Color.white);
         linkdinGiorgina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         linkdinGiorgina.setText("Linkedin/Giorgina");
         linkdinGiorgina.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        linkdinGiorgina.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                linkdinGiorginaMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                linkdinGiorginaMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                linkdinGiorginaMouseExited(evt);
-            }
-        });
-        jPanel1.add(linkdinGiorgina);
-        linkdinGiorgina.setBounds(467, 85, 81, 14);
+        escritorio.add(linkdinGiorgina);
+        linkdinGiorgina.setBounds(500, 150, 81, 14);
+
+        jLabel6.setForeground(java.awt.Color.white);
+        jLabel6.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, java.awt.Color.white));
+        escritorio.add(jLabel6);
+        jLabel6.setBounds(110, 180, 471, 1);
 
         gitGiorgina.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         gitGiorgina.setForeground(java.awt.Color.white);
         gitGiorgina.setText("GitHub/York-Andy");
         gitGiorgina.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        gitGiorgina.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                gitGiorginaMouseClicked(evt);
-            }
-        });
-        jPanel1.add(gitGiorgina);
-        gitGiorgina.setBounds(462, 115, 86, 14);
+        escritorio.add(gitGiorgina);
+        gitGiorgina.setBounds(490, 190, 86, 14);
 
         linkdinHernan.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         linkdinHernan.setForeground(java.awt.Color.white);
         linkdinHernan.setText("Linkedin/Hernan");
         linkdinHernan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        linkdinHernan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                linkdinHernanMouseClicked(evt);
-            }
-        });
-        jPanel1.add(linkdinHernan);
-        linkdinHernan.setBounds(471, 172, 77, 14);
+        escritorio.add(linkdinHernan);
+        linkdinHernan.setBounds(500, 240, 77, 14);
+
+        jLabel7.setForeground(java.awt.Color.white);
+        jLabel7.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, java.awt.Color.white));
+        escritorio.add(jLabel7);
+        jLabel7.setBounds(110, 260, 471, 1);
 
         gitHernan.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         gitHernan.setForeground(java.awt.Color.white);
         gitHernan.setText("GitHub/HernanL22");
         gitHernan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        gitHernan.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                gitHernanMouseClicked(evt);
-            }
-        });
-        jPanel1.add(gitHernan);
-        gitHernan.setBounds(460, 202, 88, 14);
+        escritorio.add(gitHernan);
+        gitHernan.setBounds(490, 270, 88, 14);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 25)); // NOI18N
+        jLabel5.setForeground(java.awt.Color.white);
+        jLabel5.setText("Hernan Lopez");
+        escritorio.add(jLabel5);
+        jLabel5.setBounds(110, 230, 172, 31);
 
         linkdinJero.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         linkdinJero.setForeground(java.awt.Color.white);
         linkdinJero.setText("Linkedin/Jeronimo");
         linkdinJero.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        linkdinJero.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                linkdinJeroMouseClicked(evt);
-            }
-        });
-        jPanel1.add(linkdinJero);
-        linkdinJero.setBounds(463, 264, 85, 14);
+        escritorio.add(linkdinJero);
+        linkdinJero.setBounds(490, 340, 85, 14);
 
-        gitJero.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        gitJero.setForeground(java.awt.Color.white);
-        gitJero.setText("GitHub/Jerommz");
-        gitJero.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        gitJero.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        gitJero.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseMoved(java.awt.event.MouseEvent evt) {
-                gitJeroMouseMoved(evt);
-            }
-        });
-        gitJero.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                gitJeroMouseClicked(evt);
-            }
-        });
-        jPanel1.add(gitJero);
-        gitJero.setBounds(470, 300, 78, 14);
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 25)); // NOI18N
+        jLabel3.setForeground(java.awt.Color.white);
+        jLabel3.setText("Jeronimo Manabella");
+        escritorio.add(jLabel3);
+        jLabel3.setBounds(110, 320, 254, 31);
 
-        escritorio.add(jPanel1);
-        jPanel1.setBounds(25, 61, 660, 460);
+        jLabel8.setForeground(java.awt.Color.white);
+        jLabel8.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, java.awt.Color.white));
+        escritorio.add(jLabel8);
+        jLabel8.setBounds(110, 360, 471, 1);
 
         jMenuBar1.setForeground(java.awt.Color.black);
         jMenuBar1.setFocusCycleRoot(true);
@@ -380,109 +291,15 @@ public class Interfaz extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_mAdminAlumnosActionPerformed
 
-    private void linkdinGiorginaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinGiorginaMouseClicked
+    private void gitJeroMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitJeroMouseEntered
         // TODO add your handling code here:
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(new URI("https://www.linkedin.com/in/giorgina-corvalan-83b167281/"));
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_linkdinGiorginaMouseClicked
+        gitJero.setForeground(Color.RED);
+    }//GEN-LAST:event_gitJeroMouseEntered
 
-    private void linkdinHernanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinHernanMouseClicked
+    private void gitJeroMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitJeroMouseExited
         // TODO add your handling code here:
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(new URI("https://www.linkedin.com/in/hernanl/"));
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_linkdinHernanMouseClicked
-
-    private void linkdinJeroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinJeroMouseClicked
-        // TODO add your handling code here:
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(new URI("https://www.linkedin.com/in/jeronimo-manabella/"));
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_linkdinJeroMouseClicked
-
-    private void gitGiorginaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitGiorginaMouseClicked
-        // TODO add your handling code here:
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(new URI("https://github.com/York-Andy"));
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_gitGiorginaMouseClicked
-
-    private void gitHernanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitHernanMouseClicked
-        // TODO add your handling code here:
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(new URI("https://github.com/hernanl22"));
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_gitHernanMouseClicked
-
-    private void linkdinGiorginaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinGiorginaMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_linkdinGiorginaMouseEntered
-
-    private void linkdinGiorginaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinGiorginaMouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_linkdinGiorginaMouseExited
-
-    private void gitJeroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitJeroMouseClicked
-        // TODO add your handling code here:
-        try {
-            if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                    desktop.browse(new URI("https://github.com/Jerommz"));
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }//GEN-LAST:event_gitJeroMouseClicked
-
-    private void gitJeroMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitJeroMouseMoved
-        // TODO add your handling code here:
-        int x=evt.getX();
-        int y=evt.getY();
-        if(x>=3 && x<=30 && y>=4 && y<= 11){
-         gitJero.setForeground(Color.red);
-        }else {
-        
-            gitJero.setForeground(Color.BLACK);
-        }
-    }//GEN-LAST:event_gitJeroMouseMoved
+        gitJero.setForeground(Color.WHITE);
+    }//GEN-LAST:event_gitJeroMouseExited
 
     /**
      * @param args the command line arguments
@@ -538,9 +355,6 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel linkdinGiorgina;
     private javax.swing.JLabel linkdinHernan;
     private javax.swing.JLabel linkdinJero;
@@ -572,5 +386,4 @@ public class Interfaz extends javax.swing.JFrame {
         }
 
     }
-
 }
