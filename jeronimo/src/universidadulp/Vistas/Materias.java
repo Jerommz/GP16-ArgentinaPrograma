@@ -30,7 +30,7 @@ public final class Materias extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -39,77 +39,63 @@ public final class Materias extends javax.swing.JInternalFrame {
         jtNombreMateria = new javax.swing.JTextField();
         jtAnioMateria = new javax.swing.JTextField();
         jcbEstadoMateria = new javax.swing.JCheckBox();
-        jbNuevoMateria = new javax.swing.JButton();
         jbEliminarMateria = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jbModificarMateria = new javax.swing.JButton();
+        jbBotonActualizar = new javax.swing.JButton();
+        jbNuevoMateria = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtTablaMateria = new javax.swing.JTable();
-        jbBotonActualizar = new javax.swing.JButton();
 
         setClosable(true);
         setPreferredSize(new java.awt.Dimension(483, 499));
         getContentPane().setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
-        jLabel1.setForeground(java.awt.Color.black);
-        jLabel1.setText("Materia");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(182, 6, 73, 27);
+        jPanel1.setLayout(null);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel5.setForeground(java.awt.Color.black);
         jLabel5.setText("Codigo");
-        getContentPane().add(jLabel5);
+        jPanel1.add(jLabel5);
         jLabel5.setBounds(51, 78, 43, 19);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel6.setForeground(java.awt.Color.black);
         jLabel6.setText("Nombre");
-        getContentPane().add(jLabel6);
+        jPanel1.add(jLabel6);
         jLabel6.setBounds(51, 158, 52, 19);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel7.setForeground(java.awt.Color.black);
         jLabel7.setText("Estado");
-        getContentPane().add(jLabel7);
+        jPanel1.add(jLabel7);
         jLabel7.setBounds(51, 323, 44, 19);
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel8.setForeground(java.awt.Color.black);
         jLabel8.setText("Año");
-        getContentPane().add(jLabel8);
+        jPanel1.add(jLabel8);
         jLabel8.setBounds(51, 241, 25, 19);
 
         jtIdMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtIdMateria.setForeground(java.awt.Color.black);
-        getContentPane().add(jtIdMateria);
+        jPanel1.add(jtIdMateria);
         jtIdMateria.setBounds(109, 70, 63, 23);
 
         jtNombreMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtNombreMateria.setForeground(java.awt.Color.black);
-        getContentPane().add(jtNombreMateria);
+        jPanel1.add(jtNombreMateria);
         jtNombreMateria.setBounds(109, 157, 150, 23);
 
         jtAnioMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtAnioMateria.setForeground(java.awt.Color.black);
-        getContentPane().add(jtAnioMateria);
+        jPanel1.add(jtAnioMateria);
         jtAnioMateria.setBounds(109, 240, 63, 23);
 
         jcbEstadoMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jcbEstadoMateria.setForeground(java.awt.Color.black);
-        getContentPane().add(jcbEstadoMateria);
+        jPanel1.add(jcbEstadoMateria);
         jcbEstadoMateria.setBounds(109, 323, 24, 24);
-
-        jbNuevoMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jbNuevoMateria.setForeground(java.awt.Color.black);
-        jbNuevoMateria.setText("Nuevo");
-        jbNuevoMateria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbNuevoMateriaActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jbNuevoMateria);
-        jbNuevoMateria.setBounds(120, 390, 65, 31);
 
         jbEliminarMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jbEliminarMateria.setForeground(java.awt.Color.black);
@@ -119,8 +105,14 @@ public final class Materias extends javax.swing.JInternalFrame {
                 jbEliminarMateriaActionPerformed(evt);
             }
         });
-        getContentPane().add(jbEliminarMateria);
-        jbEliminarMateria.setBounds(200, 390, 70, 31);
+        jPanel1.add(jbEliminarMateria);
+        jbEliminarMateria.setBounds(200, 410, 70, 31);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
+        jLabel1.setForeground(java.awt.Color.black);
+        jLabel1.setText("Materia");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(200, 20, 73, 27);
 
         jbModificarMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jbModificarMateria.setForeground(java.awt.Color.black);
@@ -130,8 +122,27 @@ public final class Materias extends javax.swing.JInternalFrame {
                 jbModificarMateriaActionPerformed(evt);
             }
         });
-        getContentPane().add(jbModificarMateria);
-        jbModificarMateria.setBounds(290, 390, 77, 31);
+        jPanel1.add(jbModificarMateria);
+        jbModificarMateria.setBounds(290, 410, 77, 31);
+
+        jbBotonActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBotonActualizarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbBotonActualizar);
+        jbBotonActualizar.setBounds(430, 370, 30, 30);
+
+        jbNuevoMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jbNuevoMateria.setForeground(java.awt.Color.black);
+        jbNuevoMateria.setText("Nuevo");
+        jbNuevoMateria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbNuevoMateriaActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jbNuevoMateria);
+        jbNuevoMateria.setBounds(120, 410, 65, 31);
 
         jtTablaMateria.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jtTablaMateria.setForeground(java.awt.Color.black);
@@ -156,16 +167,11 @@ public final class Materias extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jtTablaMateria);
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(290, 30, 180, 310);
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(270, 70, 200, 290);
 
-        jbBotonActualizar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbBotonActualizarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jbBotonActualizar);
-        jbBotonActualizar.setBounds(430, 350, 30, 30);
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(0, 0, 480, 480);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -208,12 +214,11 @@ public final class Materias extends javax.swing.JInternalFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error inesperado.");
         }
-
     }//GEN-LAST:event_jbEliminarMateriaActionPerformed
 
     private void jbModificarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarMateriaActionPerformed
         // TODO add your handling code here:
-        String sql = "select idMateria from materia";
+         String sql = "select idMateria from materia";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -241,8 +246,14 @@ public final class Materias extends javax.swing.JInternalFrame {
         } catch (ArrayIndexOutOfBoundsException ex) {
             JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
         }
-
     }//GEN-LAST:event_jbModificarMateriaActionPerformed
+
+    private void jbBotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonActualizarActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+        mod.setRowCount(0);
+        mostrarTabla();
+    }//GEN-LAST:event_jbBotonActualizarActionPerformed
 
     private void jtTablaMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaMateriaMouseClicked
         // TODO add your handling code here:
@@ -256,15 +267,7 @@ public final class Materias extends javax.swing.JInternalFrame {
         jtNombreMateria.setText(nombre);
         jtAnioMateria.setText(String.valueOf(anio));
         jcbEstadoMateria.setSelected(true);
-        
     }//GEN-LAST:event_jtTablaMateriaMouseClicked
-
-    private void jbBotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonActualizarActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
-        mod.setRowCount(0);
-        mostrarTabla();
-    }//GEN-LAST:event_jbBotonActualizarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -273,6 +276,7 @@ public final class Materias extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbBotonActualizar;
     private javax.swing.JButton jbEliminarMateria;

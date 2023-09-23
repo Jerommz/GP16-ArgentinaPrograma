@@ -1,4 +1,3 @@
-
 package universidadulp.Vistas;
 
 import java.awt.Color;
@@ -8,14 +7,16 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.net.URI;
 import javax.swing.ImageIcon;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.html.HTML;
 import universidadulp.AccesoADatos.MateriaData;
 
 public class Interfaz extends javax.swing.JFrame {
-    
-    MateriaData mat=new MateriaData();
-    DefaultTableModel modelo=new DefaultTableModel();
+
+    MateriaData mat = new MateriaData();
+    DefaultTableModel modelo = new DefaultTableModel();
 
     public Interfaz() {
         initComponents();
@@ -130,13 +131,11 @@ public class Interfaz extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        linkdinGiorgina.setBackground(new Color(255, 0, 0, 0));
         linkdinGiorgina.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         linkdinGiorgina.setForeground(java.awt.Color.white);
         linkdinGiorgina.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         linkdinGiorgina.setText("Linkedin/Giorgina");
         linkdinGiorgina.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        linkdinGiorgina.setOpaque(true);
         linkdinGiorgina.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 linkdinGiorginaMouseClicked(evt);
@@ -196,6 +195,12 @@ public class Interfaz extends javax.swing.JFrame {
         gitJero.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 gitJeroMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                gitJeroMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                gitJeroMouseExited(evt);
             }
         });
 
@@ -391,35 +396,40 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void mFormularioAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mFormularioAlumnoActionPerformed
         // TODO add your handling code here:
-        Alumnos ga=new Alumnos();
+        Alumnos ga = new Alumnos();
+        cerrarFrames();
         frameCentrado(ga);
         escritorio.moveToFront(ga);
     }//GEN-LAST:event_mFormularioAlumnoActionPerformed
 
     private void mFormularioMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mFormularioMateriaActionPerformed
         // TODO add your handling code here:
-        Materias gm=new Materias();
+        Materias gm = new Materias();
+        cerrarFrames();
         frameCentrado(gm);
         escritorio.moveToFront(gm);
     }//GEN-LAST:event_mFormularioMateriaActionPerformed
 
     private void mManejoInscripcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mManejoInscripcionesActionPerformed
         // TODO add your handling code here:
-        Inscripciones gi=new Inscripciones();
+        Inscripciones gi = new Inscripciones();
+        cerrarFrames();
         frameCentrado(gi);
         escritorio.moveToFront(gi);
     }//GEN-LAST:event_mManejoInscripcionesActionPerformed
 
     private void mManejoNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mManejoNotasActionPerformed
         // TODO add your handling code here:
-        Notas gn=new Notas();
+        Notas gn = new Notas();
+        cerrarFrames();
         frameCentrado(gn);
         escritorio.moveToFront(gn);
     }//GEN-LAST:event_mManejoNotasActionPerformed
 
     private void mAlumnosMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAlumnosMateriaActionPerformed
         // TODO add your handling code here:
-        AlumnosPorMateria gam=new AlumnosPorMateria();
+        AlumnosPorMateria gam = new AlumnosPorMateria();
+        cerrarFrames();
         frameCentrado(gam);
         escritorio.moveToFront(gam);
     }//GEN-LAST:event_mAlumnosMateriaActionPerformed
@@ -430,84 +440,84 @@ public class Interfaz extends javax.swing.JFrame {
 
     private void linkdinGiorginaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinGiorginaMouseClicked
         // TODO add your handling code here:
-        try{
-            if(Desktop.isDesktopSupported()){
+        try {
+            if (Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
-                if(desktop.isSupported(Desktop.Action.BROWSE)){
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
                     desktop.browse(new URI("https://www.linkedin.com/in/giorgina-corvalan-83b167281/"));
                 }
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_linkdinGiorginaMouseClicked
 
     private void linkdinHernanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinHernanMouseClicked
         // TODO add your handling code here:
-//        try{
-//            if(Desktop.isDesktopSupported()){
-//                Desktop desktop = Desktop.getDesktop();
-//                if(desktop.isSupported(Desktop.Action.BROWSE)){
-//                    desktop.browse(new URI("https://www.linkedin.com/in/jeronimo-manabella/"));
-//                }
-//            }
-//        }catch(Exception ex){
-//            ex.printStackTrace();
-//        }
+        try {
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    desktop.browse(new URI("https://www.linkedin.com/in/hernanl/"));
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_linkdinHernanMouseClicked
 
     private void linkdinJeroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinJeroMouseClicked
         // TODO add your handling code here:
-        try{
-            if(Desktop.isDesktopSupported()){
+        try {
+            if (Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
-                if(desktop.isSupported(Desktop.Action.BROWSE)){
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
                     desktop.browse(new URI("https://www.linkedin.com/in/jeronimo-manabella/"));
                 }
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_linkdinJeroMouseClicked
 
     private void gitGiorginaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitGiorginaMouseClicked
         // TODO add your handling code here:
-        try{
-            if(Desktop.isDesktopSupported()){
+        try {
+            if (Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
-                if(desktop.isSupported(Desktop.Action.BROWSE)){
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
                     desktop.browse(new URI("https://github.com/York-Andy"));
                 }
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_gitGiorginaMouseClicked
 
     private void gitHernanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitHernanMouseClicked
         // TODO add your handling code here:
-        try{
-            if(Desktop.isDesktopSupported()){
+        try {
+            if (Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
-                if(desktop.isSupported(Desktop.Action.BROWSE)){
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
                     desktop.browse(new URI("https://github.com/hernanl22"));
                 }
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_gitHernanMouseClicked
 
     private void gitJeroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitJeroMouseClicked
         // TODO add your handling code here:
-        try{
-            if(Desktop.isDesktopSupported()){
+        try {
+            if (Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
-                if(desktop.isSupported(Desktop.Action.BROWSE)){
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
                     desktop.browse(new URI("https://github.com/Jerommz"));
                 }
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_gitJeroMouseClicked
@@ -519,6 +529,18 @@ public class Interfaz extends javax.swing.JFrame {
     private void linkdinGiorginaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_linkdinGiorginaMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_linkdinGiorginaMouseExited
+
+    private void gitJeroMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitJeroMouseEntered
+        // TODO add your handling code here:
+        gitJero.setForeground(Color.red);
+        gitJero.setBackground(new Color(0,0,0,0));
+    }//GEN-LAST:event_gitJeroMouseEntered
+
+    private void gitJeroMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gitJeroMouseExited
+        // TODO add your handling code here:
+        gitJero.setForeground(Color.white);
+        gitJero.setBackground(new Color(0,0,0,0));
+    }//GEN-LAST:event_gitJeroMouseExited
 
     /**
      * @param args the command line arguments
@@ -588,10 +610,25 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JMenuItem mManejoNotas;
     // End of variables declaration//GEN-END:variables
 
-    public void frameCentrado(Component frameCentrado){
+    public void frameCentrado(Component frameCentrado) {
         escritorio.add(frameCentrado);
-        frameCentrado.setLocation((escritorio.getWidth()-frameCentrado.getWidth())/2, (escritorio.getHeight()-frameCentrado.getHeight())/2);
+        frameCentrado.setLocation((escritorio.getWidth() - frameCentrado.getWidth()) / 2, (escritorio.getHeight() - frameCentrado.getHeight()) / 2);
         frameCentrado.setVisible(true);
     }
-    
+
+    public void cerrarFrames() {
+        Component comps[] = escritorio.getComponents();
+
+        for (Component comp : comps) {
+            if (!(comp instanceof JPanel) && !(comp instanceof JLabel)) {
+                if (comp instanceof JInternalFrame) {
+                    ((JInternalFrame) comp).dispose();
+                } else {
+                    escritorio.remove(comp);
+                }
+            }
+        }
+
+    }
+
 }

@@ -56,6 +56,8 @@ public class Notas extends javax.swing.JInternalFrame {
         jcbListaNotas = new javax.swing.JComboBox<>();
         jbBotonGuardarNotas = new javax.swing.JButton();
 
+        setClosable(true);
+
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
         jLabel1.setForeground(java.awt.Color.black);
         jLabel1.setText("Carga de notas");

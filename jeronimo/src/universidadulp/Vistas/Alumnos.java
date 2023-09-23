@@ -144,7 +144,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(jbNuevoAlumno);
-        jbNuevoAlumno.setBounds(63, 380, 65, 31);
+        jbNuevoAlumno.setBounds(90, 380, 65, 31);
 
         jgModificarAlumno.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jgModificarAlumno.setForeground(java.awt.Color.black);
@@ -155,7 +155,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(jgModificarAlumno);
-        jgModificarAlumno.setBounds(234, 380, 77, 31);
+        jgModificarAlumno.setBounds(260, 380, 77, 31);
 
         jbEliminarAlumno.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jbEliminarAlumno.setForeground(java.awt.Color.black);
@@ -166,7 +166,7 @@ public class Alumnos extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(jbEliminarAlumno);
-        jbEliminarAlumno.setBounds(146, 380, 70, 31);
+        jbEliminarAlumno.setBounds(170, 380, 70, 31);
 
         jbBuscarAlumno.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jbBuscarAlumno.setForeground(java.awt.Color.black);
