@@ -11,6 +11,7 @@ import javax.swing.table.TableColumnModel;
 import universidadulp.AccesoADatos.AlumnoData;
 import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.InscripcionData;
+import universidadulp.Entidades.Alumno;
 import universidadulp.Entidades.Inscripcion;
 import universidadulp.Entidades.Materia;
 
@@ -19,6 +20,13 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
     private Connection con;
     private AlumnoData alumnoDB = new AlumnoData();
     private InscripcionData inscripcionDB = new InscripcionData();
+    String[] col = {"ID", "Nombre", "Año"};
+        DefaultTableModel modelo = new DefaultTableModel(null, col) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
     public Inscripciones() {
         initComponents();
@@ -37,8 +45,8 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jcMateriasNoInscriptas = new javax.swing.JCheckBox();
         jcMateriasInscriptas = new javax.swing.JCheckBox();
+        jcMateriasNoInscriptas = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtTablaInscripcion = new javax.swing.JTable();
         jbAnularInscripcion = new javax.swing.JButton();
@@ -52,6 +60,11 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
 
         jcbListaAlumnosInscripcion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jcbListaAlumnosInscripcion.setForeground(java.awt.Color.black);
+        jcbListaAlumnosInscripcion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbListaAlumnosInscripcionActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel5.setForeground(java.awt.Color.black);
@@ -69,19 +82,19 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
         jLabel8.setForeground(java.awt.Color.black);
         jLabel8.setText("Materias no inscriptas");
 
-        jcMateriasNoInscriptas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jcMateriasNoInscriptas.setForeground(java.awt.Color.black);
-        jcMateriasNoInscriptas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcMateriasNoInscriptasActionPerformed(evt);
-            }
-        });
-
         jcMateriasInscriptas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jcMateriasInscriptas.setForeground(java.awt.Color.black);
         jcMateriasInscriptas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcMateriasInscriptasActionPerformed(evt);
+            }
+        });
+
+        jcMateriasNoInscriptas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jcMateriasNoInscriptas.setForeground(java.awt.Color.black);
+        jcMateriasNoInscriptas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcMateriasNoInscriptasActionPerformed(evt);
             }
         });
 
@@ -146,11 +159,11 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcMateriasNoInscriptas)
+                        .addComponent(jcMateriasInscriptas)
                         .addGap(43, 43, 43)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jcMateriasInscriptas)))
+                        .addComponent(jcMateriasNoInscriptas)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -164,9 +177,9 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
-                    .addComponent(jcMateriasInscriptas)
+                    .addComponent(jcMateriasNoInscriptas)
                     .addComponent(jLabel8)
-                    .addComponent(jcMateriasNoInscriptas))
+                    .addComponent(jcMateriasInscriptas))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addGap(27, 27, 27)
@@ -197,29 +210,39 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
     private void jcMateriasInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasInscriptasActionPerformed
         // TODO add your handling code here:
         jcMateriasNoInscriptas.setSelected(false);
+        limpiarTabla();
         String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
-        mostrarTabla(inscripcionDB.obtenerMateriasNoCursadas(buscarAlumno(nombre)));
+        mostrarTabla(inscripcionDB.obtenerMateriasCursadas(buscarAlumno(nombre)));
     }//GEN-LAST:event_jcMateriasInscriptasActionPerformed
 
     private void jcMateriasNoInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasNoInscriptasActionPerformed
         // TODO add your handling code here:
         jcMateriasInscriptas.setSelected(false);
+        limpiarTabla();
         String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
-        mostrarTabla(inscripcionDB.obtenerMateriasCursadas(buscarAlumno(nombre)));
+        mostrarTabla(inscripcionDB.obtenerMateriasNoCursadas(buscarAlumno(nombre)));
     }//GEN-LAST:event_jcMateriasNoInscriptasActionPerformed
 
     private void jbInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbInscribirActionPerformed
         // TODO add your handling code here:
-        Inscripcion insc = new Inscripcion();
-        String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
-        if (inscripcionDB.obtenerMateriasNoCursadas(buscarAlumno(nombre)) == null) {
-            inscripcionDB.nuevoInscripcion(insc);
-
-        } else {
-            JOptionPane.showMessageDialog(null, "no puede ser inscripto en esta materia ya existe inscripcion");
-
+        int filaSeleccionada = jtTablaInscripcion.getSelectedRow();
+        if (filaSeleccionada != -1) {
+            String nombre = jtTablaInscripcion.getValueAt(i, 0)
         }
     }//GEN-LAST:event_jbInscribirActionPerformed
+
+    private void jcbListaAlumnosInscripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaAlumnosInscripcionActionPerformed
+        // TODO add your handling code here:
+        if (jcMateriasInscriptas.isSelected()) {
+            String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
+            limpiarTabla();
+            mostrarTabla(inscripcionDB.obtenerMateriasCursadas(buscarAlumno(nombre)));
+        } else if (jcMateriasNoInscriptas.isSelected()) {
+            String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
+            limpiarTabla();
+            mostrarTabla(inscripcionDB.obtenerMateriasNoCursadas(buscarAlumno(nombre)));
+        }
+    }//GEN-LAST:event_jcbListaAlumnosInscripcionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -239,7 +262,6 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     public void mostrarComboBox() {
-
         String sql = "select nombre, apellido from alumno order by idAlumno ASC";
 
         try {
@@ -260,13 +282,7 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
     }
 
     public void mostrarTabla(List<Materia> materias) {
-        String[] col = {"ID", "Nombre", "Año"};
-        DefaultTableModel modelo = new DefaultTableModel(null, col) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        
         jtTablaInscripcion.setModel(modelo);
         TableColumnModel columna = jtTablaInscripcion.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
@@ -299,6 +315,11 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Error..");
         }
         return id;
+    }
+
+    public void limpiarTabla() {
+        DefaultTableModel mod = (DefaultTableModel) jtTablaInscripcion.getModel();
+        mod.setRowCount(0);
     }
 
 }
