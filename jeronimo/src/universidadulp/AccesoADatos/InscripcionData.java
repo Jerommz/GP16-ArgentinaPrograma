@@ -30,6 +30,7 @@ public class InscripcionData {
             ps.setDouble(1, inscripcion.getNota());
             ps.setInt(2, inscripcion.getAlumno().getIdAlumno());
             ps.setInt(3, inscripcion.getMateria().getIdMateria());
+            ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
 
             if (rs.next()) {

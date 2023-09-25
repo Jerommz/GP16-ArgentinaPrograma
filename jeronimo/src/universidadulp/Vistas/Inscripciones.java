@@ -11,6 +11,7 @@ import javax.swing.table.TableColumnModel;
 import universidadulp.AccesoADatos.AlumnoData;
 import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.InscripcionData;
+import universidadulp.Entidades.Inscripcion;
 import universidadulp.Entidades.Materia;
 
 public final class Inscripciones extends javax.swing.JInternalFrame {
@@ -106,6 +107,11 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
         jbInscribir.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jbInscribir.setForeground(java.awt.Color.black);
         jbInscribir.setText("Inscribir");
+        jbInscribir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbInscribirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -190,17 +196,30 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
 
     private void jcMateriasInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasInscriptasActionPerformed
         // TODO add your handling code here:
-        jcMateriasInscriptas.setSelected(false);
+        jcMateriasNoInscriptas.setSelected(false);
         String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
         mostrarTabla(inscripcionDB.obtenerMateriasNoCursadas(buscarAlumno(nombre)));
     }//GEN-LAST:event_jcMateriasInscriptasActionPerformed
 
     private void jcMateriasNoInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasNoInscriptasActionPerformed
         // TODO add your handling code here:
-        jcMateriasNoInscriptas.setSelected(false);
+        jcMateriasInscriptas.setSelected(false);
         String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
         mostrarTabla(inscripcionDB.obtenerMateriasCursadas(buscarAlumno(nombre)));
     }//GEN-LAST:event_jcMateriasNoInscriptasActionPerformed
+
+    private void jbInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbInscribirActionPerformed
+        // TODO add your handling code here:
+        Inscripcion insc = new Inscripcion();
+        String nombre = jcbListaAlumnosInscripcion.getSelectedItem().toString();
+        if (inscripcionDB.obtenerMateriasNoCursadas(buscarAlumno(nombre)) == null) {
+            inscripcionDB.nuevoInscripcion(insc);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "no puede ser inscripto en esta materia ya existe inscripcion");
+
+        }
+    }//GEN-LAST:event_jbInscribirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -232,7 +251,7 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 String dato[] = {nombre + " " + apellido};
-                for(String datos : dato){
+                for (String datos : dato) {
                     jcbListaAlumnosInscripcion.addItem(datos);
                 }
             }
@@ -251,20 +270,20 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
         jtTablaInscripcion.setModel(modelo);
         TableColumnModel columna = jtTablaInscripcion.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
-        
+
         for (int i = 0; i < materias.size(); i++) {
             String idMateria = materias.get(i).getIdMateria() + "";
             String nombreMateria = materias.get(i).getNombre();
             String anioMateria = materias.get(i).getAnioMateria() + "";
-            String [] dataM = {idMateria, nombreMateria, anioMateria};
+            String[] dataM = {idMateria, nombreMateria, anioMateria};
             modelo.addRow(dataM);
         }
-        
+
     }
 
     public int buscarAlumno(String nombre) {
         String[] valores = nombre.split(" ");
-        String nombreSQL=valores[0];
+        String nombreSQL = valores[0];
         String sql = "select idAlumno from alumno where nombre = ?";
         int id = 0;
         try {
