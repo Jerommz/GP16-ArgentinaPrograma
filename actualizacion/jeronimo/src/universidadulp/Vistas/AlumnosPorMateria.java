@@ -25,6 +25,22 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
     private InscripcionData inscripcionDB = new InscripcionData();
     private AlumnoData alumnoDB = new AlumnoData();
     private Connection con;
+    
+    String[] col1 = {"ID", "DNI", "Alumno"};
+        DefaultTableModel modeloInscriptos = new DefaultTableModel(null, col1) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        String[] col2 = {"ID", "DNI", "Alumno"};
+        DefaultTableModel modeloNoInscriptos = new DefaultTableModel(null, col2) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
     /**
      * Creates new form AlumnosPorMateria2
@@ -33,6 +49,10 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
         initComponents();
         con = Conexion.getConnection();
         mostrarComboBox();
+        limpiarTablaInscriptos();
+        mostrarTablaInscriptas();
+        limpiarTablaNoInscriptos();
+        mostrarTablaNoInscriptas();
     }
 
     /**
@@ -166,8 +186,11 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
 
     private void jcbListaMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaMateriasActionPerformed
         // TODO add your handling code here:
+        limpiarTablaInscriptos();
         mostrarTablaInscriptas();
+        limpiarTablaNoInscriptos();
         mostrarTablaNoInscriptas();
+        
     }//GEN-LAST:event_jcbListaMateriasActionPerformed
 
 
@@ -189,14 +212,7 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     public void mostrarTablaInscriptas() {
-        String[] col = {"ID", "DNI", "Apellido", "Nombre"};
-        DefaultTableModel modelo1 = new DefaultTableModel(null, col) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        jtTablaMateriasInscriptas.setModel(modelo1);
+        jtTablaMateriasInscriptas.setModel(modeloInscriptos);
         TableColumnModel columna = jtTablaMateriasInscriptas.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
         String sql = "select inscripcion.idAlumno, inscripcion.idMateria "
@@ -216,7 +232,7 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
                 String nombre = alumnoDB.buscarAlumno(idAlumno).getNombre();
                 String alumno = nombre + " " + apellido;
                 String dataM[] = {String.valueOf(idAlumno), String.valueOf(dni), alumno};
-                modelo1.addRow(dataM);
+                modeloInscriptos.addRow(dataM);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
@@ -224,25 +240,20 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
     }
     
     public void mostrarTablaNoInscriptas(){
-        String[] col = {"ID", "DNI", "Apellido", "Nombre"};
-        DefaultTableModel modelo2 = new DefaultTableModel(null, col) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        jtTablaMateriasNoInscriptas.setModel(modelo2);
+        jtTablaMateriasNoInscriptas.setModel(modeloNoInscriptos);
         TableColumnModel columna = jtTablaMateriasInscriptas.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
-        String sql = "select inscripcion.idAlumno, inscripcion.idMateria "
-                + "from inscripcion "
-                + "inner join alumno on alumno.idAlumno != inscripcion.idAlumno "
-                + "inner join materia on materia.idMateria != inscripcion.idMateria "
-                + "where materia.nombre = ?";
+        String sql = "SELECT idAlumno, nombre "
+                + "FROM alumno "
+                + "WHERE estado = 1 AND "
+                + "idAlumno NOT IN(SELECT idAlumno "
+                + "FROM inscripcion "
+                + "WHERE inscripcion.idMateria = ?);";
         String nombreM = jcbListaMaterias.getSelectedItem().toString();
+        int idMateria = buscarMateria(nombreM);
         try {
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, nombreM);
+            ps.setInt(1, idMateria);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 int idAlumno = rs.getInt("idAlumno");
@@ -250,8 +261,8 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
                 String apellido = alumnoDB.buscarAlumno(idAlumno).getApellido();
                 String nombre = alumnoDB.buscarAlumno(idAlumno).getNombre();
                 String alumno = nombre + " " + apellido;
-                String dataM[] = {String.valueOf(idAlumno), String.valueOf(dni), alumno};
-                modelo2.addRow(dataM);
+                String dataNM[] = {String.valueOf(idAlumno), String.valueOf(dni), alumno};
+                modeloNoInscriptos.addRow(dataNM);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
@@ -272,5 +283,33 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
             }
         } catch (SQLException ex) {
         }
+    }
+    
+    public void limpiarTablaInscriptos() {
+        DefaultTableModel mod = (DefaultTableModel) jtTablaMateriasInscriptas.getModel();
+        mod.setRowCount(0);
+    }
+    
+    public void limpiarTablaNoInscriptos() {
+        DefaultTableModel mod = (DefaultTableModel) jtTablaMateriasNoInscriptas.getModel();
+        mod.setRowCount(0);
+    }
+    
+    public int buscarMateria(String nombre){
+        int idMateria = 0;
+        String sql = "select idMateria "
+                + "from materia "
+                + "where nombre = ?";
+        try{
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nombre);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                idMateria = rs.getInt("idMateria");
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos./buscarMateria");
+        }
+        return idMateria;
     }
 }

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -18,6 +19,9 @@ import javax.swing.table.TableColumnModel;
 import universidadulp.AccesoADatos.AlumnoData;
 import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.InscripcionData;
+import universidadulp.AccesoADatos.MateriaData;
+import universidadulp.Entidades.Alumno;
+import universidadulp.Entidades.Inscripcion;
 import universidadulp.Entidades.Materia;
 
 /**
@@ -30,6 +34,7 @@ public class Administracion extends javax.swing.JPanel {
     boolean editable = false;
     private AlumnoData alumnoDB = new AlumnoData();
     private InscripcionData inscripcionDB = new InscripcionData();
+    private MateriaData materiaDB = new MateriaData();
 
     String[] col = {"ID", "Nombre", "Año"};
     DefaultTableModel modeloInscripciones = new DefaultTableModel(null, col) {
@@ -51,11 +56,7 @@ public class Administracion extends javax.swing.JPanel {
     DefaultTableModel modeloAlumno = new DefaultTableModel(null, col3) {
         @Override
         public boolean isCellEditable(int row, int column) {
-            if(column == 3){
-                return true;
-            }else{
-                return editable;
-            }
+            return editable;
         }
     };
 
@@ -396,11 +397,6 @@ public class Administracion extends javax.swing.JPanel {
             }
         ));
         jtTablaAlumnos.setRowHeight(32);
-        jtTablaAlumnos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jtTablaAlumnosMouseClicked(evt);
-            }
-        });
         jScrollPane3.setViewportView(jtTablaAlumnos);
 
         panelMid3.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -460,10 +456,26 @@ public class Administracion extends javax.swing.JPanel {
 
     private void jbInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbInscribirActionPerformed
         // TODO add your handling code here:
-//        int filaSeleccionada = jtTablaInscripcion.getSelectedRow();
-//        if (filaSeleccionada != -1) {
-//            String nombre = jtTablaInscripcion.getValueAt(i, 0)
-//        }
+        List<Materia> mats = new ArrayList<>();
+        Materia materia = new Materia();
+        Alumno alum = new Alumno();
+        int fila = jtTablaInscripcion.getSelectedRow();
+        if (fila != -1) {
+            String id = jtTablaInscripcion.getValueAt(fila, 0).toString();
+            int idMateria = 0;
+            mats = inscripcionDB.obtenerMateriasNoCursadas(Integer.valueOf(id));
+            alum = alumnoDB.buscarAlumno(Integer.valueOf(id));
+            for(Materia mat : mats){
+                idMateria = mat.getIdMateria();
+            }
+            Materia mate = materiaDB.buscarMateria(idMateria);
+            int nota = 0;
+            Inscripcion insc = new Inscripcion(alum, materia, nota);
+            inscripcionDB.nuevoInscripcion(insc);
+            JOptionPane.showMessageDialog(null, "Alumnos inscripto.");
+        }else{
+            JOptionPane.showMessageDialog(null, "Error al inscribir algumno.");
+        }
     }//GEN-LAST:event_jbInscribirActionPerformed
 
     private void jcbListaAlumnosInscripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaAlumnosInscripcionActionPerformed
@@ -499,34 +511,64 @@ public class Administracion extends javax.swing.JPanel {
         // TODO add your handling code here:
         String sql = "select idMateria from materia where nombre = ?";
         int i = jtTablaNotas.getSelectedRow();
-        String idAl = jtTablaNotas.getModel().getValueAt(i, 0).toString();
-        String nombreMat = jtTablaNotas.getModel().getValueAt(i, 1).toString();
-        String notaAl = jtTablaNotas.getModel().getValueAt(i, 2).toString();
-        try {
+        if (i == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un alumno.");
+        } else {
+            String idAl = jtTablaNotas.getModel().getValueAt(i, 0).toString();
+            String nombreMat = jtTablaNotas.getModel().getValueAt(i, 1).toString();
+            String notaAl = jtTablaNotas.getModel().getValueAt(i, 2).toString();
+            try {
 
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, nombreMat);
-            ResultSet rs = ps.executeQuery();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, nombreMat);
+                ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                int idMat = rs.getInt("idMateria");
-                inscripcionDB.actualizarNota(Integer.valueOf(idAl), idMat, Integer.valueOf(notaAl));
+                if (rs.next()) {
+                    int idMat = rs.getInt("idMateria");
+                    inscripcionDB.actualizarNota(Integer.valueOf(idAl), idMat, Integer.valueOf(notaAl));
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
         }
     }//GEN-LAST:event_jbBotonGuardarNotasActionPerformed
 
-    private void jtTablaAlumnosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaAlumnosMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtTablaAlumnosMouseClicked
-
     private void jbBotonBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonBajaActionPerformed
         // TODO add your handling code here:
+        int fila = jtTablaAlumnos.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un alumno.");
+        } else {
+            if ((Boolean) jtTablaAlumnos.getValueAt(fila, 3) == false) {
+                JOptionPane.showMessageDialog(null, "El alumno seleccionado ya ha sido eliminado.");
+            } else {
+                String idAlumno = jtTablaAlumnos.getValueAt(fila, 0).toString();
+                alumnoDB.eliminarAlumno(Integer.valueOf(idAlumno));
+                jtTablaAlumnos.setValueAt(false, fila, 3);
+            }
+        }
     }//GEN-LAST:event_jbBotonBajaActionPerformed
 
     private void jbBotonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonAltaActionPerformed
         // TODO add your handling code here:
+        int fila = jtTablaAlumnos.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un alumno.");
+        } else {
+            if ((Boolean) jtTablaAlumnos.getValueAt(fila, 3) == true) {
+                JOptionPane.showMessageDialog(null, "El alumno seleccionado esta activo.");
+            } else {
+                String sql = "update alumno set estado = ?";
+                try {
+                    PreparedStatement ps = con.prepareStatement(sql);
+                    ps.setBoolean(1, true);
+                    jtTablaAlumnos.setValueAt(true, fila, 3);
+                    JOptionPane.showMessageDialog(null, "Alumno agregado.");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos./altaBoton");
+                }
+            }
+        }
     }//GEN-LAST:event_jbBotonAltaActionPerformed
 
 
@@ -632,7 +674,7 @@ public class Administracion extends javax.swing.JPanel {
                 String[] dataM = {idMateria, nombreMateria, anioMateria};
                 modeloInscripciones.addRow(dataM);
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos./tablaInscripciones");
         }
 
@@ -677,28 +719,22 @@ public class Administracion extends javax.swing.JPanel {
         TableColumnModel columna = jtTablaAlumnos.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
         columna.getColumn(3).setMaxWidth(50);
-        
 
         String sql = "select idAlumno, dni, apellido, nombre, estado "
                 + "from alumno ";
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 String idMateria = String.valueOf(rs.getInt("idAlumno"));
                 String dni = String.valueOf(rs.getInt("dni"));
                 String apellido = rs.getString("apellido");
                 String nombre = rs.getString("nombre");
                 String alumno = nombre + " " + apellido;
                 boolean estado = rs.getBoolean("estado");
-                String dataM[] = {idMateria, dni, alumno};
+                Object dataM[] = {idMateria, dni, alumno, estado};
                 modeloAlumno.addRow(dataM);
                 int fil = jtTablaAlumnos.getSelectedRow();
-//                if(estado == true){
-//                    jtTablaAlumnos.setValueAt(true, fil, 3);
-//                }else{
-//                    jtTablaAlumnos.setValueAt(false, fil, 3);
-//                }
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos./tablaAlumnos");
@@ -735,14 +771,14 @@ public class Administracion extends javax.swing.JPanel {
         return id;
     }
 
-    public void checkBoxColumn(int col, JTable table){
+    public void checkBoxColumn(int col, JTable table) {
         TableColumn colum = table.getColumnModel().getColumn(col);
         colum.setCellEditor(table.getDefaultEditor(Boolean.class));
         colum.setCellRenderer(table.getDefaultRenderer(Boolean.class));
     }
-    
-    public boolean isSelected(int fila, int columna, JTable table){
-        return table.getValueAt(fila, columna) !=null;
+
+    public boolean isSelected(int fila, int columna, JTable table) {
+        return table.getValueAt(fila, columna) != null;
     }
-    
+
 }

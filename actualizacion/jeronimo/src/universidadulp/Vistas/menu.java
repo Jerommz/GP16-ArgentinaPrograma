@@ -469,7 +469,7 @@ public class menu extends javax.swing.JFrame {
 
     private void jbBotonAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonAlumnoActionPerformed
         // TODO add your handling code here:
-        mostrarPanel(new Alumno());
+        mostrarPanel(new Alumnos());
         mostrarLabels();
     }//GEN-LAST:event_jbBotonAlumnoActionPerformed
 

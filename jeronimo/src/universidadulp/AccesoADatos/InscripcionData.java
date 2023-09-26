@@ -32,7 +32,6 @@ public class InscripcionData {
             ps.setInt(3, inscripcion.getMateria().getIdMateria());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
-
             if (rs.next()) {
                 inscripcion.setIdInscripcion(rs.getInt(1));
                 JOptionPane.showMessageDialog(null, "Inscripción guardada exitosamente");
