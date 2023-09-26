@@ -11,8 +11,6 @@ import javax.swing.table.TableColumnModel;
 import universidadulp.AccesoADatos.AlumnoData;
 import universidadulp.AccesoADatos.Conexion;
 import universidadulp.AccesoADatos.InscripcionData;
-import universidadulp.Entidades.Alumno;
-import universidadulp.Entidades.Inscripcion;
 import universidadulp.Entidades.Materia;
 
 public final class Inscripciones extends javax.swing.JInternalFrame {
@@ -21,12 +19,12 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
     private AlumnoData alumnoDB = new AlumnoData();
     private InscripcionData inscripcionDB = new InscripcionData();
     String[] col = {"ID", "Nombre", "Año"};
-        DefaultTableModel modelo = new DefaultTableModel(null, col) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+    DefaultTableModel modelo = new DefaultTableModel(null, col) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
 
     public Inscripciones() {
         initComponents();
@@ -282,7 +280,7 @@ public final class Inscripciones extends javax.swing.JInternalFrame {
     }
 
     public void mostrarTabla(List<Materia> materias) {
-        
+
         jtTablaInscripcion.setModel(modelo);
         TableColumnModel columna = jtTablaInscripcion.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
