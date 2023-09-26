@@ -5,17 +5,34 @@
  */
 package universidadulp.Vistas;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+import universidadulp.AccesoADatos.AlumnoData;
+import universidadulp.AccesoADatos.Conexion;
+import universidadulp.AccesoADatos.InscripcionData;
+
 /**
  *
  * @author jero
  */
 public class AlumnosPorMateria extends javax.swing.JPanel {
 
+    private InscripcionData inscripcionDB = new InscripcionData();
+    private AlumnoData alumnoDB = new AlumnoData();
+    private Connection con;
+
     /**
      * Creates new form AlumnosPorMateria2
      */
     public AlumnosPorMateria() {
         initComponents();
+        con = Conexion.getConnection();
+        mostrarComboBox();
     }
 
     /**
@@ -31,13 +48,17 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
         panelTop = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         panelMid = new javax.swing.JPanel();
+        panelMidTop = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jcbListaMaterias = new javax.swing.JComboBox<>();
+        panelMidBot = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         panelBot = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtTablaMateriasInscriptas = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jtTablaMateriasNoInscriptas = new javax.swing.JTable();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -54,76 +75,202 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
 
         panelMid.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(21, 39, 43)));
         panelMid.setPreferredSize(new java.awt.Dimension(0, 80));
-        panelMid.setLayout(new java.awt.GridBagLayout());
+        panelMid.setLayout(new java.awt.BorderLayout());
+
+        panelMidTop.setPreferredSize(new java.awt.Dimension(0, 80));
+        panelMidTop.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jLabel1.setForeground(java.awt.Color.white);
         jLabel1.setText("Seleccione una materia:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 15);
-        panelMid.add(jLabel1, gridBagConstraints);
+        panelMidTop.add(jLabel1, gridBagConstraints);
 
-        jComboBox1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jComboBox1.setForeground(java.awt.Color.white);
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(200, 40));
-        panelMid.add(jComboBox1, new java.awt.GridBagConstraints());
+        jcbListaMaterias.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jcbListaMaterias.setForeground(java.awt.Color.white);
+        jcbListaMaterias.setPreferredSize(new java.awt.Dimension(200, 40));
+        jcbListaMaterias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbListaMateriasActionPerformed(evt);
+            }
+        });
+        panelMidTop.add(jcbListaMaterias, new java.awt.GridBagConstraints());
+
+        panelMid.add(panelMidTop, java.awt.BorderLayout.NORTH);
+
+        panelMidBot.setPreferredSize(new java.awt.Dimension(0, 80));
+        panelMidBot.setLayout(new java.awt.GridBagLayout());
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel3.setForeground(java.awt.Color.white);
+        jLabel3.setText("Inscriptos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 275);
+        panelMidBot.add(jLabel3, gridBagConstraints);
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel4.setForeground(java.awt.Color.white);
+        jLabel4.setText("No inscriptos");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 275, 0, 0);
+        panelMidBot.add(jLabel4, gridBagConstraints);
+
+        panelMid.add(panelMidBot, java.awt.BorderLayout.SOUTH);
 
         add(panelMid, java.awt.BorderLayout.CENTER);
 
-        panelBot.setPreferredSize(new java.awt.Dimension(0, 580));
+        panelBot.setPreferredSize(new java.awt.Dimension(0, 500));
         panelBot.setLayout(new java.awt.GridLayout(1, 0));
 
-        jTable1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(21, 39, 43)));
-        jTable1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTable1.setForeground(java.awt.Color.white);
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtTablaMateriasInscriptas.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(21, 39, 43)));
+        jtTablaMateriasInscriptas.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jtTablaMateriasInscriptas.setForeground(java.awt.Color.white);
+        jtTablaMateriasInscriptas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jtTablaMateriasInscriptas.setRowHeight(32);
+        jScrollPane1.setViewportView(jtTablaMateriasInscriptas);
 
         panelBot.add(jScrollPane1);
 
-        jTable2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 0, 0, new java.awt.Color(21, 39, 43)));
-        jTable2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTable2.setForeground(java.awt.Color.white);
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jtTablaMateriasNoInscriptas.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 0, 0, new java.awt.Color(21, 39, 43)));
+        jtTablaMateriasNoInscriptas.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jtTablaMateriasNoInscriptas.setForeground(java.awt.Color.white);
+        jtTablaMateriasNoInscriptas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jtTablaMateriasNoInscriptas.setRowHeight(32);
+        jScrollPane2.setViewportView(jtTablaMateriasNoInscriptas);
 
         panelBot.add(jScrollPane2);
 
         add(panelBot, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jcbListaMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaMateriasActionPerformed
+        // TODO add your handling code here:
+        mostrarTablaInscriptas();
+        mostrarTablaNoInscriptas();
+    }//GEN-LAST:event_jcbListaMateriasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JComboBox<String> jcbListaMaterias;
+    private javax.swing.JTable jtTablaMateriasInscriptas;
+    private javax.swing.JTable jtTablaMateriasNoInscriptas;
     private javax.swing.JPanel panelBot;
     private javax.swing.JPanel panelMid;
+    private javax.swing.JPanel panelMidBot;
+    private javax.swing.JPanel panelMidTop;
     private javax.swing.JPanel panelTop;
     // End of variables declaration//GEN-END:variables
+
+    public void mostrarTablaInscriptas() {
+        String[] col = {"ID", "DNI", "Apellido", "Nombre"};
+        DefaultTableModel modelo1 = new DefaultTableModel(null, col) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        jtTablaMateriasInscriptas.setModel(modelo1);
+        TableColumnModel columna = jtTablaMateriasInscriptas.getColumnModel();
+        columna.getColumn(0).setMaxWidth(30);
+        String sql = "select inscripcion.idAlumno, inscripcion.idMateria "
+                + "from inscripcion "
+                + "inner join alumno on alumno.idAlumno = inscripcion.idAlumno "
+                + "inner join materia on materia.idMateria = inscripcion.idMateria "
+                + "where materia.nombre = ?";
+        String nombreM = jcbListaMaterias.getSelectedItem().toString();
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nombreM);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int idAlumno = rs.getInt("idAlumno");
+                int dni = alumnoDB.buscarAlumno(idAlumno).getDni();
+                String apellido = alumnoDB.buscarAlumno(idAlumno).getApellido();
+                String nombre = alumnoDB.buscarAlumno(idAlumno).getNombre();
+                String alumno = nombre + " " + apellido;
+                String dataM[] = {String.valueOf(idAlumno), String.valueOf(dni), alumno};
+                modelo1.addRow(dataM);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
+        }
+    }
+    
+    public void mostrarTablaNoInscriptas(){
+        String[] col = {"ID", "DNI", "Apellido", "Nombre"};
+        DefaultTableModel modelo2 = new DefaultTableModel(null, col) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        jtTablaMateriasNoInscriptas.setModel(modelo2);
+        TableColumnModel columna = jtTablaMateriasInscriptas.getColumnModel();
+        columna.getColumn(0).setMaxWidth(30);
+        String sql = "select inscripcion.idAlumno, inscripcion.idMateria "
+                + "from inscripcion "
+                + "inner join alumno on alumno.idAlumno != inscripcion.idAlumno "
+                + "inner join materia on materia.idMateria != inscripcion.idMateria "
+                + "where materia.nombre = ?";
+        String nombreM = jcbListaMaterias.getSelectedItem().toString();
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nombreM);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int idAlumno = rs.getInt("idAlumno");
+                int dni = alumnoDB.buscarAlumno(idAlumno).getDni();
+                String apellido = alumnoDB.buscarAlumno(idAlumno).getApellido();
+                String nombre = alumnoDB.buscarAlumno(idAlumno).getNombre();
+                String alumno = nombre + " " + apellido;
+                String dataM[] = {String.valueOf(idAlumno), String.valueOf(dni), alumno};
+                modelo2.addRow(dataM);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
+        }
+    }
+
+    public void mostrarComboBox() {
+        String sql = "select nombre from materia WHERE 1 order by idMateria ASC";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String nombre = rs.getString("nombre");
+                jcbListaMaterias.addItem(nombre);
+            }
+        } catch (SQLException ex) {
+        }
+    }
 }

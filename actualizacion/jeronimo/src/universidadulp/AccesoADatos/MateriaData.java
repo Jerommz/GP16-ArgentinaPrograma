@@ -85,7 +85,7 @@ public class MateriaData {
         }
     }
 
-    public void eliminarAlumno(int id) {
+    public void eliminarMateria(int id) {
         String sql = "update materia set estado = 0 where idMateria = ?";
 
         try {
