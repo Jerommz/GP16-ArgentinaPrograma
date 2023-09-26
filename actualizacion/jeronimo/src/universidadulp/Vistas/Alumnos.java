@@ -320,7 +320,8 @@ public class Alumnos extends javax.swing.JPanel {
                     alumnoDB.nuevoAlumno(alu);
                 }
             }
-
+            ps.close();
+            rs.close();
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "No puede haber campos vacios.");
         } catch (SQLException ex) {
@@ -344,6 +345,8 @@ public class Alumnos extends javax.swing.JPanel {
                     int id = rs.getInt("idAlumno");
                     alumnoDB.eliminarAlumno(id);
                 }
+                ps.close();
+                rs.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
             }
@@ -371,7 +374,8 @@ public class Alumnos extends javax.swing.JPanel {
                     universidadulp.Entidades.Alumno alu = new universidadulp.Entidades.Alumno(id, dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
                     alumnoDB.modificarAlumno(alu);
                 }
-
+                ps.close();
+                rs.close();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "error");
             }
@@ -453,6 +457,8 @@ public class Alumnos extends javax.swing.JPanel {
                 String tbdata[] = {id, dni, alumno};
                 modelo.addRow(tbdata);
             }
+            ps.close();
+            rs.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error..");
         }

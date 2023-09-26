@@ -153,6 +153,7 @@ public class AlumnoData {
                 alumnos.add(alumno);
             }
             ps.close();
+            rs.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "ERROR al buscar alumnos ");
         }

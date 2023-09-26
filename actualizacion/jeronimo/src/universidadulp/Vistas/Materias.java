@@ -307,6 +307,8 @@ public class Materias extends javax.swing.JPanel {
                 jtAnioMateria.setText("");
                 jcbEstadoMateria.enable(false);
             }
+            ps.close();
+            rs.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error inesperado.");
         } catch (NumberFormatException ex) {
@@ -379,6 +381,8 @@ public class Materias extends javax.swing.JPanel {
                 String tbdata[] = {id, nombre};
                 modelo.addRow(tbdata);
             }
+            ps.close();
+            rs.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error..");
         }

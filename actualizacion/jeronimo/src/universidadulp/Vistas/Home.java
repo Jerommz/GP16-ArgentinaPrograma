@@ -341,7 +341,6 @@ public class Home extends javax.swing.JPanel {
                     switch (labl.getText()) {
                         case "Linkedin/G":
                             link = "https://www.linkedin.com/in/giorgina-corvalan-83b167281/";
-                            System.out.println("1");
                             agregarLink(link);
                             break;
                         case "GitHub/G":
@@ -364,6 +363,12 @@ public class Home extends javax.swing.JPanel {
                             link = "https://github.com/Jerommz";
                             agregarLink(link);
                             break;
+                        case "emailG":
+                            link = "Daryork43@gmail.com";
+                        case "emailH":
+                            link = "Hernanl22@hotmail.com";
+                        case"emailJ":
+                            link = "jeronimomanabella971@gmail.com";
                     }
                 }
 

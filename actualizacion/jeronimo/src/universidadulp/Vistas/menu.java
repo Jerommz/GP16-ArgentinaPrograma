@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package universidadulp.Vistas;
 
+//imports de paquetes y clases necesarios
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
@@ -20,10 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicButtonUI;
 
-/**
- *
- * @author jero
- */
 public class menu extends javax.swing.JFrame {
 
     public menu() {
