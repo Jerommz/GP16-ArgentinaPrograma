@@ -294,6 +294,11 @@ public class Materias extends javax.swing.JPanel {
 
                     //metodo para actualizar tabla
                     actualizarTabla();
+                    //limpiar los campos una vez impactado en la DB
+                    jtNombreMateria.setText("");
+                    jtAnioMateria.setText("");
+                    jtIdMateria.setText(null);
+                    jcbEstadoMateria.setSelected(false);
                 }
             }
         } catch (NumberFormatException ex) {
