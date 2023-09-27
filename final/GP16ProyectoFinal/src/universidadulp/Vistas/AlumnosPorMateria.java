@@ -41,9 +41,9 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
         initComponents();
         con = Conexion.getConnection();
         mostrarComboBox();
-        limpiarTablaInscriptos();
+        actualizarTablaInscriptos();
         mostrarTablaInscriptas();
-        limpiarTablaNoInscriptos();
+        actualizarTablaInscriptos();
         mostrarTablaNoInscriptas();
     }
     @SuppressWarnings("unchecked")
@@ -173,9 +173,9 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
     //action del combobox que lista las materias
     private void jcbListaMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaMateriasActionPerformed
         // TODO add your handling code here:
-        limpiarTablaInscriptos();
+        actualizarTablaNoInscriptos();
         mostrarTablaInscriptas();
-        limpiarTablaNoInscriptos();
+        actualizarTablaNoInscriptos();
         mostrarTablaNoInscriptas();
 
     }//GEN-LAST:event_jcbListaMateriasActionPerformed
@@ -200,10 +200,14 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
 
     //metodo para rellenar la tabla materias inscriptas con los datos requeridos
     public void mostrarTablaInscriptas() {
+        
+        //seteo de modelo para tabla inscriptos
         jtTablaMateriasInscriptas.setModel(modeloInscriptos);
+        
         //codigo para obtener el modelo de las columnas y cambiar su tamaño
         TableColumnModel columna = jtTablaMateriasInscriptas.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
+        
         //query para obtener idAlumno
         String sql = "select inscripcion.idAlumno, inscripcion.idMateria "
                 + "from inscripcion "
@@ -216,12 +220,14 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
             ps.setString(1, nombreM);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                
                 //declaracion de variables que seran mostradas en cada fila de la tabla
                 int idAlumno = rs.getInt("idAlumno");
                 int dni = alumnoDB.buscarAlumno(idAlumno).getDni();
                 String apellido = alumnoDB.buscarAlumno(idAlumno).getApellido();
                 String nombre = alumnoDB.buscarAlumno(idAlumno).getNombre();
                 String alumno = nombre + " " + apellido;
+                
                 //array para rellenar la tabla
                 String dataM[] = {String.valueOf(idAlumno), String.valueOf(dni), alumno};
                 modeloInscriptos.addRow(dataM);
@@ -292,13 +298,13 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
     }
 
     //metodo para limpar/actualizar la tabla inscriptos
-    public void limpiarTablaInscriptos() {
+    public void actualizarTablaInscriptos() {
         //declaracion de modelo con el modelo de la tabla para eliminar todas las filas
         DefaultTableModel mod = (DefaultTableModel) jtTablaMateriasInscriptas.getModel();
         mod.setRowCount(0);
     }
     //metodo para limpar/actualizar la tabla inscriptos
-    public void limpiarTablaNoInscriptos() {
+    public void actualizarTablaNoInscriptos() {
         //declaracion de modelo con el modelo de la tabla para eliminar todas las filas
         DefaultTableModel mod = (DefaultTableModel) jtTablaMateriasNoInscriptas.getModel();
         mod.setRowCount(0);

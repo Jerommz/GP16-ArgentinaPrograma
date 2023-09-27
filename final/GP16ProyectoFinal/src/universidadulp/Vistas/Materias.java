@@ -1,10 +1,15 @@
 package universidadulp.Vistas;
 
+import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import universidadulp.AccesoADatos.Conexion;
@@ -27,6 +32,35 @@ public class Materias extends javax.swing.JPanel {
         initComponents();
         con = Conexion.getConnection();
         mostrarTabla();
+
+        JButton btns[] = {jbNuevoMateria, jbEliminarMateria, jbModificarMateria, jbBotonActualizar};
+        for (JButton btn : btns) {
+            btn.setBackground(new Color(60, 63, 65));
+            btn.setUI(new BasicButtonUI());
+            btn.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    btn.setBackground(new Color(80, 41, 179));
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    btn.setBackground(new Color(60, 63, 65));
+                }
+            });
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -243,7 +277,7 @@ public class Materias extends javax.swing.JPanel {
                     boolean estado = jcbEstadoMateria.isEnabled();
                     Materia mat = new Materia(nombre, anio, estado);
                     materiaDB.nuevoMateria(mat);
-                    
+
                     DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
                     mod.setRowCount(0);
                     mostrarTabla();
@@ -263,7 +297,7 @@ public class Materias extends javax.swing.JPanel {
                 int id = Integer.parseInt(jtIdMateria.getText());
                 materiaDB.eliminarMateria(id);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.");
+                JOptionPane.showMessageDialog(null, "No puede haber campos vacios.");
             }
         }
     }//GEN-LAST:event_jbEliminarMateriaActionPerformed
@@ -282,13 +316,13 @@ public class Materias extends javax.swing.JPanel {
                 int anio = Integer.parseInt(jtAnioMateria.getText());
                 boolean estado = jcbEstadoMateria.isSelected();
                 Materia mat = new Materia(Integer.valueOf(id), nombre, anio, estado);
-                
+
                 DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
                 mod.setRowCount(0);
                 mostrarTabla();
-                
+
                 materiaDB.modificarMateria(mat);
-                
+
                 jtIdMateria.setText("");
                 jtNombreMateria.setText("");
                 jtAnioMateria.setText("");

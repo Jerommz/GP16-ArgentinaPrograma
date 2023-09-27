@@ -1,13 +1,18 @@
 package universidadulp.Vistas;
 
 //imports de paquetes y clases necesarios
+import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -62,8 +67,49 @@ public class Administracion extends javax.swing.JPanel {
         jcMateriasInscriptas.setSelected(true);
         mostrarComboBoxInscripciones();
         mostrarComboBoxNotas();
+        jbInscribir.setEnabled(false);
         mostrarTablaAlumno();
         checkBoxColumn(3, jtTablaAlumnos);
+
+        //array con cada boton para que tengan un hover
+        JButton btns[] = {jbAnularInscripcion, jbInscribir, jbBotonGuardarNotas, jbBotonBaja, jbBotonAlta};
+
+        //loop for para recorrer el array y que realice los cambios a cada boton
+        for (JButton btn : btns) {
+
+            //seteo el color default
+            btn.setBackground(new Color(60, 63, 65));
+
+            //seteo el look and feel basico de los botones
+            btn.setUI(new BasicButtonUI());
+
+            //mouse listener para que me detecte al apretar cada boton
+            btn.addMouseListener(new MouseListener() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                }
+
+                //override al evento mouseEntered para que cuando pase el mouse por arriba cambie al color elegido
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    btn.setBackground(new Color(80, 41, 179));
+                }
+
+                //override al evento mouseEntered para que cuando pase el mouse por arriba cambie al color elegido
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    btn.setBackground(new Color(60, 63, 65));
+                }
+            });
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -424,6 +470,11 @@ public class Administracion extends javax.swing.JPanel {
     //action checkbox materias isncriptas de panel inscripciones
     private void jcMateriasInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasInscriptasActionPerformed
         // TODO add your handling code here:
+        if (jcMateriasInscriptas.isSelected()) {
+            jbInscribir.setEnabled(false);
+            jbAnularInscripcion.setEnabled(true);
+        }
+
         //deseleccionar checkbox no inscriptas
         jcMateriasNoInscriptas.setSelected(false);
 
@@ -440,6 +491,11 @@ public class Administracion extends javax.swing.JPanel {
     //action checkbox materias no isncriptas de panel inscripciones
     private void jcMateriasNoInscriptasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcMateriasNoInscriptasActionPerformed
         // TODO add your handling code here:
+        if (jcMateriasNoInscriptas.isSelected()) {
+            jbInscribir.setEnabled(true);
+            jbAnularInscripcion.setEnabled(false);
+        }
+
         //deseleccionar checkbox inscriptas
         jcMateriasInscriptas.setSelected(false);
 
@@ -545,10 +601,12 @@ public class Administracion extends javax.swing.JPanel {
         // TODO add your handling code here:
         //metodo para actualizar la tabla notas
         actualizarTablaNotas();
-        String dataCB = jcbListaNotas.getSelectedItem().toString();
+
+        //metodo para mostrar tabla notas
         mostrarTablaNotas();
     }//GEN-LAST:event_jcbListaNotasActionPerformed
 
+    //action table setear columna como no editable
     private void jtTablaNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaNotasMouseClicked
         // TODO add your handling code here:
         if (jtTablaNotas.getSelectedColumn() == 2) {
@@ -558,58 +616,89 @@ public class Administracion extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jtTablaNotasMouseClicked
 
+    //action guardar panel notas
     private void jbBotonGuardarNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonGuardarNotasActionPerformed
         // TODO add your handling code here:
-        int fila = jtTablaAlumnos.getSelectedRow();
+        //seleccion de fila
+        int fila = jtTablaNotas.getSelectedRow();
         if (fila != -1) {
+
+            //declaracion de variables para enviar al metodo actualizar nota
             int i = jtTablaNotas.getSelectedRow();
-            String nota = jtTablaNotas.getModel().getValueAt(i, 2).toString();
-            double notaAl = Double.valueOf(nota);
-            if (notaAl < 1 || notaAl > 10) {
+            double nota = Double.parseDouble(jtTablaNotas.getModel().getValueAt(i, 2).toString());
+
+            //if para que la nota este entre 1 y 10
+            if (nota < 1 || nota > 10) {
                 JOptionPane.showMessageDialog(null, "La nota debe ser entre 1 y 10.");
             } else {
+
+                //declaracion de variables para enviar al metodo actualizar nota
                 String nombre = jcbListaNotas.getSelectedItem().toString();
                 int idAlumno = buscarAlumno(nombre);
-                String idMateria = jtTablaNotas.getModel().getValueAt(i, 0).toString();
-                inscripcionDB.actualizarNota(idAlumno, Integer.valueOf(idMateria), Double.valueOf(nota));
+                int idMateria = Integer.parseInt(jtTablaNotas.getModel().getValueAt(i, 0).toString());
+
+                //metodo para actualizar nota
+                inscripcionDB.actualizarNota(idAlumno, idMateria, nota);
             }
-        }else {
+        } else {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un alumno.");
         }
     }//GEN-LAST:event_jbBotonGuardarNotasActionPerformed
 
+    //action baja alumno
     private void jbBotonBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonBajaActionPerformed
         // TODO add your handling code here:
+        //seleccion de fila
         int fila = jtTablaAlumnos.getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione un alumno.");
         } else {
+
+            //if para detectar si el alumno ya ha sido eliminado
             if ((Boolean) jtTablaAlumnos.getValueAt(fila, 3) == false) {
                 JOptionPane.showMessageDialog(null, "El alumno seleccionado ya ha sido eliminado.");
             } else {
+
+                //declaracion de variables para enviar al metodo eliminar alumno
                 String idAlumno = jtTablaAlumnos.getValueAt(fila, 0).toString();
+
+                //metodo para eliminar alumno
                 alumnoDB.eliminarAlumno(Integer.valueOf(idAlumno));
+
+                //seteo de checkbox en negativo para el alumno eliminado
                 jtTablaAlumnos.setValueAt(false, fila, 3);
             }
         }
     }//GEN-LAST:event_jbBotonBajaActionPerformed
 
+    //action alta alumno
     private void jbBotonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonAltaActionPerformed
         // TODO add your handling code here:
+        //seleccion de fila
         int fila = jtTablaAlumnos.getSelectedRow();
         if (fila == -1) {
             JOptionPane.showMessageDialog(null, "Seleccione un alumno.");
         } else {
+
+            //if para detectar si el alumno esta activo
             if ((Boolean) jtTablaAlumnos.getValueAt(fila, 3) == true) {
                 JOptionPane.showMessageDialog(null, "El alumno seleccionado esta activo.");
             } else {
+
+                //query para updatear el estado del alumno
                 String sql = "update alumno set estado = true "
                         + "where idAlumno = ?";
+
+                //declaracion de variables para enviar al metodo eliminar alumno
                 String idAlumno = jtTablaAlumnos.getValueAt(fila, 0).toString();
                 try {
+
+                    //envio de query a la base de datos
                     PreparedStatement ps = con.prepareStatement(sql);
                     ps.setInt(1, Integer.valueOf(idAlumno));
                     ps.executeUpdate();
+
+                    //seteo de checkbox en positivo para el alumno activado
                     jtTablaAlumnos.setValueAt(true, fila, 3);
                     JOptionPane.showMessageDialog(null, "Alumno agregado.");
                 } catch (SQLException ex) {
@@ -665,15 +754,20 @@ public class Administracion extends javax.swing.JPanel {
     private javax.swing.JPanel panelTopHalf2;
     // End of variables declaration//GEN-END:variables
 
+    //metodo para mostrar combobox de inscripciones
     public void mostrarComboBoxInscripciones() {
+
+        //query para obtener nombre y apellido
         String sql = "select nombre, apellido from alumno order by idAlumno ASC";
 
         try {
+
+            //envio de query a la base de datos
             PreparedStatement ps = con.prepareStatement(sql);
-
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
+
+                //declaracion de variables que seran mostrados en el combobox
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 String dato[] = {nombre + " " + apellido};
@@ -687,14 +781,20 @@ public class Administracion extends javax.swing.JPanel {
         }
     }
 
+    //metodo para mostrar combobox de inscripciones
     public int mostrarComboBoxNotas() {
+
+        //query para obtener nombre y apellido
         String sql = "select nombre, apellido from alumno order by idAlumno ASC";
         int id = 0;
         try {
+
+            //declaracion de variables que seran mostrados en el combobox
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
+
+                //declaracion de variables que seran mostrados en el combobox
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 String dato[] = {nombre + " " + apellido};
@@ -710,12 +810,17 @@ public class Administracion extends javax.swing.JPanel {
         return id;
     }
 
+    //metodo para rellenar la tabla inscripciones con los datos requeridos
     public void mostrarTablaInscripciones(List<Materia> materias) {
-
+        //seteo de modelo de la tabla inscripciones
         jtTablaInscripcion.setModel(modeloInscripciones);
+
+        //codigo para obtener el modelo de las columnas y cambiar su tamaño
         TableColumnModel columna = jtTablaInscripcion.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
         try {
+
+            //declaracion de variables que seran mostradas en cada fila de la tabla
             for (int i = 0; i < materias.size(); i++) {
                 String idMateria = materias.get(i).getIdMateria() + "";
                 String nombreMateria = materias.get(i).getNombre();
@@ -729,25 +834,34 @@ public class Administracion extends javax.swing.JPanel {
 
     }
 
+    //metodo para rellenar la tabla notas con los datos requeridos
     public void mostrarTablaNotas() {
+        //seteo de modelo de la tabla inscripciones
         jtTablaNotas.setModel(modeloNotas);
+
+        //declaracion de variable para invocar metodo buscarAlumno
         String nombreLista = jcbListaNotas.getSelectedItem().toString();
         int id = buscarAlumno(nombreLista);
+
+        //codigo para obtener el modelo de las columnas y cambiar su tamaño
         TableColumnModel columna = jtTablaNotas.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
         columna.getColumn(2).setMaxWidth(60);
 
+        //query para obtener idMateria y nombre y nota
         String sql = "select materia.idMateria, materia.nombre, inscripcion.nota "
                 + "from materia "
                 + "inner join inscripcion on inscripcion.idMateria = materia.idMateria "
                 + "inner join alumno on alumno.idAlumno = inscripcion.idAlumno "
                 + "where inscripcion.idAlumno = ? order by idMateria ASC";
         try {
+            //declaracion de variables que seran mostrados en la tabla notas
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
+
+                //declaracion de variables que seran mostrados en la tabla notas
                 String idMateria = String.valueOf(rs.getInt("materia.idMateria"));
                 String nombre = rs.getString("materia.nombre");
                 String nota = rs.getString("inscripcion.nota");
@@ -761,18 +875,27 @@ public class Administracion extends javax.swing.JPanel {
         }
     }
 
+    //metodo para rellenar la tabla alumno con los datos requeridos
     public void mostrarTablaAlumno() {
+        //seteo de modelo de la tabla inscripciones
         jtTablaAlumnos.setModel(modeloAlumno);
+
+        //codigo para obtener el modelo de las columnas y cambiar su tamaño
         TableColumnModel columna = jtTablaAlumnos.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
         columna.getColumn(3).setMaxWidth(50);
 
+        //query para obtener idAlumno, dni, apellido, nombre y estado
         String sql = "select idAlumno, dni, apellido, nombre, estado "
                 + "from alumno";
         try {
+
+            //declaracion de variables que seran mostrados en la tabla notas
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+
+                //declaracion de variables que seran mostrados en la tabla alumno
                 String idMateria = String.valueOf(rs.getInt("idAlumno"));
                 String dni = String.valueOf(rs.getInt("dni"));
                 String apellido = rs.getString("apellido");
@@ -790,22 +913,30 @@ public class Administracion extends javax.swing.JPanel {
         }
     }
 
+    //metodo para actualizar la tabla inscripciones
     public void actualizarTablaInscripciones() {
         DefaultTableModel mod = (DefaultTableModel) jtTablaInscripcion.getModel();
         mod.setRowCount(0);
     }
 
+    //metodo para actualizar la tabla notas
     public void actualizarTablaNotas() {
         DefaultTableModel mod = (DefaultTableModel) jtTablaNotas.getModel();
         mod.setRowCount(0);
     }
 
+    //metodo para buscar un alumno y retornar su idAlumno
     public int buscarAlumno(String nombre) {
+        //declaracion de variables
         String[] valores = nombre.split(" ");
         String nombreSQL = valores[0];
+
+        //query para obtener idAlumno
         String sql = "select idAlumno from alumno where nombre = ?";
         int id = 0;
         try {
+
+            //declaracion de variables que seran mostrados en la tabla notas
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, nombreSQL);
             ResultSet rs = ps.executeQuery();
@@ -821,13 +952,10 @@ public class Administracion extends javax.swing.JPanel {
         return id;
     }
 
+    //metodo para setear una columna como Boolean para que contenga checkbox
     public void checkBoxColumn(int col, JTable table) {
         TableColumn colum = table.getColumnModel().getColumn(col);
         colum.setCellEditor(table.getDefaultEditor(Boolean.class));
         colum.setCellRenderer(table.getDefaultRenderer(Boolean.class));
-    }
-
-    public boolean isSelected(int fila, int columna, JTable table) {
-        return table.getValueAt(fila, columna) != null;
     }
 }

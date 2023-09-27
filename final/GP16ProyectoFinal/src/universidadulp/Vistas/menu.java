@@ -238,12 +238,13 @@ public class menu extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
         panelSide.add(jbBotonAdmin, gridBagConstraints);
 
         jbBotonCosulta.setForeground(java.awt.Color.white);
         jbBotonCosulta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Iconos/icons8-queries-32.png"))); // NOI18N
-        jbBotonCosulta.setText("Listar");
+        jbBotonCosulta.setText("Listado");
         jbBotonCosulta.setBorder(null);
         jbBotonCosulta.setBorderPainted(false);
         jbBotonCosulta.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -255,7 +256,8 @@ public class menu extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
         panelSide.add(jbBotonCosulta, gridBagConstraints);
 
         panelMenu1.setBackground(new java.awt.Color(21, 25, 28));
