@@ -2,22 +2,14 @@ package universidadulp.Vistas;
 
 //imports de paquetes y clases necesarios
 import java.awt.Color;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.awt.event.*;
+import java.sql.*;
 import java.time.LocalDate;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import universidadulp.AccesoADatos.AlumnoData;
-import universidadulp.AccesoADatos.Conexion;
+import javax.swing.table.*;
+import universidadulp.AccesoADatos.*;
+import universidadulp.Entidades.Alumno;
 
 public class Alumnos extends javax.swing.JPanel {
 
@@ -45,14 +37,13 @@ public class Alumnos extends javax.swing.JPanel {
         
         //loop for para recorrer el array y que realice los cambios a cada boton
         for (JButton btn : btns) {
-            
-            //seteo el color default
+            //seteo del color default
             btn.setBackground(new Color(60,63,65));
             
-            //seteo el look and feel basico de los botones
+            //seteo del look and feel basico de los botones
             btn.setUI(new BasicButtonUI());
             
-            //mouse listener para que me detecte al apretar cada boton
+            //mouse listener para que detecte al apretar cada boton
             btn.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -72,7 +63,7 @@ public class Alumnos extends javax.swing.JPanel {
                     btn.setBackground(new Color(80, 41, 179));
                 }
 
-                //override al evento mouseEntered para que cuando pase el mouse por arriba cambie al color elegido
+                //override al evento mouseExited para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseExited(MouseEvent e) {
                     btn.setBackground(new Color(60,63,65));
@@ -329,32 +320,51 @@ public class Alumnos extends javax.swing.JPanel {
         add(panelBot, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
-    //action boton nuevo
+    //action boton nuevo alumno
     private void jbNuevoAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoAlumnoActionPerformed
         // TODO add your handling code here:
-        //
+        //if para comprobar que ningun campo este vacio
         if (jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
         } else {
+            
+            //seteo variable para enviar a la base de datos
             int dniDB = Integer.parseInt(jtDniAlumno.getText());
+            
+            //query para obtener todos los datos dentro de la tabla alumno
             String sql = "select * from alumno where dni = ?";
             try {
+                
+                //envio de query a base de datos
                 PreparedStatement ps = con.prepareStatement(sql);
+                
+                //seteo de valores de query sacados del parametro
                 ps.setInt(1, dniDB);
                 ResultSet rs = ps.executeQuery();
+                
+                //if para comprobar si ya hay un alumno con el dni dado
                 if (rs.next() && rs.getInt(1) > 0) {
                     JOptionPane.showMessageDialog(null, "Ya hay un alumno registrado con ese DNI.");
                 } else {
+                    
+                    //if para que ningun campo este vacio
                     if (jtDniAlumno.getText() == null || jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
                         JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos.");
                     } else {
+                        
+                        //declaracion de variables que seran enviadas al constructor de alumno
                         int dni = Integer.parseInt(jtDniAlumno.getText());
                         String apellido = jtApellidoAlumno.getText();
                         String nombre = jtNombreAlumno.getText();
                         String fechaNac = ((JTextField) jdFechaNacAlumno.getDateEditor().getUiComponent()).getText();
                         boolean estado = jcbEstadoAlumno.isEnabled();
-                        universidadulp.Entidades.Alumno alu = new universidadulp.Entidades.Alumno(dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
+                        Alumno alu = new Alumno(dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
+                        
+                        //invocacion de metodo nuevo alumno
                         alumnoDB.nuevoAlumno(alu);
+                        
+                        //metodo para actualizar tabla
+                        actualizarTabla();
                     }
                 }
                 ps.close();
@@ -367,21 +377,39 @@ public class Alumnos extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jbNuevoAlumnoActionPerformed
 
+    
+    //action boton eliminar alumno
     private void jbEliminarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarAlumnoActionPerformed
         // TODO add your handling code here:
+        
+        //if para comprobar que ningun campo este vacio
         if (jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
         } else {
             try {
+                
+                //seteo variable para enviar a la base de datos
                 int dni = Integer.parseInt(jtDniAlumno.getText());
-                String sql = "select idAlumno from alumno where dni=?";
+                
+                //query para obtener idAlumno
+                String sql = "select idAlumno from alumno where dni = ?";
 
+                //envio de query a base de datos
                 PreparedStatement ps = con.prepareStatement(sql);
+                
+                //seteo de valores de query sacados del parametro
                 ps.setInt(1, dni);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
+                    
+                    //declaracion de variable que sera enviada a metodo eliminar alumno
                     int id = rs.getInt("idAlumno");
+                    
+                    //invocacion de metodo eliminar alumno
                     alumnoDB.eliminarAlumno(id);
+                    
+                    //metodo para actualizar tabla
+                    actualizarTabla();
                 }
                 ps.close();
                 rs.close();
@@ -391,26 +419,45 @@ public class Alumnos extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jbEliminarAlumnoActionPerformed
 
+    //action boton modificar alumno
     private void jgModificarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jgModificarAlumnoActionPerformed
         // TODO add your handling code here:
+        
+        //if para comprobar que ningun campo este vacio
         if (jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
         } else {
+            
+            //declaracion de variables que seran enviadas al constructor de alumno
             int dni = Integer.parseInt(jtDniAlumno.getText());
             String apellido = jtApellidoAlumno.getText();
             String nombre = jtNombreAlumno.getText();
             String fechaNac = ((JTextField) jdFechaNacAlumno.getDateEditor().getUiComponent()).getText();
             boolean estado = jcbEstadoAlumno.isSelected();
-            String sql = "select idAlumno from alumno where dni=?";
-
+            
+            //query para obtener idAlumno
+            String sql = "select idAlumno from alumno where dni = ?";
             try {
+                
+                //envio de query a la base de datos
                 PreparedStatement ps = con.prepareStatement(sql);
+                
+                //seteo de valores de query sacados del parametro
                 ps.setInt(1, dni);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
+                    
+                    //declaracion de variable que sera enviada a metodo modificar alumno
                     int id = rs.getInt("idAlumno");
-                    universidadulp.Entidades.Alumno alu = new universidadulp.Entidades.Alumno(id, dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
+                    
+                    //constructor alumno con los datos requeridos
+                    Alumno alu = new Alumno(id, dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
+                    
+                    //invocacion de metodo modificar alumno
                     alumnoDB.modificarAlumno(alu);
+                    
+                    //metodo para actualizar tabla
+                    actualizarTabla();
                 }
                 ps.close();
                 rs.close();
@@ -420,23 +467,34 @@ public class Alumnos extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jgModificarAlumnoActionPerformed
 
+    //action boton actualizar alumno
     private void jbBotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonActualizarActionPerformed
         // TODO add your handling code here:
+        //declaracion de nuevo modelo de tabla copiando el modelo actual de la tabla
         DefaultTableModel mod = (DefaultTableModel) jtTablaAlumno.getModel();
+        
+        //eliminacion de filas
         mod.setRowCount(0);
+        
+        //metodo para mostrar tabla
         mostrarTabla();
     }//GEN-LAST:event_jbBotonActualizarActionPerformed
 
+    //action click en combobox tabla alumno
     private void jtTablaAlumnoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaAlumnoMouseClicked
         // TODO add your handling code here:
+        //seleccion de fila
         int i = jtTablaAlumno.getSelectedRow();
-        String val = jtTablaAlumno.getModel().getValueAt(i, 0).toString();
-        int id = Integer.valueOf(val);
+        
+        //declaracion de variables que seran enviadas a cada textfield de la tabla alumno
+        int id = Integer.parseInt(jtTablaAlumno.getModel().getValueAt(i, 0).toString());
         int dni = alumnoDB.buscarAlumno(id).getDni();
         String nombre = alumnoDB.buscarAlumno(id).getNombre();
         String apellido = alumnoDB.buscarAlumno(id).getApellido();
         Boolean estado = alumnoDB.buscarAlumno(id).isActivo();
         LocalDate nacimiento = alumnoDB.buscarAlumno(id).getFechaNac();
+        
+        //seteo de variables dentro de cada texfield con datos obtenidos
         jtID.setText(String.valueOf(id));
         jtDniAlumno.setText(String.valueOf(dni));
         jtNombreAlumno.setText(nombre);
@@ -474,19 +532,27 @@ public class Alumnos extends javax.swing.JPanel {
     private javax.swing.JPanel panelTop;
     // End of variables declaration//GEN-END:variables
 
+    //metodo para mostrar tabla alumno
     public void mostrarTabla() {
-
+        //seteo de modelo de la tabla
         jtTablaAlumno.setModel(modeloAlumno);
+        
+        //obtener modelo de columna para cambiar tamaño individualmente
         TableColumnModel columna = jtTablaAlumno.getColumnModel();
         columna.getColumn(0).setMaxWidth(45);
         columna.getColumn(1).setMaxWidth(110);
         columna.getColumn(2).setMaxWidth(590);
 
+        //query para obtener idAlumno, dni, nombre, apellido
         String sql = "select idAlumno, dni, nombre, apellido from alumno where estado = 1 order by idAlumno ASC";
         try {
+            
+            //envio de query a la base de datos                                     
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                
+                //declaracion de variables que seran mostradas en la tabla alumno
                 String id = String.valueOf(rs.getInt("idAlumno"));
                 String dni = String.valueOf(rs.getInt("dni"));
                 String nombre = rs.getString("nombre");
@@ -500,5 +566,17 @@ public class Alumnos extends javax.swing.JPanel {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error..");
         }
+    }
+    
+    //metodo para actualizar la tabla alumno
+    public void actualizarTabla(){
+        //declaracion de nuevo modelo copiando el modelo actual de la tabla
+        DefaultTableModel mod = (DefaultTableModel) jtTablaAlumno.getModel();
+        
+        //eliminacion de filas
+        mod.setRowCount(0);
+        
+        //metodo para mostrar tabla alumnos
+        mostrarTabla();
     }
 }

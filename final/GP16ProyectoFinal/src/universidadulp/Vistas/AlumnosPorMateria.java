@@ -1,16 +1,10 @@
 package universidadulp.Vistas;
 
 //imports de paquetes y clases necesarios
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import universidadulp.AccesoADatos.AlumnoData;
-import universidadulp.AccesoADatos.Conexion;
-import universidadulp.AccesoADatos.InscripcionData;
+import javax.swing.table.*;
+import universidadulp.AccesoADatos.*;
 
 public class AlumnosPorMateria extends javax.swing.JPanel {
 
@@ -41,10 +35,12 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
         initComponents();
         con = Conexion.getConnection();
         mostrarComboBox();
+        
+        //metodo para actualizar tabla inscriptos
         actualizarTablaInscriptos();
-        mostrarTablaInscriptas();
+        
+        //metodo para actualizar tabla no inscriptos
         actualizarTablaInscriptos();
-        mostrarTablaNoInscriptas();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -173,11 +169,11 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
     //action del combobox que lista las materias
     private void jcbListaMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbListaMateriasActionPerformed
         // TODO add your handling code here:
+        //metodo para actualizar tabla inscriptos
+        actualizarTablaInscriptos();
+        
+        //metodo para actualizar tabla no inscriptos
         actualizarTablaNoInscriptos();
-        mostrarTablaInscriptas();
-        actualizarTablaNoInscriptos();
-        mostrarTablaNoInscriptas();
-
     }//GEN-LAST:event_jcbListaMateriasActionPerformed
 
 
@@ -200,7 +196,6 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
 
     //metodo para rellenar la tabla materias inscriptas con los datos requeridos
     public void mostrarTablaInscriptas() {
-        
         //seteo de modelo para tabla inscriptos
         jtTablaMateriasInscriptas.setModel(modeloInscriptos);
         
@@ -217,10 +212,11 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
         String nombreM = jcbListaMaterias.getSelectedItem().toString();
         try {
             PreparedStatement ps = con.prepareStatement(sql);
+            
+            //seteo de valores de query sacados del parametro
             ps.setString(1, nombreM);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                
                 //declaracion de variables que seran mostradas en cada fila de la tabla
                 int idAlumno = rs.getInt("idAlumno");
                 int dni = alumnoDB.buscarAlumno(idAlumno).getDni();
@@ -241,7 +237,9 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
 
     //metodo para rellenar la tabla materias no inscriptas con los datos requeridos
     public void mostrarTablaNoInscriptas() {
+        //seteo de modelo tabla no inscriptos
         jtTablaMateriasNoInscriptas.setModel(modeloNoInscriptos);
+        
         //codigo para obtener el modelo de las columnas y cambiar su tamaño
         TableColumnModel columna = jtTablaMateriasNoInscriptas.getColumnModel();
         columna.getColumn(0).setMaxWidth(30);
@@ -252,12 +250,16 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
                 + "idAlumno NOT IN(SELECT idAlumno "
                 + "FROM inscripcion "
                 + "WHERE inscripcion.idMateria = ?);";
+        
         //obtener item seleccionado en el combobox
         String nombreM = jcbListaMaterias.getSelectedItem().toString();
+        
         //llamo al metodo buscarMateria para obtener la id de la materia
         int idMateria = buscarMateria(nombreM);
         try {
             PreparedStatement ps = con.prepareStatement(sql);
+            
+            //seteo de valores de query sacados del parametro
             ps.setInt(1, idMateria);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -267,6 +269,7 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
                 String apellido = alumnoDB.buscarAlumno(idAlumno).getApellido();
                 String nombre = alumnoDB.buscarAlumno(idAlumno).getNombre();
                 String alumno = nombre + " " + apellido;
+                
                 //array para rellenar la tabla
                 String dataNM[] = {String.valueOf(idAlumno), String.valueOf(dni), alumno};
                 modeloNoInscriptos.addRow(dataNM);
@@ -299,15 +302,25 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
 
     //metodo para limpar/actualizar la tabla inscriptos
     public void actualizarTablaInscriptos() {
-        //declaracion de modelo con el modelo de la tabla para eliminar todas las filas
+        //declaracion de modelo nuevo copiando el modelo actual de la tabla inscriptos
         DefaultTableModel mod = (DefaultTableModel) jtTablaMateriasInscriptas.getModel();
+        
+        //eliminacion de filas
         mod.setRowCount(0);
+        
+        //metodo para mostrar tabla inscriptos
+        mostrarTablaInscriptas();
     }
     //metodo para limpar/actualizar la tabla inscriptos
     public void actualizarTablaNoInscriptos() {
-        //declaracion de modelo con el modelo de la tabla para eliminar todas las filas
+        //declaracion de modelo nuevo copiando el modelo actual de la tabla no inscriptos
         DefaultTableModel mod = (DefaultTableModel) jtTablaMateriasNoInscriptas.getModel();
+        
+        //eliminacion de filas
         mod.setRowCount(0);
+        
+        //metodo para mostrar tabla no inscriptos
+        mostrarTablaNoInscriptas();
     }
 
     //metodo para buscar materia por nombre
@@ -318,7 +331,10 @@ public class AlumnosPorMateria extends javax.swing.JPanel {
                 + "from materia "
                 + "where nombre = ?";
         try {
+            //envio de query a la base de datos
             PreparedStatement ps = con.prepareStatement(sql);
+            
+            //seteo de valores de query sacados del parametro
             ps.setString(1, nombre);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

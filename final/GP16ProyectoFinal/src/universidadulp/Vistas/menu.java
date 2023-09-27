@@ -4,29 +4,32 @@ package universidadulp.Vistas;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.net.URI;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 public class menu extends javax.swing.JFrame {
 
+    //constructor vacio
     public menu() {
         initComponents();
         mostrarPanel(new Home());
         sacarLabels();
 
+        //array con cada boton para que tengan un hover
         JButton btns[] = {jbBotonAlumno, jbBotonMateria, jbBotonAdmin, jbBotonCosulta, jbBotonHome, jbBotonSalir};
+        
+        //loop for para recorrer el array y que realice los cambios a cada boton
         for (JButton btn : btns) {
+            //seteo del color default
             btn.setBackground(new Color(21, 25, 28));
+            
+            //seteo del look and feel basico de los botones
             btn.setUI(new BasicButtonUI());
+            
+            //mouse listener para que detecte al apretar cada boton
             btn.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -40,11 +43,13 @@ public class menu extends javax.swing.JFrame {
                 public void mouseReleased(MouseEvent e) {
                 }
 
+                //override al evento mouseEntered para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     btn.setBackground(new Color(80, 41, 179));
                 }
 
+                //override al evento mouseExited para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseExited(MouseEvent e) {
                     btn.setBackground(new Color(21, 25, 28));
@@ -52,16 +57,30 @@ public class menu extends javax.swing.JFrame {
             });
         }
 
+        //array con cada label para que tengan un hover
         JLabel lab[] = {linkdinGiorgina, gitGiorgina, linkdinHernan, gitHernan, linkdinJero, gitJero};
+        
+        //loop for para recorrer el array y que realice los cambios a cada label
         for (JLabel labl : lab) {
+            //seteo del color default
             labl.setForeground(Color.white);
+            
+            //mouse listener para que detecte al apretar cada label
             labl.addMouseListener(new MouseListener() {
+                //override al evento mouseClicked para detectar cuando se haga click en cada label
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    //declaracion de variables que seran enviadas a distintos metodos
                     String link = null;
+                    
+                    //switch para obtener texto de cada label
                     switch (labl.getText()) {
+                        
+                        //case si el texto coincide, setea variable link con un string del respectivo link
                         case "Linkedin/Giorgina":
                             link = "https://www.linkedin.com/in/giorgina-corvalan-83b167281/";
+                            
+                            //invocacion de metodo agregarLink
                             agregarLink(link);
                             break;
                         case "GitHub/York-Andy":
@@ -95,11 +114,13 @@ public class menu extends javax.swing.JFrame {
                 public void mouseReleased(MouseEvent e) {
                 }
 
+                //override al evento mouseEntered para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     labl.setForeground(new Color (80, 41, 179));
                 }
 
+                //override al evento mouseExited para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseExited(MouseEvent e) {
                     labl.setForeground(Color.white);
@@ -442,44 +463,63 @@ public class menu extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    //action boton consulta
     private void jbBotonCosultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonCosultaActionPerformed
         // TODO add your handling code here:
+        //metodo para mostrar panel y creacion de nuevo panel
         mostrarPanel(new AlumnosPorMateria());
+        
+        //metodo para mostrar labels dentro de un panel
         mostrarLabels();
     }//GEN-LAST:event_jbBotonCosultaActionPerformed
 
+    //actio boton admin
     private void jbBotonAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonAdminActionPerformed
         // TODO add your handling code here:
+        //metodo para mostrar panel y creacion de nuevo panel
         mostrarPanel(new Administracion());
+        
+        //metodo para mostrar labels dentro de un panel
         mostrarLabels();
     }//GEN-LAST:event_jbBotonAdminActionPerformed
 
+    //action boton materia
     private void jbBotonMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonMateriaActionPerformed
         // TODO add your handling code here:
+        //metodo para mostrar panel y creacion de nuevo panel
         mostrarPanel(new Materias());
+        
+        //metodo para mostrar labels dentro de un panel
         mostrarLabels();
     }//GEN-LAST:event_jbBotonMateriaActionPerformed
 
+    //action boton alumno
     private void jbBotonAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonAlumnoActionPerformed
         // TODO add your handling code here:
+        //metodo para mostrar panel y creacion de nuevo panel
         mostrarPanel(new Alumnos());
+        
+        //metodo para mostrar labels dentro de un panel
         mostrarLabels();
     }//GEN-LAST:event_jbBotonAlumnoActionPerformed
 
+    //action boton home
     private void jbBotonHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonHomeActionPerformed
         // TODO add your handling code here:
+        //metodo para mostrar panel y creacion de nuevo panel
         mostrarPanel(new Home());
+        
+        //metodo para mostrar labels dentro de un panel
         sacarLabels();
     }//GEN-LAST:event_jbBotonHomeActionPerformed
 
+    //action boton salir
     private void jbBotonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonSalirActionPerformed
         // TODO add your handling code here:
+        //metodo para cerrar el programa
         this.dispose();
     }//GEN-LAST:event_jbBotonSalirActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -506,10 +546,17 @@ public class menu extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        //instalacion de theme para cada panel desde una libreria(FlatLaf)
         FlatMacDarkLaf.install();
-        Font customFont = new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13);
-        FlatRobotoFont.install();
+        
+        //registro del paquete donde el theme afectara los paneles
         FlatLaf.registerCustomDefaultsSource("universidadulp.Vistas");
+        
+        //declaracion de nueva font
+        Font customFont = new Font(FlatRobotoFont.FAMILY, Font.PLAIN, 13);
+        
+        //instalacion de fuente roboto
+        FlatRobotoFont.install();
         UIManager.put("defaultFont", customFont);
         UIManager.put("Label.font", customFont);
         UIManager.put("TextField.font", customFont);
@@ -552,30 +599,59 @@ public class menu extends javax.swing.JFrame {
     private javax.swing.JPanel panelVacio;
     // End of variables declaration//GEN-END:variables
 
+    //metodo mostrar panel
     public void mostrarPanel(Component com) {
+        //metodo para eliminar todos los componentes dentro del panel
         panelCMid.removeAll();
+        
+        //metodo para agregar un componente al panel
         panelCMid.add(com);
+        
+        //metodo para actualizar el panel y mostrar nuevos componentes
         panelCMid.repaint();
+        
+        //metodo para validar el panel
         panelCMid.revalidate();
     }
 
+    
+    //metodo para eliminar labels de abajo al apretar el boton home
     public void sacarLabels() {
+        //metodo para eliminar panel especifico que contiene labels
         panelCBottom.remove(agregarEstePanel);
+        
+        //metodo para validar el panel
         panelCBottom.revalidate();
+        
+        //metodo para actualizar el panel
         panelCBottom.repaint();
     }
 
+    //metodo para mostrar labels de abajo al apretar un boton que no sea home
     public void mostrarLabels() {
+        //metodo para agregar panel especifico que contiene labels
         panelCBottom.add(agregarEstePanel);
+        
+        //metodo para validar el panel
         panelCBottom.revalidate();
+        
+        //metodo para actualizar el panel
         panelCBottom.repaint();
     }
 
+    //metodo agregar links
     public void agregarLink(String link) {
+        //try-catch para detectar si el enviroment actual es compatible con la clase Desktop
+        //la clase Desktop habilita la interacion con el sistema operativo permitiendo realizar busquedas en navegador
         try {
+            //comprobacion de compatibilidad
             if (Desktop.isDesktopSupported()) {
+                //habilitacion de interaccion con sistema operativo
                 Desktop desktop = Desktop.getDesktop();
+                
+                //if para detectar si el enviroment es compatible con Desktop.Action.BROWSE
                 if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    //metodo browse, recibe parametro
                     desktop.browse(new URI(link));
                 }
             }

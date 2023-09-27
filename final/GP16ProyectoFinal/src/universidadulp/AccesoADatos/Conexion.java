@@ -1,25 +1,28 @@
 
 package universidadulp.AccesoADatos;
 
+//imports de paquetes y clases necesarios
 import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class Conexion {
-    
+    //atributos necesarios para la base de datos
     private static final String url="jdbc:mariadb://localhost/";
     private static final String dataBase="universidadulp";
     private static final String user="root";
     private static final String pass="";
-    
     private static Connection connection;
     
+    //constructor vacio
     public Conexion(){
-        
     }
     
+    //metodo connection para conectar a la base de datos
     public static Connection getConnection(){
+        //comprobacion si conexion es null
         if (connection==null){
             try{
+                //conexion al driver
                 Class.forName("org.mariadb.jdbc.Driver");
                 connection=DriverManager.getConnection(url+dataBase+"?useLegacyDatetimeCode=false&serverTimezone=UTC"+"&user="+user+"&password="+pass);
             }catch(SQLException ex){

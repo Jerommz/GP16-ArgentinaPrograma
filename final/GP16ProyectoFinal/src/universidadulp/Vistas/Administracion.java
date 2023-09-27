@@ -2,27 +2,14 @@ package universidadulp.Vistas;
 
 //imports de paquetes y clases necesarios
 import java.awt.Color;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.awt.event.*;
+import java.sql.*;
 import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import universidadulp.AccesoADatos.AlumnoData;
-import universidadulp.AccesoADatos.Conexion;
-import universidadulp.AccesoADatos.InscripcionData;
-import universidadulp.AccesoADatos.MateriaData;
-import universidadulp.Entidades.Alumno;
-import universidadulp.Entidades.Inscripcion;
-import universidadulp.Entidades.Materia;
+import javax.swing.table.*;
+import universidadulp.AccesoADatos.*;
+import universidadulp.Entidades.*;
 
 public class Administracion extends javax.swing.JPanel {
 
@@ -526,6 +513,12 @@ public class Administracion extends javax.swing.JPanel {
 
             //metodo para actualizar la tabla inscripciones
             actualizarTablaInscripciones();
+            
+            //metodo para actualizar tabla notas
+            actualizarTablaNotas();
+            
+            //metodo para mostrar tabla notas
+            mostrarTablaNotas();
 
             //metodo para mostrar la tabla inscripciones
             mostrarTablaInscripciones(inscripcionDB.obtenerMateriasCursadas(buscarAlumno(nombre)));
@@ -561,6 +554,12 @@ public class Administracion extends javax.swing.JPanel {
 
             //metodo para actualizar la tabla inscripciones
             actualizarTablaInscripciones();
+            
+            //metodo para actualizar tabla notas
+            actualizarTablaNotas();
+            
+            //metodo para mostrar tabla notas
+            mostrarTablaNotas();
 
             //metodo para mostrar la tabla inscripciones
             mostrarTablaInscripciones(inscripcionDB.obtenerMateriasNoCursadas(buscarAlumno(nombre)));
@@ -695,6 +694,8 @@ public class Administracion extends javax.swing.JPanel {
 
                     //envio de query a la base de datos
                     PreparedStatement ps = con.prepareStatement(sql);
+                    
+                    //seteo de valores de query sacados del parametro
                     ps.setInt(1, Integer.valueOf(idAlumno));
                     ps.executeUpdate();
 
@@ -857,6 +858,8 @@ public class Administracion extends javax.swing.JPanel {
         try {
             //declaracion de variables que seran mostrados en la tabla notas
             PreparedStatement ps = con.prepareStatement(sql);
+            
+            //seteo de valores de query sacados del parametro
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -915,13 +918,19 @@ public class Administracion extends javax.swing.JPanel {
 
     //metodo para actualizar la tabla inscripciones
     public void actualizarTablaInscripciones() {
+        //declaracion de nuevo modelo copiando el modelo actual de la tabla
         DefaultTableModel mod = (DefaultTableModel) jtTablaInscripcion.getModel();
+        
+        //eliminacion de filas
         mod.setRowCount(0);
     }
 
     //metodo para actualizar la tabla notas
     public void actualizarTablaNotas() {
+        //declaracion de nuevo modelo copiando el modelo actual de la tabla
         DefaultTableModel mod = (DefaultTableModel) jtTablaNotas.getModel();
+        
+        //eliminacion de filas
         mod.setRowCount(0);
     }
 
@@ -938,9 +947,10 @@ public class Administracion extends javax.swing.JPanel {
 
             //declaracion de variables que seran mostrados en la tabla notas
             PreparedStatement ps = con.prepareStatement(sql);
+            
+            //seteo de valores de query sacados del parametro
             ps.setString(1, nombreSQL);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 id = rs.getInt("idAlumno");
             }

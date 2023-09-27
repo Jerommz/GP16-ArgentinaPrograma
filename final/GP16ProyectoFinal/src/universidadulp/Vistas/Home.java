@@ -1,24 +1,19 @@
 
 package universidadulp.Vistas;
 
-import java.awt.Color;
-import java.awt.Desktop;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+//imports de paquetes y clases necesarios
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.event.*;
 import java.net.URI;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 public class Home extends javax.swing.JPanel {
-
+    //constructor vacio
     public Home() {
         initComponents();
         clickLinks();
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -286,7 +281,6 @@ public class Home extends javax.swing.JPanel {
         labelImagen.setBounds(0, 0, 1280, 720);
     }// </editor-fold>//GEN-END:initComponents
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel emailG;
     private javax.swing.JLabel emailH;
@@ -318,18 +312,33 @@ public class Home extends javax.swing.JPanel {
     private javax.swing.JPanel panelJTop;
     // End of variables declaration//GEN-END:variables
 
+    //metodo loop para setear cada link y hacer el hover en los jLabel
     public void clickLinks() {
+        //array con cada label para que tengan un hover
         JLabel lab[] = {linkG, gitG, emailG, linkH, gitH, emailH, linkJ, gitJ, emailJ};
+        
+        //loop for para recorrer el array y que realice los cambios a cada label
         for (JLabel labl : lab) {
+            //seteo del color default
             labl.setForeground(Color.white);
+            
+            //mouse listener para que detecte al apretar cada label
             labl.addMouseListener(new MouseListener() {
+                //override al evento mouseClicked para detectar cuando se haga click en cada label
                 @Override
                 public void mouseClicked(MouseEvent e) {
+                    //declaracion de variables que seran enviadas a distintos metodos
                     String str = null;
                     String link = null;
+                    
+                    //switch para obtener texto de cada label
                     switch (labl.getText()) {
+                        
+                            //case si el texto coincide, setea variable link con un string del respectivo link
                         case "Linkedin/G":
                             link = "https://www.linkedin.com/in/giorgina-corvalan-83b167281/";
+                            
+                            //invocacion de metodo agregarLink
                             agregarLink(link);
                             break;
                         case "GitHub/G":
@@ -352,17 +361,21 @@ public class Home extends javax.swing.JPanel {
                             link = "https://github.com/Jerommz";
                             agregarLink(link);
                             break;
+                            
+                            //case si el texto coincide, setea variable str con un string de un email
                         case "Email/G":
                             str = "Daryork43@gmail.com";
-                            copyClipboard(str);
+                            
+                            //invocacion de metodo copiar
+                            copiar(str);
                             break;
                         case "Email/H":
                             str = "Hernanl22@hotmail.com";
-                            copyClipboard(str);
+                            copiar(str);
                             break;
                         case "Email/J":
                             str = "jeronimomanabella971@gmail.com";
-                            copyClipboard(str);
+                            copiar(str);
                             break;
                     }
                 }
@@ -375,11 +388,13 @@ public class Home extends javax.swing.JPanel {
                 public void mouseReleased(MouseEvent e) {
                 }
 
+                //override al evento mouseEntered para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     labl.setForeground(new Color(237, 126, 119));
                 }
 
+                //override al evento mouseExited para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseExited(MouseEvent e) {
                     labl.setForeground(Color.white);
@@ -388,11 +403,19 @@ public class Home extends javax.swing.JPanel {
         }
     }
 
+    //metodo agregar link
     public void agregarLink(String link) {
+        //try-catch para detectar si el enviroment actual es compatible con la clase Desktop
+        //la clase Desktop habilita la interacion con el sistema operativo permitiendo realizar busquedas en navegador
         try {
+            //comprobacion de compatibilidad
             if (Desktop.isDesktopSupported()) {
+                //habilitacion de interaccion con sistema operativo
                 Desktop desktop = Desktop.getDesktop();
+                
+                //if para detectar si el enviroment es compatible con Desktop.Action.BROWSE
                 if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                    //metodo browse, recibe parametro
                     desktop.browse(new URI(link));
                 }
             }
@@ -401,9 +424,16 @@ public class Home extends javax.swing.JPanel {
         }
     }
     
-    public void copyClipboard(String str){
+    //metodo para copiar al portapapeles al clickear un label
+    public void copiar(String str){
+        
+        //declaracion de variable con acceso al portapapeles del sistema
         Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
+        
+        //declaracion de variable con string obtenida por parametro
         StringSelection strsel = new StringSelection(str);
+        
+        //envio de string al portapapeles del sistema
         clip.setContents(strsel, strsel);
         JOptionPane.showMessageDialog(null, "Copiado.");
     }

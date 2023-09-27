@@ -1,23 +1,18 @@
 package universidadulp.Vistas;
 
+//imports de paquetes y clases necesarios
 import java.awt.Color;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
+import java.awt.event.*;
+import java.sql.*;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-import universidadulp.AccesoADatos.Conexion;
-import universidadulp.AccesoADatos.MateriaData;
+import javax.swing.table.*;
+import universidadulp.AccesoADatos.*;
 import universidadulp.Entidades.Materia;
 
 public class Materias extends javax.swing.JPanel {
 
+    //modelo para tabla materia usada en el metodo mostrar tabla
     String[] col = {"ID", "Nombre"};
     DefaultTableModel modeloTablaMateria = new DefaultTableModel(null, col) {
         @Override
@@ -25,17 +20,27 @@ public class Materias extends javax.swing.JPanel {
             return false;
         }
     };
+
+    //atributos necesarios para los metodos utilizados
     MateriaData materiaDB = new MateriaData();
     private Connection con;
 
+    //constructor vacio
     public Materias() {
         initComponents();
         con = Conexion.getConnection();
         mostrarTabla();
 
+        //array con cada boton para que tengan un hover
         JButton btns[] = {jbNuevoMateria, jbEliminarMateria, jbModificarMateria, jbBotonActualizar};
+
+        //loop for para recorrer el array y que realice los cambios a cada boton
         for (JButton btn : btns) {
+
+            //seteo del color default
             btn.setBackground(new Color(60, 63, 65));
+
+            //seteo del look and feel basico de los botones
             btn.setUI(new BasicButtonUI());
             btn.addMouseListener(new MouseListener() {
                 @Override
@@ -50,11 +55,13 @@ public class Materias extends javax.swing.JPanel {
                 public void mouseReleased(MouseEvent e) {
                 }
 
+                //override al evento mouseEntered para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseEntered(MouseEvent e) {
                     btn.setBackground(new Color(80, 41, 179));
                 }
 
+                //override al evento mouseExited para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseExited(MouseEvent e) {
                     btn.setBackground(new Color(60, 63, 65));
@@ -264,23 +271,29 @@ public class Materias extends javax.swing.JPanel {
         add(panelBottom, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
+    //action boton nueva materia
     private void jbNuevoMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbNuevoMateriaActionPerformed
         // TODO add your handling code here:
         try {
+            //if para comprobar que ningun campo este vacio
             if (jtNombreMateria.getText() == null || jtAnioMateria.getText() == null) {
                 JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos menos codigo.");
             } else {
+                //if para setear null el campo idMateria si no esta vacio
                 if (jtIdMateria.getText() != null) {
                     jtIdMateria.setText(null);
+
+                    //declaracion de variables que seran enviadas al metodo nuevaMateria
                     String nombre = jtNombreMateria.getText();
                     int anio = Integer.parseInt(jtAnioMateria.getText());
                     boolean estado = jcbEstadoMateria.isEnabled();
                     Materia mat = new Materia(nombre, anio, estado);
-                    materiaDB.nuevoMateria(mat);
 
-                    DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
-                    mod.setRowCount(0);
-                    mostrarTabla();
+                    //invocacion de metodo nueva materia
+                    materiaDB.nuevaMateria(mat);
+
+                    //metodo para actualizar tabla
+                    actualizarTabla();
                 }
             }
         } catch (NumberFormatException ex) {
@@ -288,13 +301,18 @@ public class Materias extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jbNuevoMateriaActionPerformed
 
+    //action boton eliminar materia
     private void jbEliminarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarMateriaActionPerformed
         // TODO add your handling code here:
+        //if para comprobar que ningun campo este vacio
         if (jtIdMateria.getText() == null || jtNombreMateria.getText() == null || jtAnioMateria.getText() == null) {
             JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
         } else {
             try {
+                //declaracion de variable que sera enviada al metodo eliminar materia
                 int id = Integer.parseInt(jtIdMateria.getText());
+
+                //invocacion de metodo eliminar materia
                 materiaDB.eliminarMateria(id);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "No puede haber campos vacios.");
@@ -302,58 +320,61 @@ public class Materias extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jbEliminarMateriaActionPerformed
 
+    //action boton modificar materia
     private void jbModificarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarMateriaActionPerformed
         // TODO add your handling code here:
-        String sql = "select idMateria from materia";
-        try {
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int i = jtTablaMateria.getSelectedRow();
+        //seleccion de fila
+        int i = jtTablaMateria.getSelectedRow();
+        
+        //declaracio de variables con datos obtenidos de los texfield
+        int id = Integer.parseInt(jtTablaMateria.getModel().getValueAt(i, 0).toString());
+        String nombre = jtNombreMateria.getText();
+        int anio = Integer.parseInt(jtAnioMateria.getText());
+        boolean estado = jcbEstadoMateria.isSelected();
+        
+        //constructor de materia con datos obtenidos
+        Materia mat = new Materia(id, nombre, anio, estado);
 
-                String id = jtTablaMateria.getModel().getValueAt(i, 0).toString();
-                String nombre = jtNombreMateria.getText();
-                int anio = Integer.parseInt(jtAnioMateria.getText());
-                boolean estado = jcbEstadoMateria.isSelected();
-                Materia mat = new Materia(Integer.valueOf(id), nombre, anio, estado);
+        //metodo para actualiar tabla materia
+        actualizarTabla();
 
-                DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
-                mod.setRowCount(0);
-                mostrarTabla();
+        //invocacion de metodo modificar materia
+        materiaDB.modificarMateria(mat);
 
-                materiaDB.modificarMateria(mat);
-
-                jtIdMateria.setText("");
-                jtNombreMateria.setText("");
-                jtAnioMateria.setText("");
-                jcbEstadoMateria.enable(false);
-            }
-            ps.close();
-            rs.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error inesperado.");
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos excepto el codigo.");
-        }
+        //seteo de textfields en null
+        jtIdMateria.setText(null);
+        jtNombreMateria.setText(null);
+        jtAnioMateria.setText(null);
+        jcbEstadoMateria.enable(false);
     }//GEN-LAST:event_jbModificarMateriaActionPerformed
 
+    //action boton actualizar
     private void jbBotonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBotonActualizarActionPerformed
         // TODO add your handling code here:
+        //declaracion de modelo nuevo con modelo actual de la tabla materias
         DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+        
+        //eliminacion de filas
         mod.setRowCount(0);
+        
+        //metodo para mostrar tabla materias
         mostrarTabla();
     }//GEN-LAST:event_jbBotonActualizarActionPerformed
 
+    //action combobox materias
     private void jtTablaMateriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtTablaMateriaMouseClicked
         // TODO add your handling code here:
+        //seleccion de fila
         int i = jtTablaMateria.getSelectedRow();
+        
+        //declaracion de variables con datos obtenidos de la tabla materia
         String val = jtTablaMateria.getModel().getValueAt(i, 0).toString();
         int id = Integer.valueOf(val);
         String nombre = materiaDB.buscarMateria(id).getNombre();
         int anio = materiaDB.buscarMateria(id).getAnioMateria();
         Boolean estado = materiaDB.buscarMateria(id).isActivo();
+        
+        //seteo de textfields con variables dadas
         jtIdMateria.setText(String.valueOf(id));
         jtNombreMateria.setText(nombre);
         jtAnioMateria.setText(String.valueOf(anio));
@@ -386,16 +407,23 @@ public class Materias extends javax.swing.JPanel {
     private javax.swing.JPanel panelTop;
     // End of variables declaration//GEN-END:variables
 
+    //metodo mostrar tabla materia
     public void mostrarTabla() {
+        //seteo de modelo tabla materia
         jtTablaMateria.setModel(modeloTablaMateria);
+        
+        //obtencion de modelo de columnas para cambiar el tamaño de ellas individualmente
         TableColumnModel columna = jtTablaMateria.getColumnModel();
         columna.getColumn(0).setMaxWidth(45);
 
+        //query obtener idMateria, nombre
         String sql = "SELECT idMateria, nombre FROM materia WHERE estado = 1 order by idMateria ASC";
         try {
+            //envio de query a la base de datos
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
+                //declaracion de variables que seran implementadas dentro de las filas de la tabla
                 String id = String.valueOf(rs.getInt("idMateria"));
                 String nombre = rs.getString("nombre");
                 String tbdata[] = {id, nombre};
@@ -406,6 +434,18 @@ public class Materias extends javax.swing.JPanel {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error..");
         }
+    }
+
+    //metodo actualizar tabla materia
+    public void actualizarTabla() {
+        //declaracion de modelo nuevo con el modelo actual de la tabla materia
+        DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
+        
+        //eliminacion de filas
+        mod.setRowCount(0);
+        
+        //metodo para mostrar tabla materia
+        mostrarTabla();
     }
 
 }
