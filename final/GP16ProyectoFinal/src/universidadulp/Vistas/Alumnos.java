@@ -21,7 +21,7 @@ public class Alumnos extends javax.swing.JPanel {
             return false;
         }
     };
-    
+
     //atributos necesarios para los metodos utilizados
     AlumnoData alumnoDB = new AlumnoData();
     private Connection con;
@@ -31,18 +31,18 @@ public class Alumnos extends javax.swing.JPanel {
         initComponents();
         con = Conexion.getConnection();
         mostrarTabla();
-        
+
         //array con cada boton para que tengan un hover
         JButton btns[] = {jbNuevoAlumno, jbEliminarAlumno, jgModificarAlumno, jbBotonActualizar};
-        
+
         //loop for para recorrer el array y que realice los cambios a cada boton
         for (JButton btn : btns) {
             //seteo del color default
-            btn.setBackground(new Color(60,63,65));
-            
+            btn.setBackground(new Color(60, 63, 65));
+
             //seteo del look and feel basico de los botones
             btn.setUI(new BasicButtonUI());
-            
+
             //mouse listener para que detecte al apretar cada boton
             btn.addMouseListener(new MouseListener() {
                 @Override
@@ -66,11 +66,12 @@ public class Alumnos extends javax.swing.JPanel {
                 //override al evento mouseExited para que cuando pase el mouse por arriba cambie al color elegido
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    btn.setBackground(new Color(60,63,65));
+                    btn.setBackground(new Color(60, 63, 65));
                 }
             });
         }
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -327,31 +328,31 @@ public class Alumnos extends javax.swing.JPanel {
         if (jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
         } else {
-            
+
             //seteo variable para enviar a la base de datos
             int dniDB = Integer.parseInt(jtDniAlumno.getText());
-            
+
             //query para obtener todos los datos dentro de la tabla alumno
             String sql = "select * from alumno where dni = ?";
             try {
-                
+
                 //envio de query a base de datos
                 PreparedStatement ps = con.prepareStatement(sql);
-                
+
                 //seteo de valores de query sacados del parametro
                 ps.setInt(1, dniDB);
                 ResultSet rs = ps.executeQuery();
-                
+
                 //if para comprobar si ya hay un alumno con el dni dado
                 if (rs.next() && rs.getInt(1) > 0) {
                     JOptionPane.showMessageDialog(null, "Ya hay un alumno registrado con ese DNI.");
                 } else {
-                    
+
                     //if para que ningun campo este vacio
                     if (jtDniAlumno.getText() == null || jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
                         JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos.");
                     } else {
-                        
+
                         //declaracion de variables que seran enviadas al constructor de alumno
                         int dni = Integer.parseInt(jtDniAlumno.getText());
                         String apellido = jtApellidoAlumno.getText();
@@ -359,12 +360,16 @@ public class Alumnos extends javax.swing.JPanel {
                         String fechaNac = ((JTextField) jdFechaNacAlumno.getDateEditor().getUiComponent()).getText();
                         boolean estado = jcbEstadoAlumno.isEnabled();
                         Alumno alu = new Alumno(dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
-                        
+
                         //invocacion de metodo nuevo alumno
                         alumnoDB.nuevoAlumno(alu);
-                        
+
                         //metodo para actualizar tabla
                         actualizarTabla();
+                        jtDniAlumno.setText("");
+                        jtApellidoAlumno.setText("");
+                        jtNombreAlumno.setText("");
+                        jdFechaNacAlumno.setDate(null);
                     }
                 }
                 ps.close();
@@ -377,37 +382,36 @@ public class Alumnos extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jbNuevoAlumnoActionPerformed
 
-    
     //action boton eliminar alumno
     private void jbEliminarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminarAlumnoActionPerformed
         // TODO add your handling code here:
-        
+
         //if para comprobar que ningun campo este vacio
         if (jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
         } else {
             try {
-                
+
                 //seteo variable para enviar a la base de datos
                 int dni = Integer.parseInt(jtDniAlumno.getText());
-                
+
                 //query para obtener idAlumno
                 String sql = "select idAlumno from alumno where dni = ?";
 
                 //envio de query a base de datos
                 PreparedStatement ps = con.prepareStatement(sql);
-                
+
                 //seteo de valores de query sacados del parametro
                 ps.setInt(1, dni);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
-                    
+
                     //declaracion de variable que sera enviada a metodo eliminar alumno
                     int id = rs.getInt("idAlumno");
-                    
+
                     //invocacion de metodo eliminar alumno
                     alumnoDB.eliminarAlumno(id);
-                    
+
                     //metodo para actualizar tabla
                     actualizarTabla();
                 }
@@ -422,40 +426,40 @@ public class Alumnos extends javax.swing.JPanel {
     //action boton modificar alumno
     private void jgModificarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jgModificarAlumnoActionPerformed
         // TODO add your handling code here:
-        
+
         //if para comprobar que ningun campo este vacio
         if (jtApellidoAlumno.getText() == null || jtNombreAlumno.getText() == null || jdFechaNacAlumno.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Primero debe realizar una busqueda.");
         } else {
-            
+
             //declaracion de variables que seran enviadas al constructor de alumno
             int dni = Integer.parseInt(jtDniAlumno.getText());
             String apellido = jtApellidoAlumno.getText();
             String nombre = jtNombreAlumno.getText();
             String fechaNac = ((JTextField) jdFechaNacAlumno.getDateEditor().getUiComponent()).getText();
             boolean estado = jcbEstadoAlumno.isSelected();
-            
+
             //query para obtener idAlumno
             String sql = "select idAlumno from alumno where dni = ?";
             try {
-                
+
                 //envio de query a la base de datos
                 PreparedStatement ps = con.prepareStatement(sql);
-                
+
                 //seteo de valores de query sacados del parametro
                 ps.setInt(1, dni);
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
-                    
+
                     //declaracion de variable que sera enviada a metodo modificar alumno
                     int id = rs.getInt("idAlumno");
-                    
+
                     //constructor alumno con los datos requeridos
                     Alumno alu = new Alumno(id, dni, apellido, nombre, LocalDate.parse(fechaNac), estado);
-                    
+
                     //invocacion de metodo modificar alumno
                     alumnoDB.modificarAlumno(alu);
-                    
+
                     //metodo para actualizar tabla
                     actualizarTabla();
                 }
@@ -472,10 +476,10 @@ public class Alumnos extends javax.swing.JPanel {
         // TODO add your handling code here:
         //declaracion de nuevo modelo de tabla copiando el modelo actual de la tabla
         DefaultTableModel mod = (DefaultTableModel) jtTablaAlumno.getModel();
-        
+
         //eliminacion de filas
         mod.setRowCount(0);
-        
+
         //metodo para mostrar tabla
         mostrarTabla();
     }//GEN-LAST:event_jbBotonActualizarActionPerformed
@@ -485,7 +489,7 @@ public class Alumnos extends javax.swing.JPanel {
         // TODO add your handling code here:
         //seleccion de fila
         int i = jtTablaAlumno.getSelectedRow();
-        
+
         //declaracion de variables que seran enviadas a cada textfield de la tabla alumno
         int id = Integer.parseInt(jtTablaAlumno.getModel().getValueAt(i, 0).toString());
         int dni = alumnoDB.buscarAlumno(id).getDni();
@@ -493,7 +497,7 @@ public class Alumnos extends javax.swing.JPanel {
         String apellido = alumnoDB.buscarAlumno(id).getApellido();
         Boolean estado = alumnoDB.buscarAlumno(id).isActivo();
         LocalDate nacimiento = alumnoDB.buscarAlumno(id).getFechaNac();
-        
+
         //seteo de variables dentro de cada texfield con datos obtenidos
         jtID.setText(String.valueOf(id));
         jtDniAlumno.setText(String.valueOf(dni));
@@ -536,7 +540,7 @@ public class Alumnos extends javax.swing.JPanel {
     public void mostrarTabla() {
         //seteo de modelo de la tabla
         jtTablaAlumno.setModel(modeloAlumno);
-        
+
         //obtener modelo de columna para cambiar tamaño individualmente
         TableColumnModel columna = jtTablaAlumno.getColumnModel();
         columna.getColumn(0).setMaxWidth(45);
@@ -546,12 +550,12 @@ public class Alumnos extends javax.swing.JPanel {
         //query para obtener idAlumno, dni, nombre, apellido
         String sql = "select idAlumno, dni, nombre, apellido from alumno where estado = 1 order by idAlumno ASC";
         try {
-            
+
             //envio de query a la base de datos                                     
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                
+
                 //declaracion de variables que seran mostradas en la tabla alumno
                 String id = String.valueOf(rs.getInt("idAlumno"));
                 String dni = String.valueOf(rs.getInt("dni"));
@@ -567,15 +571,15 @@ public class Alumnos extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Error..");
         }
     }
-    
+
     //metodo para actualizar la tabla alumno
-    public void actualizarTabla(){
+    public void actualizarTabla() {
         //declaracion de nuevo modelo copiando el modelo actual de la tabla
         DefaultTableModel mod = (DefaultTableModel) jtTablaAlumno.getModel();
-        
+
         //eliminacion de filas
         mod.setRowCount(0);
-        
+
         //metodo para mostrar tabla alumnos
         mostrarTabla();
     }
