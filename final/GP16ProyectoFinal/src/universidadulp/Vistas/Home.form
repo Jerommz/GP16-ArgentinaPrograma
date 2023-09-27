@@ -29,7 +29,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="0" y="16" width="-1" height="704"/>
+          <AbsoluteConstraints x="0" y="0" width="-1" height="720"/>
         </Constraint>
       </Constraints>
 
@@ -196,7 +196,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="428" y="16" width="426" height="704"/>
+          <AbsoluteConstraints x="428" y="0" width="426" height="720"/>
         </Constraint>
       </Constraints>
 
@@ -380,7 +380,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="854" y="16" width="-1" height="704"/>
+          <AbsoluteConstraints x="854" y="0" width="-1" height="720"/>
         </Constraint>
       </Constraints>
 
@@ -397,9 +397,9 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <EmptySpace min="0" pref="62" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="70" max="32767" attributes="0"/>
                   <Component id="panelJ1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="62" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="70" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

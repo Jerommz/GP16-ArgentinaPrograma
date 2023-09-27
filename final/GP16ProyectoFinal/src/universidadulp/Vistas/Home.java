@@ -114,7 +114,7 @@ public class Home extends javax.swing.JPanel {
         panelG.add(panelG1, new java.awt.GridBagConstraints());
 
         add(panelG);
-        panelG.setBounds(0, 16, 428, 704);
+        panelG.setBounds(0, 0, 428, 720);
 
         panelH.setBackground(new Color(0, 0, 0, 0));
 
@@ -193,7 +193,7 @@ public class Home extends javax.swing.JPanel {
         );
 
         add(panelH);
-        panelH.setBounds(428, 16, 426, 704);
+        panelH.setBounds(428, 0, 426, 720);
 
         panelJ.setBackground(new Color(0, 0, 0, 0));
         panelJ.setPreferredSize(new java.awt.Dimension(426, 0));
@@ -267,13 +267,13 @@ public class Home extends javax.swing.JPanel {
         panelJLayout.setVerticalGroup(
             panelJLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelJLayout.createSequentialGroup()
-                .addGap(0, 62, Short.MAX_VALUE)
+                .addGap(0, 70, Short.MAX_VALUE)
                 .addComponent(panelJ1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 62, Short.MAX_VALUE))
+                .addGap(0, 70, Short.MAX_VALUE))
         );
 
         add(panelJ);
-        panelJ.setBounds(854, 16, 426, 704);
+        panelJ.setBounds(854, 0, 426, 720);
 
         labelImagen.setBackground(new java.awt.Color(102, 204, 0));
         labelImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/este.png"))); // NOI18N
