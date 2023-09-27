@@ -332,7 +332,7 @@ public class Materias extends javax.swing.JPanel {
         int fila = jtTablaMateria.getSelectedRow();
         if (fila != -1) {
             //declaracio de variables con datos obtenidos de los texfield
-            int id = Integer.parseInt(jtTablaMateria.getModel().getValueAt(i, 0).toString());
+            int id = Integer.parseInt(jtTablaMateria.getModel().getValueAt(fila, 0).toString());
             String nombre = jtNombreMateria.getText();
             int anio = Integer.parseInt(jtAnioMateria.getText());
             boolean estado = jcbEstadoMateria.isSelected();
