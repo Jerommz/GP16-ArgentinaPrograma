@@ -366,6 +366,7 @@ public class Alumnos extends javax.swing.JPanel {
 
                         //metodo para actualizar tabla
                         actualizarTabla();
+                        //limpiar los campos una vez impactado en la DB
                         jtDniAlumno.setText("");
                         jtApellidoAlumno.setText("");
                         jtNombreAlumno.setText("");
