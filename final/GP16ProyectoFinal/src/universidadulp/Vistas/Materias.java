@@ -329,28 +329,33 @@ public class Materias extends javax.swing.JPanel {
     private void jbModificarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarMateriaActionPerformed
         // TODO add your handling code here:
         //seleccion de fila
-        int i = jtTablaMateria.getSelectedRow();
-        
-        //declaracio de variables con datos obtenidos de los texfield
-        int id = Integer.parseInt(jtTablaMateria.getModel().getValueAt(i, 0).toString());
-        String nombre = jtNombreMateria.getText();
-        int anio = Integer.parseInt(jtAnioMateria.getText());
-        boolean estado = jcbEstadoMateria.isSelected();
-        
-        //constructor de materia con datos obtenidos
-        Materia mat = new Materia(id, nombre, anio, estado);
+        int fila = jtTablaMateria.getSelectedRow();
+        if (fila != -1) {
+            //declaracio de variables con datos obtenidos de los texfield
+            int id = Integer.parseInt(jtTablaMateria.getModel().getValueAt(i, 0).toString());
+            String nombre = jtNombreMateria.getText();
+            int anio = Integer.parseInt(jtAnioMateria.getText());
+            boolean estado = jcbEstadoMateria.isSelected();
 
-        //metodo para actualiar tabla materia
-        actualizarTabla();
+            //constructor de materia con datos obtenidos
+            Materia mat = new Materia(id, nombre, anio, estado);
 
-        //invocacion de metodo modificar materia
-        materiaDB.modificarMateria(mat);
+            //metodo para actualiar tabla materia
+            actualizarTabla();
 
-        //seteo de textfields en null
-        jtIdMateria.setText(null);
-        jtNombreMateria.setText(null);
-        jtAnioMateria.setText(null);
-        jcbEstadoMateria.enable(false);
+            //invocacion de metodo modificar materia
+            materiaDB.modificarMateria(mat);
+
+            //seteo de textfields en null
+            jtIdMateria.setText(null);
+            jtNombreMateria.setText(null);
+            jtAnioMateria.setText(null);
+            jcbEstadoMateria.enable(false);
+        } else {
+            JOptionPane.showMessageDialog(null, "No puede haber cambios vacios.");
+        }
+
+
     }//GEN-LAST:event_jbModificarMateriaActionPerformed
 
     //action boton actualizar
@@ -358,10 +363,10 @@ public class Materias extends javax.swing.JPanel {
         // TODO add your handling code here:
         //declaracion de modelo nuevo con modelo actual de la tabla materias
         DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
-        
+
         //eliminacion de filas
         mod.setRowCount(0);
-        
+
         //metodo para mostrar tabla materias
         mostrarTabla();
     }//GEN-LAST:event_jbBotonActualizarActionPerformed
@@ -371,14 +376,14 @@ public class Materias extends javax.swing.JPanel {
         // TODO add your handling code here:
         //seleccion de fila
         int i = jtTablaMateria.getSelectedRow();
-        
+
         //declaracion de variables con datos obtenidos de la tabla materia
         String val = jtTablaMateria.getModel().getValueAt(i, 0).toString();
         int id = Integer.valueOf(val);
         String nombre = materiaDB.buscarMateria(id).getNombre();
         int anio = materiaDB.buscarMateria(id).getAnioMateria();
         Boolean estado = materiaDB.buscarMateria(id).isActivo();
-        
+
         //seteo de textfields con variables dadas
         jtIdMateria.setText(String.valueOf(id));
         jtNombreMateria.setText(nombre);
@@ -416,7 +421,7 @@ public class Materias extends javax.swing.JPanel {
     public void mostrarTabla() {
         //seteo de modelo tabla materia
         jtTablaMateria.setModel(modeloTablaMateria);
-        
+
         //obtencion de modelo de columnas para cambiar el tamaño de ellas individualmente
         TableColumnModel columna = jtTablaMateria.getColumnModel();
         columna.getColumn(0).setMaxWidth(45);
@@ -445,10 +450,10 @@ public class Materias extends javax.swing.JPanel {
     public void actualizarTabla() {
         //declaracion de modelo nuevo con el modelo actual de la tabla materia
         DefaultTableModel mod = (DefaultTableModel) jtTablaMateria.getModel();
-        
+
         //eliminacion de filas
         mod.setRowCount(0);
-        
+
         //metodo para mostrar tabla materia
         mostrarTabla();
     }
